@@ -1,5 +1,7 @@
 package com.safetynet.alerts_api.model;
 
+import java.util.List;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,8 +11,8 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "persons")
-public class Person {
+@Table(name = "medicalrecords")
+public class MedicalRecord {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,14 +22,12 @@ public class Person {
 
   private String lastName;
 
-  private String address;
+  private String birthdate;
 
-  private String city;
+  @ElementCollection
+  private List<String> medications;
 
-  private String zip;
-
-  private String phone;
-
-  private String email;
+  @ElementCollection
+  private List<String> allergies;
 
 }
