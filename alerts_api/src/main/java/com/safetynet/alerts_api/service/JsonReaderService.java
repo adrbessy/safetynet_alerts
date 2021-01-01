@@ -3,12 +3,14 @@ package com.safetynet.alerts_api.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts_api.model.FireStation;
+import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.model.Person;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -36,6 +38,9 @@ public class JsonReaderService {
   @Autowired
   private FireStationService fireStationService;
 
+  @Autowired
+  private MedicalRecordService medicalRecordService;
+
   public void readDataFromJsonFile() {
     logger.debug("Démarrage du chargement du fichier data.json");
 
@@ -51,6 +56,9 @@ public class JsonReaderService {
 
       List<FireStation> lstFireStation = readListFireStationFromJsonObject(jsonObject);
       fireStationService.saveAllFireStations(lstFireStation);
+
+      List<MedicalRecord> lstMedicalRecords = readListMedicalRecordFromJsonObject(jsonObject);
+      medicalRecordService.saveAllMedicalRecords(lstMedicalRecords);
 
       inputStreamReader.close();
 
@@ -77,7 +85,9 @@ public class JsonReaderService {
       }
     }
     ;
-    return personList;
+    List<Person> personListNoDuplicates = personList.stream().distinct().collect(Collectors.toList());
+
+    return personListNoDuplicates;
   }
 
   private List<FireStation> readListFireStationFromJsonObject(JSONObject jsonObject) {
@@ -90,16 +100,37 @@ public class JsonReaderService {
       try {
         fireStationList.add(objectMapper.readValue(fireStation.toString(), FireStation.class));
 
-        // TODO : problème d'une station de pompier en double dans le fichier de départ
-        // et donc dans la base de données
       } catch (JsonProcessingException exception) {
         logger.error("Error while parsing input json file - firestations : " + exception.getMessage()
             + " Stack Strace : " + exception.getStackTrace());
       }
     }
     ;
+    List<FireStation> fireStationListNoDuplicates = fireStationList.stream().distinct().collect(Collectors.toList());
 
-    return fireStationList;
+    return fireStationListNoDuplicates;
+  }
+
+  private List<MedicalRecord> readListMedicalRecordFromJsonObject(JSONObject jsonObject) {
+    JSONArray medicalRecordsArrayInJson = (JSONArray) jsonObject.get("medicalrecords");
+
+    objectMapper = new ObjectMapper();
+    List<MedicalRecord> medicalRecordList = new ArrayList<>();
+
+    for (Object medicalRecord : medicalRecordsArrayInJson) {
+      try {
+        medicalRecordList.add(objectMapper.readValue(medicalRecord.toString(), MedicalRecord.class));
+      } catch (JsonProcessingException exception) {
+        logger.error("Error while parsing input json file - medicalRecords : " + exception.getMessage()
+            + " Stack Strace : " + exception.getStackTrace());
+      }
+    }
+    ;
+    List<MedicalRecord> medicalRecordListNoDuplicates = medicalRecordList.stream().distinct()
+        .collect(Collectors.toList());
+
+    return medicalRecordListNoDuplicates;
+
 
   }
 
