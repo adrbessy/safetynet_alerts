@@ -2,6 +2,7 @@ package com.safetynet.alerts_api.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.model.Person;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -32,6 +33,9 @@ public class JsonReaderService {
   @Autowired
   private PersonService personService;
 
+  @Autowired
+  private FireStationService fireStationService;
+
   public void readDataFromJsonFile() {
     logger.debug("Démarrage du chargement du fichier data.json");
 
@@ -44,6 +48,9 @@ public class JsonReaderService {
 
       List<Person> lstPerson = readListPersonFromJsonObject(jsonObject);
       personService.saveAllPersons(lstPerson);
+
+      List<FireStation> lstFireStation = readListFireStationFromJsonObject(jsonObject);
+      fireStationService.saveAllFireStations(lstFireStation);
 
       inputStreamReader.close();
 
@@ -70,8 +77,30 @@ public class JsonReaderService {
       }
     }
     ;
-
     return personList;
+  }
+
+  private List<FireStation> readListFireStationFromJsonObject(JSONObject jsonObject) {
+    JSONArray fireStationsArrayInJson = (JSONArray) jsonObject.get("firestations");
+
+    objectMapper = new ObjectMapper();
+    List<FireStation> fireStationList = new ArrayList<>();
+
+    for (Object fireStation : fireStationsArrayInJson) {
+      try {
+        fireStationList.add(objectMapper.readValue(fireStation.toString(), FireStation.class));
+
+        // TODO : problème d'une station de pompier en double dans le fichier de départ
+        // et donc dans la base de données
+      } catch (JsonProcessingException exception) {
+        logger.error("Error while parsing input json file - firestations : " + exception.getMessage()
+            + " Stack Strace : " + exception.getStackTrace());
+      }
+    }
+    ;
+
+    return fireStationList;
+
   }
 
 
