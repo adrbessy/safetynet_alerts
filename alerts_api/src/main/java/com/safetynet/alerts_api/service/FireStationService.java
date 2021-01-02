@@ -3,6 +3,7 @@ package com.safetynet.alerts_api.service;
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.FireStationRepository;
+import com.safetynet.alerts_api.repository.MedicalRecordRepository;
 import com.safetynet.alerts_api.repository.PersonRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,9 @@ public class FireStationService {
 
   @Autowired
   private PersonRepository personRepository;
+
+  @Autowired
+  private MedicalRecordRepository medicalRecordRepository;
 
   /**
    * Sauvegarder la liste des stations de feu
@@ -44,14 +48,57 @@ public class FireStationService {
   public List<Person> getFireStationPersonList(Integer stationNumber) {
     if (stationNumber != null) {
       try {
-        // on récupère la liste des stations concernées
+        // we retrieve the list of stations corresponding to the stationNumber
         List<FireStation> fireStationList = fireStationRepository.findDistinctByStation(stationNumber);
 
-        // extraction de la liste des adresses des stations
+        // we retrieve the address list corresponding to the fireStation list
         List<String> addressList = getAddressListFromFireStationList(fireStationList);
 
-        // on récupère la liste des personnes rattachées à la liste des adresses
-        return personRepository.findAllByAddressInOrderByAddress(addressList);
+        // we retrieve the person list corresponding to the address list
+        List<Person> filteredPersonList = personRepository.findAllByAddressInOrderByAddress(addressList);
+
+        // we retrieve the firstNameAndLastName from the list corresponding to the
+        // person list
+        // boolean birthdateList =
+        // getFirstNameAndLastNameListFromFilteredPersonList(FilteredPersonList);
+
+        // List<MedicalRecord> filteredMedicalRecordList = new ArrayList<>();
+
+        List<String> birthDateList = new ArrayList<>();
+        filteredPersonList.forEach(personIterator -> {
+          System.out.println(personIterator.getFirstName());
+          System.out.println(medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
+              personIterator.getFirstName(), personIterator.getLastName()));
+          /*
+           * String birthdate =
+           * getBirthdateListFromFilteredPersonList(medicalRecordRepository
+           * .findByFirstNameAndLastNameAllIgnoreCase( personIterator.getFirstName(),
+           * personIterator.getLastName()));
+           */
+          medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
+              personIterator.getFirstName(), personIterator.getLastName()).forEach(fireStationIterator -> {
+                if (fireStationIterator.getBirthdate() != null && !fireStationIterator.getBirthdate().isEmpty()) {
+                  birthDateList.add(fireStationIterator.getBirthdate());
+                }
+              });
+          // getbirddayFromFireStationList(filteredMedicalRecordList);
+          /*
+           * birthdateList.add(
+           * medicalRecordRepository.findBirthdateByFirstNameAndLastNameAllIgnoreCase(
+           * personIterator.getFirstName(), personIterator.getLastName()));
+           */
+
+        });
+        System.out.println(birthDateList);
+        //
+
+        // we retrieve the birthdate list corresponding to the person list
+        // boolean birthdateList =
+        // getBirthdateListFromFilteredPersonList(FilteredPersonList);
+
+        // we retrieve the number of adults and the number of children
+
+        return filteredPersonList;
 
       } catch (Exception exception) {
         logger.error("Erreur lors de la récupération des personnes liées à une station de feu : "
@@ -62,6 +109,7 @@ public class FireStationService {
       return null;
     }
   }
+
 
   private List<String> getAddressListFromFireStationList(List<FireStation> fireStationList) {
     List<String> addressList = new ArrayList<>();
