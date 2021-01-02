@@ -1,5 +1,6 @@
 package com.safetynet.alerts_api.model;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,6 +10,7 @@ import lombok.Data;
 
 @Data
 @Entity
+@JsonFilter("dynamicFilter")
 @Table(name = "persons")
 public class Person {
 
