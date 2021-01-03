@@ -57,44 +57,18 @@ public class FireStationService {
         // we retrieve the person list corresponding to the address list
         List<Person> filteredPersonList = personRepository.findAllByAddressInOrderByAddress(addressList);
 
-        // we retrieve the firstNameAndLastName from the list corresponding to the
-        // person list
-        // boolean birthdateList =
-        // getFirstNameAndLastNameListFromFilteredPersonList(FilteredPersonList);
-
-        // List<MedicalRecord> filteredMedicalRecordList = new ArrayList<>();
-
+        // we retrieve the birthDateList corresponding to the filteredPersonList
         List<String> birthDateList = new ArrayList<>();
         filteredPersonList.forEach(personIterator -> {
-          System.out.println(personIterator.getFirstName());
-          System.out.println(medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
-              personIterator.getFirstName(), personIterator.getLastName()));
-          /*
-           * String birthdate =
-           * getBirthdateListFromFilteredPersonList(medicalRecordRepository
-           * .findByFirstNameAndLastNameAllIgnoreCase( personIterator.getFirstName(),
-           * personIterator.getLastName()));
-           */
           medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
               personIterator.getFirstName(), personIterator.getLastName()).forEach(fireStationIterator -> {
                 if (fireStationIterator.getBirthdate() != null && !fireStationIterator.getBirthdate().isEmpty()) {
                   birthDateList.add(fireStationIterator.getBirthdate());
                 }
               });
-          // getbirddayFromFireStationList(filteredMedicalRecordList);
-          /*
-           * birthdateList.add(
-           * medicalRecordRepository.findBirthdateByFirstNameAndLastNameAllIgnoreCase(
-           * personIterator.getFirstName(), personIterator.getLastName()));
-           */
 
         });
         System.out.println(birthDateList);
-        //
-
-        // we retrieve the birthdate list corresponding to the person list
-        // boolean birthdateList =
-        // getBirthdateListFromFilteredPersonList(FilteredPersonList);
 
         // we retrieve the number of adults and the number of children
 
