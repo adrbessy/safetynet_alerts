@@ -3,7 +3,7 @@ package com.safetynet.alerts_api.controller;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.safetynet.alerts_api.model.Person;
+import com.safetynet.alerts_api.model.FireStationInfo;
 import com.safetynet.alerts_api.service.FireStationService;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -26,7 +26,7 @@ public class FireStationController {
   public MappingJacksonValue getPersonListCoveredByThisStation(@RequestParam Integer stationNumber) {
     logger.info(
         "Requête Get sur le endpoint 'fireStation' avec stationNumber : {" + stationNumber.toString() + "} reçue");
-    List<Person> FireStationPersonList = fireStationService.getFireStationPersonList(stationNumber);
+    List<FireStationInfo> FireStationPersonList = fireStationService.getFireStationPersonList(stationNumber);
     SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.serializeAllExcept("id", "city", "zip", "email");
     FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
     MappingJacksonValue filteredFireStationPersonList = new MappingJacksonValue(FireStationPersonList);

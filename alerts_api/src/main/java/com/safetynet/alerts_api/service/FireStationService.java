@@ -1,11 +1,17 @@
 package com.safetynet.alerts_api.service;
 
 import com.safetynet.alerts_api.model.FireStation;
+import com.safetynet.alerts_api.model.FireStationInfo;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.FireStationRepository;
 import com.safetynet.alerts_api.repository.MedicalRecordRepository;
 import com.safetynet.alerts_api.repository.PersonRepository;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -45,7 +51,7 @@ public class FireStationService {
     return false;
   }
 
-  public List<Person> getFireStationPersonList(Integer stationNumber) {
+  public List<FireStationInfo> getFireStationPersonList(Integer stationNumber) {
     if (stationNumber != null) {
       try {
         // we retrieve the list of stations corresponding to the stationNumber
@@ -70,9 +76,35 @@ public class FireStationService {
         });
         System.out.println(birthDateList);
 
-        // we retrieve the number of adults and the number of children
+        // we retrieve the age, then the number of children and adults
+        int child = 0;
+        int adult = 0;
+        for (String temp : birthDateList) {
+          SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+          Date d = sdf.parse(temp);
+          Calendar c = Calendar.getInstance();
+          c.setTime(d);
+          int year = c.get(Calendar.YEAR);
+          int month = c.get(Calendar.MONTH) + 1;
+          int date = c.get(Calendar.DATE);
+          LocalDate l1 = LocalDate.of(year, month, date);
+          LocalDate now1 = LocalDate.now();
+          Period diff1 = Period.between(l1, now1);
+          System.out.println("age:" + diff1.getYears() + "years");
+          if (diff1.getYears() <= 18)
+            child++;
+          else
+            adult++;
+        }
 
-        return filteredPersonList;
+        // We create an object including the list of persons and the number of adults
+        // and children
+        FireStationInfo fireStationInfo = new FireStationInfo(filteredPersonList,
+            child, adult);
+        List<FireStationInfo> fireStationInfoList = new ArrayList<>();
+        fireStationInfoList.add(fireStationInfo);
+
+        return fireStationInfoList;
 
       } catch (Exception exception) {
         logger.error("Erreur lors de la récupération des personnes liées à une station de feu : "
