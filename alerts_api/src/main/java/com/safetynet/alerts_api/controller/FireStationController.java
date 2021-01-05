@@ -27,7 +27,8 @@ public class FireStationController {
     logger.info(
         "Get request of the endpoint 'fireStation' with the stationNumber : {" + stationNumber.toString() + "}");
     List<FireStationInfo> FireStationPersonList = fireStationService.getFireStationPersonList(stationNumber);
-    SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.serializeAllExcept("id", "city", "zip", "email");
+    SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("firstName", "lastName", "address",
+        "phone");
     FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
     MappingJacksonValue filteredFireStationPersonList = new MappingJacksonValue(FireStationPersonList);
     filteredFireStationPersonList.setFilters(filterList);

@@ -3,7 +3,7 @@ package com.safetynet.alerts_api.controller;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.safetynet.alerts_api.model.Person;
+import com.safetynet.alerts_api.model.Home;
 import com.safetynet.alerts_api.service.PersonService;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -25,10 +25,10 @@ public class ChildAlertController {
   public MappingJacksonValue getChildListLivingToThisAdress(@RequestParam String address) {
     logger.info(
         "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
-    List<Person> childrenList = personService.getChildrenList(address);
-    SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.serializeAllExcept("id", "city", "zip", "email");
+    List<Home> homeList = personService.getChildrenList(address);
+    SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("firstName", "lastName", "age");
     FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
-    MappingJacksonValue filteredFireStationPersonList = new MappingJacksonValue(childrenList);
+    MappingJacksonValue filteredFireStationPersonList = new MappingJacksonValue(homeList);
     filteredFireStationPersonList.setFilters(filterList);
     return filteredFireStationPersonList;
   }

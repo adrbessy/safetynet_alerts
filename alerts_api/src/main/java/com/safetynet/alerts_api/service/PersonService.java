@@ -1,5 +1,6 @@
 package com.safetynet.alerts_api.service;
 
+import com.safetynet.alerts_api.model.Home;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.MedicalRecordRepository;
 import com.safetynet.alerts_api.repository.PersonRepository;
@@ -46,13 +47,14 @@ public class PersonService {
     return false;
   }
 
-  public List<Person> getChildrenList(String address) {
+  public List<Home> getChildrenList(String address) {
 
     // we retrieve the list of persons corresponding to the address
     List<Person> filteredPersonList = personRepository.findDistinctByAddress(address);
 
     // we retrieve the list of children from the list of persons
     List<Person> childrenList = new ArrayList<>();
+    List<Person> adultList = new ArrayList<>();
     filteredPersonList.forEach(personIterator -> {
       medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
           personIterator.getFirstName(), personIterator.getLastName()).forEach(fireStationIterator -> {
@@ -70,9 +72,13 @@ public class PersonService {
                 LocalDate l1 = LocalDate.of(year, month, date);
                 LocalDate now1 = LocalDate.now();
                 Period diff1 = Period.between(l1, now1);
-                System.out.println("age:" + diff1.getYears() + "years");
-                if (diff1.getYears() <= 18)
+                System.out.println("age: " + diff1.getYears() + "years");
+                personIterator.setAge(diff1.getYears());
+                if (diff1.getYears() <= 18) {
                   childrenList.add(personIterator);
+                } else {
+                  adultList.add(personIterator);
+                }
               } catch (ParseException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -80,7 +86,13 @@ public class PersonService {
             }
           });
     });
-    return childrenList;
+
+    // We create an object including the list of children and the list of adults
+    Home home = new Home(childrenList, adultList);
+    List<Home> homeList = new ArrayList<>();
+    homeList.add(home);
+
+    return homeList;
   }
 
 }
