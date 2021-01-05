@@ -10,4 +10,6 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
 
   List<Person> findAllByAddressInOrderByAddress(List<String> addressList);
 
+  List<Person> findDistinctByAddress(String address);
+
 }

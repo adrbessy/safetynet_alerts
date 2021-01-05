@@ -72,7 +72,6 @@ public class FireStationService {
                   birthDateList.add(fireStationIterator.getBirthdate());
                 }
               });
-
         });
         System.out.println(birthDateList);
 

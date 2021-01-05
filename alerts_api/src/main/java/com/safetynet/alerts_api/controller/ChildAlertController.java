@@ -3,8 +3,8 @@ package com.safetynet.alerts_api.controller;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.safetynet.alerts_api.model.FireStationInfo;
-import com.safetynet.alerts_api.service.FireStationService;
+import com.safetynet.alerts_api.model.Person;
+import com.safetynet.alerts_api.service.PersonService;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,23 +15,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class FireStationController {
+public class ChildAlertController {
 
   private static final Logger logger = LogManager.getLogger(FireStationController.class);
-
   @Autowired
-  private FireStationService fireStationService;
+  private PersonService personService;
 
-  @GetMapping("/firestation")
-  public MappingJacksonValue getPersonListCoveredByThisStation(@RequestParam Integer stationNumber) {
+  @GetMapping("/childAlert")
+  public MappingJacksonValue getChildListLivingToThisAdress(@RequestParam String address) {
     logger.info(
-        "Get request of the endpoint 'fireStation' with the stationNumber : {" + stationNumber.toString() + "}");
-    List<FireStationInfo> FireStationPersonList = fireStationService.getFireStationPersonList(stationNumber);
+        "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
+    List<Person> childrenList = personService.getChildrenList(address);
     SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.serializeAllExcept("id", "city", "zip", "email");
     FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
-    MappingJacksonValue filteredFireStationPersonList = new MappingJacksonValue(FireStationPersonList);
+    MappingJacksonValue filteredFireStationPersonList = new MappingJacksonValue(childrenList);
     filteredFireStationPersonList.setFilters(filterList);
     return filteredFireStationPersonList;
   }
-
 }
