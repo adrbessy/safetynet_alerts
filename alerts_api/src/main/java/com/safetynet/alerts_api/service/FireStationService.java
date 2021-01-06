@@ -158,8 +158,6 @@ public class FireStationService {
 
     System.out.println("phoneListNoDuplicates:" + phoneListNoDuplicates);
 
-    // List<String> fireStationInfoList = new ArrayList<>();
-
     return phoneListNoDuplicates;
   }
 

@@ -10,4 +10,6 @@ public interface FireStationRepository extends CrudRepository<FireStation, Long>
 
   List<FireStation> findDistinctByStation(int stationNumber);
 
+  List<FireStation> findDistinctByAddress(String address);
+
 }
