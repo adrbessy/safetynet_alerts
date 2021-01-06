@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,6 +127,40 @@ public class FireStationService {
       });
     }
     return addressList;
+  }
+
+  private List<String> getPhoneListFromPersonList(List<Person> personList) {
+    List<String> phoneList = new ArrayList<>();
+    if (personList != null) {
+      personList.forEach(personIterator -> {
+        if (personIterator.getPhone() != null && !personIterator.getPhone().isEmpty()) {
+          phoneList.add(personIterator.getPhone());
+        }
+      });
+    }
+    return phoneList;
+  }
+
+  public List<String> getPhoneNumberList(Integer firestation) {
+    // we retrieve the list of stations corresponding to the stationNumber
+    List<FireStation> fireStationList = fireStationRepository.findDistinctByStation(firestation);
+
+    // we retrieve the address list corresponding to the fireStation list
+    List<String> addressList = getAddressListFromFireStationList(fireStationList);
+
+    // we retrieve the person list corresponding to the address list
+    List<Person> filteredPersonList = personRepository.findAllByAddressInOrderByAddress(addressList);
+
+    // we retrieve the address list corresponding to the filteredPerson list
+    List<String> phoneList = getPhoneListFromPersonList(filteredPersonList);
+
+    List<String> phoneListNoDuplicates = phoneList.stream().distinct().collect(Collectors.toList());
+
+    System.out.println("phoneListNoDuplicates:" + phoneListNoDuplicates);
+
+    // List<String> fireStationInfoList = new ArrayList<>();
+
+    return phoneListNoDuplicates;
   }
 
 }

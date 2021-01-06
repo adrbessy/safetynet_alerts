@@ -89,10 +89,17 @@ public class PersonService {
 
     // We create an object including the list of children and the list of adults
     Home home = new Home(childrenList, adultList);
+    if (childrenList.isEmpty()) {
+      return new ArrayList<>();
+    }
     List<Home> homeList = new ArrayList<>();
     homeList.add(home);
 
+
+
     return homeList;
   }
+
+
 
 }
