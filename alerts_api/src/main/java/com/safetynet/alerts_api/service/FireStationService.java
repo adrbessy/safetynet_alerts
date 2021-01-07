@@ -90,7 +90,7 @@ public class FireStationService {
           LocalDate l1 = LocalDate.of(year, month, date);
           LocalDate now1 = LocalDate.now();
           Period diff1 = Period.between(l1, now1);
-          System.out.println("age:" + diff1.getYears() + "years");
+          System.out.println("age:" + diff1.getYears());
           if (diff1.getYears() <= 18)
             child++;
           else
@@ -160,6 +160,8 @@ public class FireStationService {
 
     return phoneListNoDuplicates;
   }
+
+
 
 }
 

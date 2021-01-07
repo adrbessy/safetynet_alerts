@@ -3,7 +3,7 @@ package com.safetynet.alerts_api.controller;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.safetynet.alerts_api.model.PersonInfo;
+import com.safetynet.alerts_api.model.PersonInfoByAddress;
 import com.safetynet.alerts_api.service.PersonService;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -15,22 +15,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class FireController {
+public class FloodController {
 
   private static final Logger logger = LogManager.getLogger(FireStationController.class);
 
   @Autowired
   private PersonService personService;
 
-  @GetMapping("/fire")
-  public MappingJacksonValue getPersonListLivingToThisAdressAndFirestationNumber(@RequestParam String address) {
+  @GetMapping("/flood")
+  public MappingJacksonValue getAddressCoveredByTheseStation(@RequestParam List<Integer> stations) {
     logger.info(
-        "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
-    List<PersonInfo> personList = personService.getPersonListWithStationNumber(address);
+        "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + stations.toString() + "}");
+    List<PersonInfoByAddress> personInfoByaddressList = personService.getPersonInfoByAddressList(stations);
     SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("lastName", "phone", "age",
         "medications", "allergies");
     FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
-    MappingJacksonValue filteredFireStationPersonList = new MappingJacksonValue(personList);
+    MappingJacksonValue filteredFireStationPersonList = new MappingJacksonValue(personInfoByaddressList);
     filteredFireStationPersonList.setFilters(filterList);
     return filteredFireStationPersonList;
   }
