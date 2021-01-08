@@ -1,10 +1,13 @@
-package com.safetynet.alerts_api.service;
+package com.safetynet.alerts_api.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.model.Person;
+import com.safetynet.alerts_api.service.FireStationService;
+import com.safetynet.alerts_api.service.MedicalRecordService;
+import com.safetynet.alerts_api.service.PersonService;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,18 +22,17 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-
-@Service
-public class JsonReaderService {
+@Repository
+public class JsonReaderRepository {
 
   private ObjectMapper objectMapper;
 
   @Value("${data.jsonFilePath}")
   private String filePath;
 
-  private static final Logger logger = LogManager.getLogger(JsonReaderService.class);
+  private static final Logger logger = LogManager.getLogger(JsonReaderRepository.class);
 
   @Autowired
   private PersonService personService;
@@ -133,6 +135,5 @@ public class JsonReaderService {
 
 
   }
-
 
 }
