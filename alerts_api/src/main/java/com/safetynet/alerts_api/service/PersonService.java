@@ -8,13 +8,7 @@ import com.safetynet.alerts_api.model.PersonInfoByAddress;
 import com.safetynet.alerts_api.repository.FireStationRepository;
 import com.safetynet.alerts_api.repository.MedicalRecordRepository;
 import com.safetynet.alerts_api.repository.PersonRepository;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
@@ -36,26 +30,9 @@ public class PersonService {
   @Autowired
   private MedicalRecordRepository medicalRecordRepository;
 
-  /**
-   * Sauvegarde la liste des personnes passées en paramètre
-   *
-   * @param personList Liste des personnes à sauvegarder
-   */
-  public boolean saveAllPersons(List<Person> personList) {
 
-    if (personList != null) {
-      try {
-        personRepository.saveAll(personList);
-        return true;
-      } catch (Exception exception) {
-        logger.error("Erreur lors de l'enregistrement de la liste des personnes " + exception.getMessage()
-            + " , Stack Trace : " + exception.getStackTrace());
-      }
-    }
-    return false;
-  }
 
-  public List<Home> getChildrenList(String address) {
+  public List<Home> getChildrenListAndAdultListFromAddress(String address) {
 
     // we retrieve the list of persons corresponding to the address
     List<Person> filteredPersonList = personRepository.findDistinctByAddress(address);
@@ -65,31 +42,13 @@ public class PersonService {
     List<Person> adultList = new ArrayList<>();
     filteredPersonList.forEach(personIterator -> {
       medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
-          personIterator.getFirstName(), personIterator.getLastName()).forEach(fireStationIterator -> {
-            if (fireStationIterator.getBirthdate() != null && !fireStationIterator.getBirthdate().isEmpty()) {
-              String birthdate = fireStationIterator.getBirthdate();
-              SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-              Date d;
-              try {
-                d = sdf.parse(birthdate);
-                Calendar c = Calendar.getInstance();
-                c.setTime(d);
-                int year = c.get(Calendar.YEAR);
-                int month = c.get(Calendar.MONTH) + 1;
-                int date = c.get(Calendar.DATE);
-                LocalDate l1 = LocalDate.of(year, month, date);
-                LocalDate now1 = LocalDate.now();
-                Period diff1 = Period.between(l1, now1);
-                System.out.println("age: " + diff1.getYears());
-                personIterator.setAge(diff1.getYears());
-                if (diff1.getYears() <= 18) {
-                  childrenList.add(personIterator);
-                } else {
-                  adultList.add(personIterator);
-                }
-              } catch (ParseException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+          personIterator.getFirstName(), personIterator.getLastName()).forEach(medicalRecordIterator -> {
+            if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
+              personIterator.setAge_Mediations_Allergies(medicalRecordIterator);
+              if (personIterator.getAge() <= 18) {
+                childrenList.add(personIterator);
+              } else {
+                adultList.add(personIterator);
               }
             }
           });
@@ -103,12 +62,57 @@ public class PersonService {
     List<Home> homeList = new ArrayList<>();
     homeList.add(home);
 
-
-
     return homeList;
   }
 
-  public List<Person> getPersonInfoList(String address) {
+
+  public List<Person> getPersonInfoByFirstNameAndLastName(String firstName, String lastName) {
+    // we retrieve the list of persons corresponding to the address
+    List<Person> filteredPersonList = personRepository.findByFirstNameAndLastNameAllIgnoreCase(firstName, lastName);
+    System.out.println("filteredPersonList:" + filteredPersonList);
+    filteredPersonList.forEach(personIterator -> {
+      medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
+          personIterator.getFirstName(), personIterator.getLastName()).forEach(medicalRecordIterator -> {
+            if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
+              personIterator.setAge_Mediations_Allergies(medicalRecordIterator);
+            }
+          });
+    });
+
+    return filteredPersonList;
+  }
+
+
+  public List<Person> getPersonInfoByLastName(String lastName) {
+    // we retrieve the list of persons corresponding to the address
+    List<Person> filteredPersonList = personRepository.findByLastNameAllIgnoreCase(lastName);
+    filteredPersonList.forEach(personIterator -> {
+      medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
+          personIterator.getFirstName(), personIterator.getLastName()).forEach(medicalRecordIterator -> {
+            if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
+              personIterator.setAge_Mediations_Allergies(medicalRecordIterator);
+            }
+          });
+    });
+
+    return filteredPersonList;
+  }
+
+
+  public List<Person> getPersonInfoByFirstNameAndLastNameThenOnlyLastName(String firstName, String lastName) {
+    List<Person> personInfoByFirstNameAndLastName = getPersonInfoByFirstNameAndLastName(firstName, lastName);
+    List<Person> personInfoByLastName = getPersonInfoByLastName(lastName);
+    personInfoByLastName.forEach(personIterator -> {
+      if (!personInfoByFirstNameAndLastName.contains(personIterator))
+        personInfoByFirstNameAndLastName.add(personIterator);
+    });
+
+    return personInfoByFirstNameAndLastName;
+
+  }
+
+
+  public List<Person> getPersonInfoListByAddress(String address) {
 
     // we retrieve the list of persons corresponding to the address
     List<Person> filteredPersonList = personRepository.findDistinctByAddress(address);
@@ -117,27 +121,7 @@ public class PersonService {
       medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
           personIterator.getFirstName(), personIterator.getLastName()).forEach(medicalRecordIterator -> {
             if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
-              String birthdate = medicalRecordIterator.getBirthdate();
-              SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-              Date d;
-              try {
-                d = sdf.parse(birthdate);
-                Calendar c = Calendar.getInstance();
-                c.setTime(d);
-                int year = c.get(Calendar.YEAR);
-                int month = c.get(Calendar.MONTH) + 1;
-                int date = c.get(Calendar.DATE);
-                LocalDate l1 = LocalDate.of(year, month, date);
-                LocalDate now1 = LocalDate.now();
-                Period diff1 = Period.between(l1, now1);
-                System.out.println("age: " + diff1.getYears());
-                personIterator.setAge(diff1.getYears());
-                personIterator.setMedications(medicalRecordIterator.getMedications());
-                personIterator.setAllergies(medicalRecordIterator.getAllergies());
-              } catch (ParseException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-              }
+              personIterator.setAge_Mediations_Allergies(medicalRecordIterator);
             }
           });
     });
@@ -148,7 +132,7 @@ public class PersonService {
 
   public List<PersonInfo> getPersonListWithStationNumber(String address) {
 
-    List<Person> filteredPersonList = getPersonInfoList(address);
+    List<Person> filteredPersonList = getPersonInfoListByAddress(address);
 
     List<FireStation> filteredFireStationList = firestationRepository.findDistinctByAddress(address);
 
@@ -209,7 +193,7 @@ public class PersonService {
     if (addressList != null) {
       addressList.forEach(addressIterator -> {
         PersonInfoByAddress personInfoByAddress = new PersonInfoByAddress(addressIterator,
-            getPersonInfoList(addressIterator));
+            getPersonInfoListByAddress(addressIterator));
         personInfoByAddressList.add(personInfoByAddress);
       });
     }
@@ -217,6 +201,25 @@ public class PersonService {
 
   }
 
+
+  /**
+   * Sauvegarde la liste des personnes passées en paramètre
+   *
+   * @param personList Liste des personnes à sauvegarder
+   */
+  public boolean saveAllPersons(List<Person> personList) {
+
+    if (personList != null) {
+      try {
+        personRepository.saveAll(personList);
+        return true;
+      } catch (Exception exception) {
+        logger.error("Erreur lors de l'enregistrement de la liste des personnes " + exception.getMessage()
+            + " , Stack Trace : " + exception.getStackTrace());
+      }
+    }
+    return false;
+  }
 
 
 }
