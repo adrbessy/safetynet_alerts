@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class PhoneAlertController {
+public class CommunityPhoneController {
 
-  private static final Logger logger = LogManager.getLogger(FireStationController.class);
+  private static final Logger logger = LogManager.getLogger(CommunityPhoneController.class);
 
   @Autowired
   private FireStationService fireStationService;

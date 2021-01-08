@@ -31,6 +31,25 @@ public class PersonService {
   private MedicalRecordRepository medicalRecordRepository;
 
 
+  public List<String> getAddressList(List<Integer> stationsList) {
+    List<String> addressList = new ArrayList<>();
+    if (stationsList != null) {
+      stationsList.forEach(stationIterator -> {
+        // we retrieve the list of stations corresponding to the stationNumber
+        firestationRepository.findDistinctByStation(stationIterator).forEach(fireStationIterator -> {
+          if (fireStationIterator.getAddress() != null && !fireStationIterator.getAddress().isEmpty()) {
+            addressList.add(fireStationIterator.getAddress());
+          }
+        });
+      });
+    }
+    ;
+    List<String> addressListNoDuplicates = addressList.stream().distinct().collect(Collectors.toList());
+    System.out.println("phoneListNoDuplicates:" + addressListNoDuplicates);
+
+    return addressListNoDuplicates;
+  }
+
 
   public List<Home> getChildrenListAndAdultListFromAddress(String address) {
 
@@ -65,6 +84,42 @@ public class PersonService {
     return homeList;
   }
 
+  private List<String> getEmailListFromPersonList(List<Person> personList) {
+    List<String> emailList = new ArrayList<>();
+    if (personList != null) {
+      personList.forEach(personIterator -> {
+        if (personIterator.getEmail() != null && !personIterator.getEmail().isEmpty()) {
+          emailList.add(personIterator.getEmail());
+        }
+      });
+    }
+    return emailList;
+  }
+
+  public List<String> getPersonEmailFromCity(String city) {
+    List<Person> filteredPersonList = personRepository.findDistinctByCityAllIgnoreCase(city);
+    List<String> emailList = getEmailListFromPersonList(filteredPersonList);
+    List<String> emailListNoDuplicates = emailList.stream().distinct().collect(Collectors.toList());
+    return emailListNoDuplicates;
+  }
+
+
+  public List<PersonInfoByAddress> getPersonInfoByAddressList(List<Integer> stationsList) {
+    // We create an object including the list of persons and the list of fireStation
+    // number deserving the address.
+
+    List<PersonInfoByAddress> personInfoByAddressList = new ArrayList<>();
+    List<String> addressList = getAddressList(stationsList);
+    if (addressList != null) {
+      addressList.forEach(addressIterator -> {
+        PersonInfoByAddress personInfoByAddress = new PersonInfoByAddress(addressIterator,
+            getPersonInfoListByAddress(addressIterator));
+        personInfoByAddressList.add(personInfoByAddress);
+      });
+    }
+    return personInfoByAddressList;
+  }
+
 
   public List<Person> getPersonInfoByFirstNameAndLastName(String firstName, String lastName) {
     // we retrieve the list of persons corresponding to the address
@@ -78,7 +133,6 @@ public class PersonService {
             }
           });
     });
-
     return filteredPersonList;
   }
 
@@ -163,44 +217,6 @@ public class PersonService {
     return fireStationNumberList;
   }
 
-  public List<String> getAddressList(List<Integer> stationsList) {
-    List<String> addressList = new ArrayList<>();
-    if (stationsList != null) {
-      stationsList.forEach(stationIterator -> {
-        // we retrieve the list of stations corresponding to the stationNumber
-        firestationRepository.findDistinctByStation(stationIterator).forEach(fireStationIterator -> {
-          if (fireStationIterator.getAddress() != null && !fireStationIterator.getAddress().isEmpty()) {
-            addressList.add(fireStationIterator.getAddress());
-          }
-        });
-      });
-    }
-    ;
-    List<String> addressListNoDuplicates = addressList.stream().distinct().collect(Collectors.toList());
-    System.out.println("phoneListNoDuplicates:" + addressListNoDuplicates);
-
-
-
-    return addressListNoDuplicates;
-  }
-
-  public List<PersonInfoByAddress> getPersonInfoByAddressList(List<Integer> stationsList) {
-    // We create an object including the list of persons and the list of fireStation
-    // number deserving the address.
-
-    List<PersonInfoByAddress> personInfoByAddressList = new ArrayList<>();
-    List<String> addressList = getAddressList(stationsList);
-    if (addressList != null) {
-      addressList.forEach(addressIterator -> {
-        PersonInfoByAddress personInfoByAddress = new PersonInfoByAddress(addressIterator,
-            getPersonInfoListByAddress(addressIterator));
-        personInfoByAddressList.add(personInfoByAddress);
-      });
-    }
-    return personInfoByAddressList;
-
-  }
-
 
   /**
    * Sauvegarde la liste des personnes passées en paramètre
@@ -220,6 +236,5 @@ public class PersonService {
     }
     return false;
   }
-
 
 }
