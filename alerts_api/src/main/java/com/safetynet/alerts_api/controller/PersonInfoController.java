@@ -3,12 +3,11 @@ package com.safetynet.alerts_api.controller;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.safetynet.alerts_api.model.FireStationInfo;
 import com.safetynet.alerts_api.model.Home;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.model.PersonInfo;
 import com.safetynet.alerts_api.model.PersonInfoByAddress;
-import com.safetynet.alerts_api.service.FireStationService;
+import com.safetynet.alerts_api.model.PersonNumberInfo;
 import com.safetynet.alerts_api.service.PersonService;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -27,14 +26,18 @@ public class PersonInfoController {
   @Autowired
   private PersonService personService;
 
-  @Autowired
-  private FireStationService fireStationService;
-
+  /**
+   * Read - Get a person list covered by a given fire station with the number of
+   * occurrences of children and adults.
+   * 
+   * @param a fire station number
+   * @return - A List of FireStationInfo
+   */
   @GetMapping("/firestation")
   public MappingJacksonValue getPersonListCoveredByThisStation(@RequestParam Integer stationNumber) {
     logger.info(
         "Get request of the endpoint 'fireStation' with the stationNumber : {" + stationNumber.toString() + "}");
-    List<FireStationInfo> FireStationPersonList = fireStationService.getFireStationPersonList(stationNumber);
+    List<PersonNumberInfo> FireStationPersonList = personService.getPersonNumberList(stationNumber);
     SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("firstName", "lastName", "address",
         "phone");
     FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
@@ -43,6 +46,14 @@ public class PersonInfoController {
     return filteredFireStationPersonList;
   }
 
+  /**
+   * Read - Get a children list (inferior or equal 18) living to a particular
+   * address, with a list of other people living there. If no children living
+   * there, returns an empty list
+   * 
+   * @param an address
+   * @return - A List of Home
+   */
   @GetMapping("/childAlert")
   public MappingJacksonValue getChildListLivingToThisAdress(@RequestParam String address) {
     logger.info(
@@ -55,6 +66,13 @@ public class PersonInfoController {
     return filteredFireStationPersonList;
   }
 
+  /**
+   * Read - Get a person list living to a particular address, with a the number of
+   * the fire station deserving it.
+   * 
+   * @param an address
+   * @return - A List of PersonInfo
+   */
   @GetMapping("/fire")
   public MappingJacksonValue getPersonListLivingToThisAdressAndFirestationNumber(@RequestParam String address) {
     logger.info(
@@ -68,6 +86,13 @@ public class PersonInfoController {
     return filteredFireStationPersonList;
   }
 
+  /**
+   * Read - Get a person list grouped by address and grouped by the number of the
+   * fire station deserving it.
+   * 
+   * @param a List of number of fire station
+   * @return - A List of PersonInfoByAddress
+   */
   @GetMapping("/flood")
   public MappingJacksonValue getAddressCoveredByTheseStation(@RequestParam List<Integer> stations) {
     logger.info(
@@ -81,6 +106,13 @@ public class PersonInfoController {
     return filteredFireStationPersonList;
   }
 
+  /**
+   * Read - Get the information about a person from his first name and his last
+   * name; get also the information about the persons having the same last name.
+   * 
+   * @param a List of number of fire station
+   * @return - A List of Person
+   */
   @GetMapping("/personInfo")
   public MappingJacksonValue getAddressCoveredByTheseStation(@RequestParam String firstName,
       @RequestParam String lastName) {

@@ -1,6 +1,6 @@
 package com.safetynet.alerts_api.controller;
 
-import com.safetynet.alerts_api.service.FireStationService;
+import com.safetynet.alerts_api.service.PhoneService;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,13 +15,20 @@ public class CommunityPhoneController {
   private static final Logger logger = LogManager.getLogger(CommunityPhoneController.class);
 
   @Autowired
-  private FireStationService fireStationService;
+  private PhoneService phoneService;
 
+  /**
+   * Read - Get the list of all phone numbers of persons covered by a given fire
+   * station.
+   * 
+   * @param a fire station number
+   * @return - A List of phone number
+   */
   @GetMapping("/phoneAlert")
   public List<String> getPhoneNumberCoveredByThisStation(@RequestParam Integer firestation) {
     logger.info(
         "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + firestation.toString() + "}");
-    List<String> phoneList = fireStationService.getPhoneNumberList(firestation);
+    List<String> phoneList = phoneService.getPhoneNumberList(firestation);
     return phoneList;
   }
 

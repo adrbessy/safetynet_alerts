@@ -1,6 +1,6 @@
 package com.safetynet.alerts_api.controller;
 
-import com.safetynet.alerts_api.service.PersonService;
+import com.safetynet.alerts_api.service.EmailService;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,13 +15,19 @@ public class CommunityEmailController {
   private static final Logger logger = LogManager.getLogger(CommunityEmailController.class);
 
   @Autowired
-  private PersonService personService;
+  private EmailService emailService;
 
+  /**
+   * Read - Get the list of all email of persons living in a given city.
+   * 
+   * @param a city
+   * @return - A List of email
+   */
   @GetMapping("/communityEmail")
   public List<String> getPersonEmailFromCity(@RequestParam String city) {
     logger.info(
         "Get request of the endpoint 'communityEmail' with the city : {" + city + "}");
-    List<String> emailList = personService.getPersonEmailFromCity(city);
+    List<String> emailList = emailService.getPersonEmailFromCity(city);
     return emailList;
   }
 
