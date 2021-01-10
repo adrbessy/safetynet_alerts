@@ -1,4 +1,4 @@
-package com.safetynet.alerts_api.service;
+package com.safetynet.alerts_api.service.email;
 
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.PersonRepository;
@@ -9,12 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailService {
+public class EmailServiceImpl implements EmailService {
 
   @Autowired
   private PersonRepository personRepository;
 
-  private List<String> getEmailListFromPersonList(List<Person> personList) {
+  @Override
+  public List<String> getEmailListFromPersonList(List<Person> personList) {
     List<String> emailList = new ArrayList<>();
     if (personList != null) {
       personList.forEach(personIterator -> {
@@ -26,6 +27,7 @@ public class EmailService {
     return emailList;
   }
 
+  @Override
   public List<String> getPersonEmailFromCity(String city) {
     List<Person> filteredPersonList = personRepository.findDistinctByCityAllIgnoreCase(city);
     List<String> emailList = getEmailListFromPersonList(filteredPersonList);

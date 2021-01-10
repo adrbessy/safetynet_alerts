@@ -1,4 +1,4 @@
-package com.safetynet.alerts_api.service;
+package com.safetynet.alerts_api.service.person;
 
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.model.Home;
@@ -9,6 +9,8 @@ import com.safetynet.alerts_api.model.PersonNumberInfo;
 import com.safetynet.alerts_api.repository.FireStationRepository;
 import com.safetynet.alerts_api.repository.MedicalRecordRepository;
 import com.safetynet.alerts_api.repository.PersonRepository;
+import com.safetynet.alerts_api.service.address.AddressServiceImpl;
+import com.safetynet.alerts_api.service.fireStation.FireStationServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -17,9 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PersonService {
+public class PersonServiceImpl implements PersonService {
 
-  private static final Logger logger = LogManager.getLogger(PersonService.class);
+  private static final Logger logger = LogManager.getLogger(PersonServiceImpl.class);
 
   @Autowired
   private PersonRepository personRepository;
@@ -31,12 +33,13 @@ public class PersonService {
   private MedicalRecordRepository medicalRecordRepository;
 
   @Autowired
-  private AddressService addressService;
+  private AddressServiceImpl addressService;
 
   @Autowired
-  private FireStationService firestationService;
+  private FireStationServiceImpl firestationService;
 
 
+  @Override
   public List<PersonNumberInfo> getPersonNumberList(Integer stationNumber) {
     if (stationNumber != null) {
       try {
@@ -52,7 +55,7 @@ public class PersonService {
         // we retrieve the children List and adult List from the filteredPersonList
         List<Person> childrenList = new ArrayList<>();
         List<Person> adultList = new ArrayList<>();
-        getChildrenListAndAdultListFromPersonList(filteredPersonList, childrenList, adultList);
+        fullChildrenListAndAdultListFromPersonList(filteredPersonList, childrenList, adultList);
 
         int child = childrenList.size();
         int adult = adultList.size();
@@ -77,7 +80,8 @@ public class PersonService {
   }
 
 
-  public void getChildrenListAndAdultListFromPersonList(List<Person> personList, List<Person> childrenList,
+  @Override
+  public void fullChildrenListAndAdultListFromPersonList(List<Person> personList, List<Person> childrenList,
       List<Person> adultList) {
     personList.forEach(personIterator -> {
       medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
@@ -95,6 +99,7 @@ public class PersonService {
   }
 
 
+  @Override
   public List<Home> getChildrenListAndAdultListFromAddress(String address) {
 
     // we retrieve the list of persons corresponding to the address
@@ -103,7 +108,7 @@ public class PersonService {
     // we retrieve the list of children from the list of persons
     List<Person> childrenList = new ArrayList<>();
     List<Person> adultList = new ArrayList<>();
-    getChildrenListAndAdultListFromPersonList(filteredPersonList, childrenList, adultList);
+    fullChildrenListAndAdultListFromPersonList(filteredPersonList, childrenList, adultList);
 
     // We create an object including the list of children and the list of adults
     Home home = new Home(childrenList, adultList);
@@ -117,6 +122,7 @@ public class PersonService {
   }
 
 
+  @Override
   public List<PersonInfoByAddress> getPersonInfoByAddressList(List<Integer> stationsList) {
     // We create an object including the list of persons and the list of fireStation
     // number deserving the address.
@@ -126,7 +132,7 @@ public class PersonService {
     if (addressList != null) {
       addressList.forEach(addressIterator -> {
         PersonInfoByAddress personInfoByAddress = new PersonInfoByAddress(addressIterator,
-            getPersonInfoListByAddress(addressIterator));
+            getPersonListByAddress(addressIterator));
         personInfoByAddressList.add(personInfoByAddress);
       });
     }
@@ -134,10 +140,10 @@ public class PersonService {
   }
 
 
-  public List<Person> getPersonInfoByFirstNameAndLastName(String firstName, String lastName) {
+  @Override
+  public List<Person> getPersonListByFirstNameAndLastName(String firstName, String lastName) {
     // we retrieve the list of persons corresponding to the address
     List<Person> filteredPersonList = personRepository.findByFirstNameAndLastNameAllIgnoreCase(firstName, lastName);
-    System.out.println("filteredPersonList:" + filteredPersonList);
     filteredPersonList.forEach(personIterator -> {
       medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
           personIterator.getFirstName(), personIterator.getLastName()).forEach(medicalRecordIterator -> {
@@ -150,7 +156,8 @@ public class PersonService {
   }
 
 
-  public List<Person> getPersonInfoByLastName(String lastName) {
+  @Override
+  public List<Person> getPersonListByLastName(String lastName) {
     // we retrieve the list of persons corresponding to the address
     List<Person> filteredPersonList = personRepository.findByLastNameAllIgnoreCase(lastName);
     filteredPersonList.forEach(personIterator -> {
@@ -165,9 +172,10 @@ public class PersonService {
   }
 
 
-  public List<Person> getPersonInfoByFirstNameAndLastNameThenOnlyLastName(String firstName, String lastName) {
-    List<Person> personInfoByFirstNameAndLastName = getPersonInfoByFirstNameAndLastName(firstName, lastName);
-    List<Person> personInfoByLastName = getPersonInfoByLastName(lastName);
+  @Override
+  public List<Person> getPersonListByFirstNameAndLastNameThenOnlyLastName(String firstName, String lastName) {
+    List<Person> personInfoByFirstNameAndLastName = getPersonListByFirstNameAndLastName(firstName, lastName);
+    List<Person> personInfoByLastName = getPersonListByLastName(lastName);
     personInfoByLastName.forEach(personIterator -> {
       if (!personInfoByFirstNameAndLastName.contains(personIterator))
         personInfoByFirstNameAndLastName.add(personIterator);
@@ -176,7 +184,8 @@ public class PersonService {
   }
 
 
-  public List<Person> getPersonInfoListByAddress(String address) {
+  @Override
+  public List<Person> getPersonListByAddress(String address) {
 
     // we retrieve the list of persons corresponding to the address
     List<Person> filteredPersonList = personRepository.findDistinctByAddress(address);
@@ -193,18 +202,15 @@ public class PersonService {
   }
 
 
+  @Override
   public List<PersonInfo> getPersonListWithStationNumber(String address) {
 
-    List<Person> filteredPersonList = getPersonInfoListByAddress(address);
+    List<Person> filteredPersonList = getPersonListByAddress(address);
 
     List<FireStation> filteredFireStationList = firestationRepository.findDistinctByAddress(address);
 
-    System.out.println("filteredFireStationList: " + filteredFireStationList);
-
     List<Integer> fireStationNumberList = firestationService
         .getStationNumberListFromFireStationList(filteredFireStationList);
-
-    System.out.println("fireStationNumberList: " + fireStationNumberList);
 
     // We create an object including the list of persons and the list of fireStation
     // number deserving the address.
@@ -215,11 +221,7 @@ public class PersonService {
   }
 
 
-  /**
-   * Sauvegarde la liste des personnes passées en paramètre
-   *
-   * @param personList Liste des personnes à sauvegarder
-   */
+  @Override
   public boolean saveAllPersons(List<Person> personList) {
 
     if (personList != null) {

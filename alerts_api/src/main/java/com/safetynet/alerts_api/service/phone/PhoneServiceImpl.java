@@ -1,9 +1,10 @@
-package com.safetynet.alerts_api.service;
+package com.safetynet.alerts_api.service.phone;
 
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.FireStationRepository;
 import com.safetynet.alerts_api.repository.PersonRepository;
+import com.safetynet.alerts_api.service.address.AddressServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PhoneService {
+public class PhoneServiceImpl implements PhoneService {
 
   @Autowired
   private PersonRepository personRepository;
@@ -20,9 +21,9 @@ public class PhoneService {
   private FireStationRepository firestationRepository;
 
   @Autowired
-  private AddressService addressService;
+  private AddressServiceImpl addressService;
 
-  private List<String> getPhoneListFromPersonList(List<Person> personList) {
+  public List<String> getPhoneListFromPersonList(List<Person> personList) {
     List<String> phoneList = new ArrayList<>();
     if (personList != null) {
       personList.forEach(personIterator -> {

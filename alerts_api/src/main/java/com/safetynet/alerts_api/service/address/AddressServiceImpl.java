@@ -1,4 +1,4 @@
-package com.safetynet.alerts_api.service;
+package com.safetynet.alerts_api.service.address;
 
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.repository.FireStationRepository;
@@ -9,11 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AddressService {
+public class AddressServiceImpl implements AddressService {
 
   @Autowired
   private FireStationRepository firestationRepository;
 
+  @Override
   public List<String> getAddressListFromStationNumberList(List<Integer> stationsList) {
     List<String> addressList = new ArrayList<>();
     if (stationsList != null) {
@@ -29,7 +30,6 @@ public class AddressService {
     ;
     List<String> addressListNoDuplicates = addressList.stream().distinct().collect(Collectors.toList());
     System.out.println("phoneListNoDuplicates:" + addressListNoDuplicates);
-
     return addressListNoDuplicates;
   }
 

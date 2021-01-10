@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.model.Person;
-import com.safetynet.alerts_api.service.FireStationService;
-import com.safetynet.alerts_api.service.MedicalRecordService;
-import com.safetynet.alerts_api.service.PersonService;
+import com.safetynet.alerts_api.service.fireStation.FireStationServiceImpl;
+import com.safetynet.alerts_api.service.medicalRecord.MedicalRecordServiceImpl;
+import com.safetynet.alerts_api.service.person.PersonServiceImpl;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,33 +21,33 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
+import constants.FilesPath;
 
 @Repository
 public class JsonReaderRepository {
 
   private ObjectMapper objectMapper;
 
-  @Value("${data.jsonFilePath}")
-  private String filePath;
+  // @Value("${data.jsonFilePath}")
+  // private String filePath;
 
   private static final Logger logger = LogManager.getLogger(JsonReaderRepository.class);
 
   @Autowired
-  private PersonService personService;
+  private PersonServiceImpl personService;
 
   @Autowired
-  private FireStationService fireStationService;
+  private FireStationServiceImpl fireStationService;
 
   @Autowired
-  private MedicalRecordService medicalRecordService;
+  private MedicalRecordServiceImpl medicalRecordService;
 
   public void readDataFromJsonFile() {
     logger.debug("Démarrage du chargement du fichier data.json");
 
     try {
-      InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(this.filePath));
+      InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(FilesPath.ORIGINAL_INPUT_FILE));
 
       JSONParser jsonParser = new JSONParser();
 

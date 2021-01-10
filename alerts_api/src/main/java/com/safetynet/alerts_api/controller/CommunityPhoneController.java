@@ -1,6 +1,6 @@
 package com.safetynet.alerts_api.controller;
 
-import com.safetynet.alerts_api.service.PhoneService;
+import com.safetynet.alerts_api.service.phone.PhoneService;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -63,7 +63,6 @@ public class Person {
       LocalDate l1 = LocalDate.of(year, month, date);
       LocalDate now1 = LocalDate.now();
       Period diff1 = Period.between(l1, now1);
-      System.out.println("age: " + diff1.getYears());
       this.setAge(diff1.getYears());
       this.setMedications(medicalRecord.getMedications());
       this.setAllergies(medicalRecord.getAllergies());

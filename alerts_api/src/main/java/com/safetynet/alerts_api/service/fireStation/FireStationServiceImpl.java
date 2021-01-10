@@ -1,4 +1,4 @@
-package com.safetynet.alerts_api.service;
+package com.safetynet.alerts_api.service.fireStation;
 
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.repository.FireStationRepository;
@@ -10,14 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FireStationService {
+public class FireStationServiceImpl implements FireStationService {
 
-  private static final Logger logger = LogManager.getLogger(FireStationService.class);
+  private static final Logger logger = LogManager.getLogger(FireStationServiceImpl.class);
 
   @Autowired
   private FireStationRepository fireStationRepository;
 
 
+  @Override
   public List<Integer> getStationNumberListFromFireStationList(List<FireStation> fireStationList) {
     List<Integer> fireStationNumberList = new ArrayList<>();
     if (fireStationList != null) {
@@ -31,12 +32,7 @@ public class FireStationService {
   }
 
 
-  /**
-   * Sauvegarder la liste des stations de feu
-   *
-   * @param fireStationsList Liste à sauvegarder
-   * @return true si la sauvegarde s'est bien passée, false en cas d'erreur
-   */
+  @Override
   public boolean saveAllFireStations(List<FireStation> fireStationsList) {
     if (fireStationsList != null && !fireStationsList.isEmpty()) {
       try {
@@ -49,13 +45,6 @@ public class FireStationService {
     }
     return false;
   }
-
-
-
-
-
-
-
 
 }
 

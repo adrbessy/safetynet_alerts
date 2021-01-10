@@ -8,7 +8,7 @@ import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.model.PersonInfo;
 import com.safetynet.alerts_api.model.PersonInfoByAddress;
 import com.safetynet.alerts_api.model.PersonNumberInfo;
-import com.safetynet.alerts_api.service.PersonService;
+import com.safetynet.alerts_api.service.person.PersonService;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -119,7 +119,7 @@ public class PersonInfoController {
     logger.info(
         "Get request of the endpoint 'personInfo' with the first name : {" + firstName + "} and the last name : "
             + lastName);
-    List<Person> personInfoByaddressList = personService.getPersonInfoByFirstNameAndLastNameThenOnlyLastName(firstName,
+    List<Person> personInfoByaddressList = personService.getPersonListByFirstNameAndLastNameThenOnlyLastName(firstName,
         lastName);
     SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("firstName", "lastName", "address",
         "age", "email",
