@@ -114,7 +114,7 @@ public class PersonInfoController {
    * @return - A List of Person
    */
   @GetMapping("/personInfo")
-  public MappingJacksonValue getAddressCoveredByTheseStation(@RequestParam String firstName,
+  public MappingJacksonValue getPersonInfoFromFirstNameAndLastName(@RequestParam String firstName,
       @RequestParam String lastName) {
     logger.info(
         "Get request of the endpoint 'personInfo' with the first name : {" + firstName + "} and the last name : "
