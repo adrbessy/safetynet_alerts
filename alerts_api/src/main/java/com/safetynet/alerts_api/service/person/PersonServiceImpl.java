@@ -11,6 +11,7 @@ import com.safetynet.alerts_api.repository.MedicalRecordRepository;
 import com.safetynet.alerts_api.repository.PersonRepository;
 import com.safetynet.alerts_api.service.address.AddressServiceImpl;
 import com.safetynet.alerts_api.service.fireStation.FireStationServiceImpl;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -87,7 +88,7 @@ public class PersonServiceImpl implements PersonService {
       medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
           personIterator.getFirstName(), personIterator.getLastName()).forEach(medicalRecordIterator -> {
             if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
-              personIterator.setAge_Mediations_Allergies(medicalRecordIterator);
+              personIterator.setAge_Medications_Allergies(medicalRecordIterator, LocalDate.now());
               if (personIterator.getAge() <= 18) {
                 childrenList.add(personIterator);
               } else {
@@ -109,6 +110,7 @@ public class PersonServiceImpl implements PersonService {
     List<Person> childrenList = new ArrayList<>();
     List<Person> adultList = new ArrayList<>();
     fullChildrenListAndAdultListFromPersonList(filteredPersonList, childrenList, adultList);
+    System.out.println("childrenList : " + childrenList);
 
     // We create an object including the list of children and the list of adults
     Home home = new Home(childrenList, adultList);
@@ -148,7 +150,7 @@ public class PersonServiceImpl implements PersonService {
       medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
           personIterator.getFirstName(), personIterator.getLastName()).forEach(medicalRecordIterator -> {
             if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
-              personIterator.setAge_Mediations_Allergies(medicalRecordIterator);
+              personIterator.setAge_Medications_Allergies(medicalRecordIterator, LocalDate.now());
             }
           });
     });
@@ -164,7 +166,7 @@ public class PersonServiceImpl implements PersonService {
       medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
           personIterator.getFirstName(), personIterator.getLastName()).forEach(medicalRecordIterator -> {
             if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
-              personIterator.setAge_Mediations_Allergies(medicalRecordIterator);
+              personIterator.setAge_Medications_Allergies(medicalRecordIterator, LocalDate.now());
             }
           });
     });
@@ -194,7 +196,7 @@ public class PersonServiceImpl implements PersonService {
       medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
           personIterator.getFirstName(), personIterator.getLastName()).forEach(medicalRecordIterator -> {
             if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
-              personIterator.setAge_Mediations_Allergies(medicalRecordIterator);
+              personIterator.setAge_Medications_Allergies(medicalRecordIterator, LocalDate.now());
             }
           });
     });

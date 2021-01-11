@@ -29,10 +29,10 @@ public class AddressServiceImpl implements AddressService {
     }
     ;
     List<String> addressListNoDuplicates = addressList.stream().distinct().collect(Collectors.toList());
-    System.out.println("phoneListNoDuplicates:" + addressListNoDuplicates);
     return addressListNoDuplicates;
   }
 
+  @Override
   public List<String> getAddressListFromFireStationList(List<FireStation> fireStationList) {
     List<String> addressList = new ArrayList<>();
     if (fireStationList != null) {
