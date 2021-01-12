@@ -15,22 +15,29 @@ public class AddressServiceImpl implements AddressService {
   private FireStationRepository firestationRepository;
 
   @Override
-  public List<String> getAddressListFromStationNumberList(List<Integer> stationsList) {
+  public List<String> getAddressListFromStationNumberList(List<Integer> stationNumberList) {
     List<String> addressList = new ArrayList<>();
-    if (stationsList != null) {
-      stationsList.forEach(stationIterator -> {
+    if (stationNumberList != null) {
+      stationNumberList.forEach(stationIterator -> {
         // we retrieve the list of stations corresponding to the stationNumber
-        firestationRepository.findDistinctByStation(stationIterator).forEach(fireStationIterator -> {
-          if (fireStationIterator.getAddress() != null && !fireStationIterator.getAddress().isEmpty()) {
-            addressList.add(fireStationIterator.getAddress());
-          }
-        });
+        addAddressToListFromFireStationList(firestationRepository.findDistinctByStation(stationIterator), addressList);
       });
     }
     ;
     List<String> addressListNoDuplicates = addressList.stream().distinct().collect(Collectors.toList());
     return addressListNoDuplicates;
   }
+
+
+  public void addAddressToListFromFireStationList(List<FireStation> fireStationList, List<String> addressList) {
+    // we retrieve the list of stations corresponding to the stationNumber
+    fireStationList.forEach(fireStationIterator -> {
+      if (fireStationIterator.getAddress() != null && !fireStationIterator.getAddress().isEmpty()) {
+        addressList.add(fireStationIterator.getAddress());
+      }
+    });
+  }
+
 
   @Override
   public List<String> getAddressListFromFireStationList(List<FireStation> fireStationList) {

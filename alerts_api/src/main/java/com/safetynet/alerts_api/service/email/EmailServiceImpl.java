@@ -24,14 +24,14 @@ public class EmailServiceImpl implements EmailService {
         }
       });
     }
-    return emailList;
+    List<String> emailListNoDuplicates = emailList.stream().distinct().collect(Collectors.toList());
+    return emailListNoDuplicates;
   }
 
   @Override
   public List<String> getPersonEmailFromCity(String city) {
     List<Person> filteredPersonList = personRepository.findDistinctByCityAllIgnoreCase(city);
-    List<String> emailList = getEmailListFromPersonList(filteredPersonList);
-    List<String> emailListNoDuplicates = emailList.stream().distinct().collect(Collectors.toList());
+    List<String> emailListNoDuplicates = getEmailListFromPersonList(filteredPersonList);
     return emailListNoDuplicates;
   }
 

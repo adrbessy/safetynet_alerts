@@ -2,6 +2,7 @@ package com.safetynet.alerts_api.service.person;
 
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.model.Home;
+import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.model.PersonInfo;
 import com.safetynet.alerts_api.model.PersonInfoByAddress;
@@ -39,19 +40,23 @@ public class PersonServiceImpl implements PersonService {
   @Autowired
   private FireStationServiceImpl firestationService;
 
+  public List<Person> getPersonListFromStationNumber(Integer stationNumber) {
+    // we retrieve the list of stations corresponding to the stationNumber
+    List<FireStation> fireStationList = firestationRepository.findDistinctByStation(stationNumber);
+
+    // we retrieve the address list corresponding to the fireStation list
+    List<String> addressList = addressService.getAddressListFromFireStationList(fireStationList);
+
+    // we retrieve the person list corresponding to the address list
+    List<Person> filteredPersonList = personRepository.findAllByAddressInOrderByAddress(addressList);
+    return filteredPersonList;
+  }
 
   @Override
-  public List<PersonNumberInfo> getPersonNumberList(Integer stationNumber) {
+  public List<PersonNumberInfo> getPersonNumberInfoListFromStationNumber(Integer stationNumber) {
     if (stationNumber != null) {
       try {
-        // we retrieve the list of stations corresponding to the stationNumber
-        List<FireStation> fireStationList = firestationRepository.findDistinctByStation(stationNumber);
-
-        // we retrieve the address list corresponding to the fireStation list
-        List<String> addressList = addressService.getAddressListFromFireStationList(fireStationList);
-
-        // we retrieve the person list corresponding to the address list
-        List<Person> filteredPersonList = personRepository.findAllByAddressInOrderByAddress(addressList);
+        List<Person> filteredPersonList = getPersonListFromStationNumber(stationNumber);
 
         // we retrieve the children List and adult List from the filteredPersonList
         List<Person> childrenList = new ArrayList<>();
@@ -85,17 +90,26 @@ public class PersonServiceImpl implements PersonService {
   public void fullChildrenListAndAdultListFromPersonList(List<Person> personList, List<Person> childrenList,
       List<Person> adultList) {
     personList.forEach(personIterator -> {
-      medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
-          personIterator.getFirstName(), personIterator.getLastName()).forEach(medicalRecordIterator -> {
-            if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
-              personIterator.setAge_Medications_Allergies(medicalRecordIterator, LocalDate.now());
-              if (personIterator.getAge() <= 18) {
-                childrenList.add(personIterator);
-              } else {
-                adultList.add(personIterator);
-              }
-            }
-          });
+      addAddressToListFromFireStationList(personIterator,
+          medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
+              personIterator.getFirstName(), personIterator.getLastName()),
+          childrenList,
+          adultList, LocalDate.now());
+    });
+  }
+
+  public void addAddressToListFromFireStationList(Person personIterator, List<MedicalRecord> medicalRecordList,
+      List<Person> childrenList,
+      List<Person> adultList, LocalDate currentDate) {
+    medicalRecordList.forEach(medicalRecordIterator -> {
+      if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
+        personIterator.setAge_Medications_Allergies(medicalRecordIterator, currentDate);
+        if (personIterator.getAge() <= 18) {
+          childrenList.add(personIterator);
+        } else {
+          adultList.add(personIterator);
+        }
+      }
     });
   }
 
@@ -128,7 +142,6 @@ public class PersonServiceImpl implements PersonService {
   public List<PersonInfoByAddress> getPersonInfoByAddressList(List<Integer> stationsList) {
     // We create an object including the list of persons and the list of fireStation
     // number deserving the address.
-
     List<PersonInfoByAddress> personInfoByAddressList = new ArrayList<>();
     List<String> addressList = addressService.getAddressListFromStationNumberList(stationsList);
     if (addressList != null) {

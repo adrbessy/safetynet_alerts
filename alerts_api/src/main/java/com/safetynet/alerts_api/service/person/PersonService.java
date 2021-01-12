@@ -16,7 +16,7 @@ public interface PersonService {
    * @param an fire station number
    * @return - A List of PersonNumberInfo
    */
-  public List<PersonNumberInfo> getPersonNumberList(Integer stationNumber);
+  public List<PersonNumberInfo> getPersonNumberInfoListFromStationNumber(Integer stationNumber);
 
   /**
    * Read - full the List of children and adults from a given Person List.

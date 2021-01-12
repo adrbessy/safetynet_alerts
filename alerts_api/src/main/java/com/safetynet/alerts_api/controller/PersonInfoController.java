@@ -37,7 +37,8 @@ public class PersonInfoController {
   public MappingJacksonValue getPersonListCoveredByThisStation(@RequestParam Integer stationNumber) {
     logger.info(
         "Get request of the endpoint 'fireStation' with the stationNumber : {" + stationNumber.toString() + "}");
-    List<PersonNumberInfo> FireStationPersonList = personService.getPersonNumberList(stationNumber);
+    List<PersonNumberInfo> FireStationPersonList = personService
+        .getPersonNumberInfoListFromStationNumber(stationNumber);
     SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("firstName", "lastName", "address",
         "phone");
     FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
