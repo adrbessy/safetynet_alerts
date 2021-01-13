@@ -28,7 +28,7 @@ public class AddressServiceImpl implements AddressService {
     return addressListNoDuplicates;
   }
 
-
+  @Override
   public void addAddressToListFromFireStationList(List<FireStation> fireStationList, List<String> addressList) {
     // we retrieve the list of stations corresponding to the stationNumber
     fireStationList.forEach(fireStationIterator -> {

@@ -9,6 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 @WebMvcTest(controllers = Person.class)
 class PersonTest {
@@ -103,6 +105,11 @@ class PersonTest {
     assertThat(person.getAllergies()).isEqualTo(aller);
     assertThat(person.getMedications()).isEqualTo(medic);
     assertThat(person.getAge()).isEqualTo(32);
+  }
+
+  @Test
+  public void simpleEqualsPerson() {
+    EqualsVerifier.forClass(Person.class).suppress(Warning.ALL_FIELDS_SHOULD_BE_USED).verify();
   }
 
 

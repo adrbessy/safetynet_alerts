@@ -40,6 +40,8 @@ public class PersonServiceImpl implements PersonService {
   @Autowired
   private FireStationServiceImpl firestationService;
 
+
+  @Override
   public List<Person> getPersonListFromStationNumber(Integer stationNumber) {
     // we retrieve the list of stations corresponding to the stationNumber
     List<FireStation> fireStationList = firestationRepository.findDistinctByStation(stationNumber);
@@ -51,6 +53,7 @@ public class PersonServiceImpl implements PersonService {
     List<Person> filteredPersonList = personRepository.findAllByAddressInOrderByAddress(addressList);
     return filteredPersonList;
   }
+
 
   @Override
   public List<PersonNumberInfo> getPersonNumberInfoListFromStationNumber(Integer stationNumber) {
@@ -90,7 +93,7 @@ public class PersonServiceImpl implements PersonService {
   public void fullChildrenListAndAdultListFromPersonList(List<Person> personList, List<Person> childrenList,
       List<Person> adultList) {
     personList.forEach(personIterator -> {
-      addAddressToListFromFireStationList(personIterator,
+      addPersonToListFromFireStationList(personIterator,
           medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
               personIterator.getFirstName(), personIterator.getLastName()),
           childrenList,
@@ -98,7 +101,9 @@ public class PersonServiceImpl implements PersonService {
     });
   }
 
-  public void addAddressToListFromFireStationList(Person personIterator, List<MedicalRecord> medicalRecordList,
+
+  @Override
+  public void addPersonToListFromFireStationList(Person personIterator, List<MedicalRecord> medicalRecordList,
       List<Person> childrenList,
       List<Person> adultList, LocalDate currentDate) {
     medicalRecordList.forEach(medicalRecordIterator -> {
@@ -115,6 +120,19 @@ public class PersonServiceImpl implements PersonService {
 
 
   @Override
+  public void setAgeAndMedicationsAndAllergiesFromPersonList(List<Person> personList) {
+    personList.forEach(personIterator -> {
+      medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
+          personIterator.getFirstName(), personIterator.getLastName()).forEach(medicalRecordIterator -> {
+            if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
+              personIterator.setAge_Medications_Allergies(medicalRecordIterator, LocalDate.now());
+            }
+          });
+    });
+  }
+
+
+  @Override
   public List<Home> getChildrenListAndAdultListFromAddress(String address) {
 
     // we retrieve the list of persons corresponding to the address
@@ -124,7 +142,6 @@ public class PersonServiceImpl implements PersonService {
     List<Person> childrenList = new ArrayList<>();
     List<Person> adultList = new ArrayList<>();
     fullChildrenListAndAdultListFromPersonList(filteredPersonList, childrenList, adultList);
-    System.out.println("childrenList : " + childrenList);
 
     // We create an object including the list of children and the list of adults
     Home home = new Home(childrenList, adultList);
@@ -159,14 +176,7 @@ public class PersonServiceImpl implements PersonService {
   public List<Person> getPersonListByFirstNameAndLastName(String firstName, String lastName) {
     // we retrieve the list of persons corresponding to the address
     List<Person> filteredPersonList = personRepository.findByFirstNameAndLastNameAllIgnoreCase(firstName, lastName);
-    filteredPersonList.forEach(personIterator -> {
-      medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
-          personIterator.getFirstName(), personIterator.getLastName()).forEach(medicalRecordIterator -> {
-            if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
-              personIterator.setAge_Medications_Allergies(medicalRecordIterator, LocalDate.now());
-            }
-          });
-    });
+    setAgeAndMedicationsAndAllergiesFromPersonList(filteredPersonList);
     return filteredPersonList;
   }
 
@@ -175,14 +185,7 @@ public class PersonServiceImpl implements PersonService {
   public List<Person> getPersonListByLastName(String lastName) {
     // we retrieve the list of persons corresponding to the address
     List<Person> filteredPersonList = personRepository.findByLastNameAllIgnoreCase(lastName);
-    filteredPersonList.forEach(personIterator -> {
-      medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
-          personIterator.getFirstName(), personIterator.getLastName()).forEach(medicalRecordIterator -> {
-            if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
-              personIterator.setAge_Medications_Allergies(medicalRecordIterator, LocalDate.now());
-            }
-          });
-    });
+    setAgeAndMedicationsAndAllergiesFromPersonList(filteredPersonList);
     return filteredPersonList;
   }
 
@@ -201,18 +204,9 @@ public class PersonServiceImpl implements PersonService {
 
   @Override
   public List<Person> getPersonListByAddress(String address) {
-
     // we retrieve the list of persons corresponding to the address
     List<Person> filteredPersonList = personRepository.findDistinctByAddress(address);
-
-    filteredPersonList.forEach(personIterator -> {
-      medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
-          personIterator.getFirstName(), personIterator.getLastName()).forEach(medicalRecordIterator -> {
-            if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
-              personIterator.setAge_Medications_Allergies(medicalRecordIterator, LocalDate.now());
-            }
-          });
-    });
+    setAgeAndMedicationsAndAllergiesFromPersonList(filteredPersonList);
     return filteredPersonList;
   }
 

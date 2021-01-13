@@ -4,10 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.safetynet.alerts_api.repository.JsonReaderRepository;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import nl.jqno.equalsverifier.EqualsVerifier;
 
 @WebMvcTest(controllers = Home.class)
 class HomeTest {
@@ -41,13 +43,27 @@ class HomeTest {
   }
 
   @Test
-  public void testGetChildList() throws Exception {
+  public void testSetChildList() throws Exception {
+    home.setChildList(childList);
     assertThat(home.getChildList()).isEqualTo(childList);
   }
 
   @Test
-  public void testGetAdultList() throws Exception {
+  public void testSetAdultList() throws Exception {
+    home.setAdultList(adultList);
     assertThat(home.getAdultList()).isEqualTo(adultList);
+  }
+
+  @Test
+  public void simpleEqualsHome() {
+    EqualsVerifier.simple().forClass(Home.class).verify();
+  }
+
+  @Test
+  public void testToString() {
+    String expected = "Home(childList=" + childList + ", adultList=" + adultList + ")";
+    ; // put the expected value here
+    Assert.assertEquals(expected, home.toString());
   }
 
 }

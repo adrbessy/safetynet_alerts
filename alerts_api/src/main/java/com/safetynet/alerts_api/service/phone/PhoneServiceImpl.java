@@ -23,6 +23,7 @@ public class PhoneServiceImpl implements PhoneService {
   @Autowired
   private AddressServiceImpl addressService;
 
+  @Override
   public List<String> getPhoneListFromPersonList(List<Person> personList) {
     List<String> phoneList = new ArrayList<>();
     if (personList != null) {
@@ -35,6 +36,7 @@ public class PhoneServiceImpl implements PhoneService {
     return phoneList;
   }
 
+  @Override
   public List<String> getPhoneNumberList(Integer firestation) {
     // we retrieve the list of stations corresponding to the stationNumber
     List<FireStation> fireStationList = firestationRepository.findDistinctByStation(firestation);

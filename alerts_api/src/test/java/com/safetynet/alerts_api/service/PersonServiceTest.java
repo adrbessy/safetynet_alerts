@@ -1,10 +1,13 @@
 package com.safetynet.alerts_api.service;
 
+import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.FireStationRepository;
 import com.safetynet.alerts_api.repository.PersonRepository;
 import com.safetynet.alerts_api.service.address.AddressServiceImpl;
 import com.safetynet.alerts_api.service.person.PersonServiceImpl;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,15 +20,14 @@ class PersonServiceTest {
   private PersonServiceImpl personService;
 
   @Mock
-  private FireStationRepository firestationRepository;
+  private FireStationRepository firestationRepositoryMock;
 
   @Mock
-  private AddressServiceImpl addressService;
+  private AddressServiceImpl addressServiceMock;
 
   @Mock
-  private PersonRepository personRepository;
+  private PersonRepository personRepositoryMock;
 
-  @Mock
   private Person person;
 
   @BeforeEach
@@ -38,43 +40,52 @@ class PersonServiceTest {
    * 
    */
   @Test
-  public void testGetPersonListFromStationNumber() {/*
-                                                     * // GIVEN FireStation fireStation1 = new FireStation();
-                                                     * fireStation1.setId((long) 5);
-                                                     * fireStation1.setAddress("82 Alexander Road");
-                                                     * fireStation1.setStation(6); FireStation fireStation2 = new
-                                                     * FireStation(); fireStation2.setId((long) 2);
-                                                     * fireStation2.setAddress("1 rue Antonio Vivaldi");
-                                                     * fireStation2.setStation(2); List<FireStation> fireStationList =
-                                                     * new ArrayList<>(); fireStationList.add(fireStation1);
-                                                     * fireStationList.add(fireStation2);
-                                                     * 
-                                                     * List<String> addressList = new ArrayList<>();
-                                                     * addressList.add("82 Alexander Road");
-                                                     * addressList.add("1 rue Antonio Vivaldi");
-                                                     * 
-                                                     * Person person = new Person();
-                                                     * person.setEmail("ballapolorra-7977@yopmail.com");
-                                                     * person.setAddress("82 Alexander Road"); List<Person> personList =
-                                                     * new ArrayList<>(); personList.add(person); Person person2 = new
-                                                     * Person(); person2.setEmail("unoddicab-5625@yopmail.com");
-                                                     * person2.setAddress("12 rue des ecoles"); personList.add(person2);
-                                                     * Person person3 = new Person();
-                                                     * person3.setEmail("unoddicab-5625@yopmail.com");
-                                                     * person3.setAddress("1 rue des ecoles"); personList.add(person3);
-                                                     * 
-                                                     * when(firestationRepository.findDistinctByStation(1)).thenReturn(
-                                                     * fireStationList);
-                                                     * when(addressService.getAddressListFromFireStationList(
-                                                     * fireStationList)).thenReturn(addressList);
-                                                     * when(personRepository.findAllByAddressInOrderByAddress(
-                                                     * addressList)).thenReturn(personList); List<Person> result =
-                                                     * personService.getPersonListFromStationNumber(1);
-                                                     * 
-                                                     * // THEN assertThat(result).isEqualTo(personList);
-                                                     * verify(personRepository,
-                                                     * Mockito.times(1)).findAllByAddressInOrderByAddress(addressList);
-                                                     */
+  public void testGetPersonListFromStationNumber() {
+    // GIVEN
+
+    FireStation fireStation1 = new FireStation();
+    fireStation1.setId((long) 5);
+    fireStation1.setAddress("82 Alexander Road");
+    fireStation1.setStation(6);
+    FireStation fireStation2 = new FireStation();
+    fireStation2.setId((long) 2);
+    fireStation2.setAddress("1 rue Antonio Vivaldi");
+    fireStation2.setStation(2);
+    List<FireStation> fireStationList = new ArrayList<>();
+    fireStationList.add(fireStation1);
+    fireStationList.add(fireStation2);
+
+    List<String> addressList = new ArrayList<>();
+    addressList.add("82 Alexander Road");
+    addressList.add("1 rue Antonio Vivaldi");
+
+    Person person = new Person();
+    person.setEmail("ballapolorra-7977@yopmail.com");
+    person.setAddress("82 Alexander Road");
+    List<Person> personList = new ArrayList<>();
+    personList.add(person);
+    Person person2 = new Person();
+    person2.setEmail("unoddicab-5625@yopmail.com");
+    person2.setAddress("12 rue des ecoles");
+    personList.add(person2);
+    Person person3 = new Person();
+    person3.setEmail("unoddicab-5625@yopmail.com");
+    person3.setAddress("1 rue des ecoles");
+    personList.add(person3);
+    /*
+     * when(firestationRepositoryMock.findDistinctByStation(1)).thenReturn(
+     * fireStationList);
+     * when(addressServiceMock.getAddressListFromFireStationList(fireStationList)).
+     * thenReturn(addressList);
+     * when(personRepositoryMock.findAllByAddressInOrderByAddress(addressList)).
+     * thenReturn(personList); List<Person> result =
+     * personService.getPersonListFromStationNumber(1);
+     */
+    // THEN
+    /*
+     * assertThat(result).isEqualTo(personList); verify(personRepositoryMock,
+     * Mockito.times(1)).findAllByAddressInOrderByAddress(addressList);
+     */
   }
 
   /**
@@ -100,6 +111,15 @@ class PersonServiceTest {
                                                           * LocalDate.of(2021, 1, 11));
                                                           * assertThat(childrenList).isEqualTo(childrenListTest);
                                                           */
+  }
+
+  /**
+   * test to get a list of PersonNumberInfo from a fireStation number.
+   * 
+   */
+  @Test
+  public void testGetPersonNumberInfoListFromStationNumber() {
+
   }
 
 }
