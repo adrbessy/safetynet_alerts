@@ -49,7 +49,7 @@ public class Person {
   private List<String> allergies;
 
 
-  public void setAge_Mediations_Allergies(MedicalRecord medicalRecord) {
+  public void setAge_Medications_Allergies(MedicalRecord medicalRecord, LocalDate currentDate) {
     String birthdate = medicalRecord.getBirthdate();
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     Date d;
@@ -61,9 +61,7 @@ public class Person {
       int month = c.get(Calendar.MONTH) + 1;
       int date = c.get(Calendar.DATE);
       LocalDate l1 = LocalDate.of(year, month, date);
-      LocalDate now1 = LocalDate.now();
-      Period diff1 = Period.between(l1, now1);
-      System.out.println("age: " + diff1.getYears());
+      Period diff1 = Period.between(l1, currentDate);
       this.setAge(diff1.getYears());
       this.setMedications(medicalRecord.getMedications());
       this.setAllergies(medicalRecord.getAllergies());
