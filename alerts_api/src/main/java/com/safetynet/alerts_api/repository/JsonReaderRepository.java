@@ -65,8 +65,7 @@ public class JsonReaderRepository {
       inputStreamReader.close();
 
     } catch (IOException | ParseException exception) {
-      logger.error("Error while parsing input json file : " + exception.getMessage() + " Stack Strace : "
-          + exception.getStackTrace());
+      logger.error("Error while parsing input json file : " + exception.getMessage());
     }
 
     logger.debug("Chargement du fichier data.json terminé");
@@ -82,8 +81,7 @@ public class JsonReaderRepository {
       try {
         personList.add(objectMapper.readValue(person.toString(), Person.class));
       } catch (JsonProcessingException exception) {
-        logger.error("Error while parsing input json file - persons : " + exception.getMessage() + " Stack Strace : "
-            + exception.getStackTrace());
+        logger.error("Error while parsing input json file - persons : " + exception.getMessage());
       }
     }
     ;
@@ -103,8 +101,7 @@ public class JsonReaderRepository {
         fireStationList.add(objectMapper.readValue(fireStation.toString(), FireStation.class));
 
       } catch (JsonProcessingException exception) {
-        logger.error("Error while parsing input json file - firestations : " + exception.getMessage()
-            + " Stack Strace : " + exception.getStackTrace());
+        logger.error("Error while parsing input json file - firestations : " + exception.getMessage());
       }
     }
     ;
@@ -123,8 +120,7 @@ public class JsonReaderRepository {
       try {
         medicalRecordList.add(objectMapper.readValue(medicalRecord.toString(), MedicalRecord.class));
       } catch (JsonProcessingException exception) {
-        logger.error("Error while parsing input json file - medicalRecords : " + exception.getMessage()
-            + " Stack Strace : " + exception.getStackTrace());
+        logger.error("Error while parsing input json file - medicalRecords : " + exception.getMessage());
       }
     }
     ;

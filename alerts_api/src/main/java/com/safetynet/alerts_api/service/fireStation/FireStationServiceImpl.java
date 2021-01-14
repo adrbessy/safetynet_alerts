@@ -17,6 +17,12 @@ public class FireStationServiceImpl implements FireStationService {
   @Autowired
   private FireStationRepository fireStationRepository;
 
+  @Override
+  public FireStation saveFireStation(FireStation fireStation) {
+    FireStation savedFireStation = fireStationRepository.save(fireStation);
+    return savedFireStation;
+  }
+
 
   @Override
   public List<Integer> getStationNumberListFromFireStationList(List<FireStation> fireStationList) {
@@ -39,8 +45,7 @@ public class FireStationServiceImpl implements FireStationService {
         fireStationRepository.saveAll(fireStationsList);
         return true;
       } catch (Exception exception) {
-        logger.error("Erreur lors de l'enregistrement de la liste des personnes " + exception.getMessage()
-            + " , Stack Trace : " + exception.getStackTrace());
+        logger.error("Erreur lors de l'enregistrement de la liste des personnes " + exception.getMessage());
       }
     }
     return false;

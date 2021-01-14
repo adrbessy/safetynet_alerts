@@ -14,4 +14,13 @@ public interface MedicalRecordService {
    */
   public boolean saveAllMedicalRecords(List<MedicalRecord> medicalRecordList);
 
+  /**
+   * Save a medical record
+   * 
+   * @param medicalRecord to save
+   * @return the saved medicalRecord
+   * 
+   */
+  public MedicalRecord saveMedicalRecord(MedicalRecord medicalRecord);
+
 }

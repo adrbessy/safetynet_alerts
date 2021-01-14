@@ -117,4 +117,13 @@ public interface PersonService {
    * 
    */
   public boolean saveAllPersons(List<Person> personList);
+
+  /**
+   * Save a Person
+   * 
+   * @param Person to save
+   * @return the saved person
+   * 
+   */
+  public Person savePerson(Person person);
 }

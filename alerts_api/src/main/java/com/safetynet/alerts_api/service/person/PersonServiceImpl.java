@@ -41,17 +41,30 @@ public class PersonServiceImpl implements PersonService {
   private FireStationServiceImpl firestationService;
 
 
+  public Person savePerson(Person person) {
+    Person savedPerson = personRepository.save(person);
+    return savedPerson;
+  }
+
+
   @Override
   public List<Person> getPersonListFromStationNumber(Integer stationNumber) {
-    // we retrieve the list of stations corresponding to the stationNumber
-    List<FireStation> fireStationList = firestationRepository.findDistinctByStation(stationNumber);
+    try {
+      // we retrieve the list of stations corresponding to the stationNumber
+      List<FireStation> fireStationList = firestationRepository.findDistinctByStation(stationNumber);
 
-    // we retrieve the address list corresponding to the fireStation list
-    List<String> addressList = addressService.getAddressListFromFireStationList(fireStationList);
+      // we retrieve the address list corresponding to the fireStation list
+      List<String> addressList = addressService.getAddressListFromFireStationList(fireStationList);
 
-    // we retrieve the person list corresponding to the address list
-    List<Person> filteredPersonList = personRepository.findAllByAddressInOrderByAddress(addressList);
-    return filteredPersonList;
+      // we retrieve the person list corresponding to the address list
+      List<Person> filteredPersonList = personRepository.findAllByAddressInOrderByAddress(addressList);
+      return filteredPersonList;
+    } catch (Exception exception) {
+      logger
+          .error("Error when retrieving the list of persons linked to a fire station number :"
+              + exception.getMessage());
+      return null;
+    }
   }
 
 
@@ -79,8 +92,9 @@ public class PersonServiceImpl implements PersonService {
         return personNumberInfoList;
 
       } catch (Exception exception) {
-        logger.error("Erreur lors de la récupération des personnes liées à une station de feu : "
-            + exception.getMessage() + " Stack Trace : " + exception.getStackTrace());
+        logger
+            .error("Error when retrieving the list of information about the persons linked to a fire station number :"
+                + exception.getMessage());
         return null;
       }
     } else {
@@ -238,8 +252,7 @@ public class PersonServiceImpl implements PersonService {
         personRepository.saveAll(personList);
         return true;
       } catch (Exception exception) {
-        logger.error("Erreur lors de l'enregistrement de la liste des personnes " + exception.getMessage()
-            + " , Stack Trace : " + exception.getStackTrace());
+        logger.error("Erreur lors de l'enregistrement de la liste des personnes " + exception.getMessage());
       }
     }
     return false;

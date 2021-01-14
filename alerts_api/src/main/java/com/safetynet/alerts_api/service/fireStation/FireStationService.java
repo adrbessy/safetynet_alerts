@@ -21,4 +21,13 @@ public interface FireStationService {
    * 
    */
   public boolean saveAllFireStations(List<FireStation> fireStationsList);
+
+  /**
+   * Save the fire station
+   * 
+   * @param FireStation to save
+   * @return the saved firestation
+   * 
+   */
+  public FireStation saveFireStation(FireStation fireStation);
 }

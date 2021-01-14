@@ -4,10 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.safetynet.alerts_api.repository.JsonReaderRepository;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import nl.jqno.equalsverifier.EqualsVerifier;
 
 @WebMvcTest(controllers = PersonNumberInfo.class)
 class PersonNumberInfoTest {
@@ -55,6 +57,19 @@ class PersonNumberInfoTest {
   @Test
   public void testGetNumberOfAdults() throws Exception {
     assertThat(personNumberInfo.getNumberOfAdults()).isEqualTo(numberOfAdults);
+  }
+
+  @Test
+  public void simpleEqualsHome() {
+    EqualsVerifier.simple().forClass(PersonNumberInfo.class).verify();
+  }
+
+  @Test
+  public void testToString() {
+    String expected = "PersonNumberInfo(personList=" + personList + ", numberOfChildren=" + numberOfChildren
+        + ", numberOfAdults=" + numberOfAdults + ")";
+    ; // put the expected value here
+    Assert.assertEquals(expected, personNumberInfo.toString());
   }
 
 }

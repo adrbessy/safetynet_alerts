@@ -17,6 +17,14 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
   @Autowired
   private MedicalRecordRepository medicalRecordRepository;
 
+
+  @Override
+  public MedicalRecord saveMedicalRecord(MedicalRecord medicalRecord) {
+    MedicalRecord savedMedicalRecord = medicalRecordRepository.save(medicalRecord);
+    return savedMedicalRecord;
+  }
+
+
   @Override
   public boolean saveAllMedicalRecords(List<MedicalRecord> medicalRecordList) {
     if (medicalRecordList != null && !medicalRecordList.isEmpty()) {
@@ -24,8 +32,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         medicalRecordRepository.saveAll(medicalRecordList);
         return true;
       } catch (Exception exception) {
-        logger.error("Erreur lors de l'enregistrement de la liste des données médicales " + exception.getMessage()
-            + " , Stack Trace : " + exception.getStackTrace());
+        logger.error("Erreur lors de l'enregistrement de la liste des données médicales " + exception.getMessage());
       }
     }
     return false;
