@@ -20,4 +20,10 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
 
   List<Person> findDistinctByCityAllIgnoreCase(String city);
 
+  void deleteByFirstNameAndLastName(String firstName, String lastName);
+
+  void deletePersonByFirstNameAndLastNameAllIgnoreCase(String firstName, String lastName);
+
+  void deleteByFirstNameAndLastNameAllIgnoreCase(String firstName, String lastName);
+
 }

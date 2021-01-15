@@ -5,9 +5,13 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.service.fireStation.FireStationService;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +20,48 @@ public class FireStationController {
 
   @Autowired
   private FireStationService fireStationService;
+
+
+  /**
+   * Delete - Delete a fire station
+   * 
+   * @param id - The id of the fire station to delete
+   */
+  @DeleteMapping("/firestation/{id}")
+  public void deleteFireStation(@PathVariable("id") final Long id) {
+    fireStationService.deleteFireStation(id);
+  }
+
+
+  /**
+   * Update - Update an existing fire station
+   * 
+   * @param id     - The id of the firestation to update
+   * @param person - The fire station object updated
+   * @return
+   */
+  @PutMapping("/firestation/{id}")
+  public MappingJacksonValue updateFireStation(@PathVariable("id") final Long id,
+      @RequestBody FireStation fireStation) {
+    Optional<FireStation> e = fireStationService.getFireStation(id);
+    if (e.isPresent()) {
+      FireStation currentFireStation = e.get();
+
+      Integer station = fireStation.getStation();
+      if (station != null) {
+        currentFireStation.setStation(station);
+      }
+      fireStationService.saveFireStation(currentFireStation);
+      SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "address", "station");
+      FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
+      MappingJacksonValue filteredFireStationList = new MappingJacksonValue(currentFireStation);
+      filteredFireStationList.setFilters(filterList);
+      return filteredFireStationList;
+    } else {
+      return null;
+    }
+  }
+
 
   /**
    * Create - Add a new fire station

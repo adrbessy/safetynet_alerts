@@ -10,12 +10,17 @@ import com.safetynet.alerts_api.model.PersonInfoByAddress;
 import com.safetynet.alerts_api.model.PersonNumberInfo;
 import com.safetynet.alerts_api.service.person.PersonService;
 import java.util.List;
+import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +32,69 @@ public class PersonInfoController {
 
   @Autowired
   private PersonService personService;
+
+
+  /**
+   * Delete - Delete an person
+   * 
+   * @param id - The id of the person to delete
+   */
+  @Transactional
+  @DeleteMapping("/person")
+  public void deletePerson(@RequestParam String firstName, @RequestParam String lastName) {
+    logger.info("Delete request with the endpoint 'person' received with parameters firstName :" + firstName
+        + " and lastName : " + lastName);
+    personService.deletePerson(firstName, lastName);
+  }
+
+
+  /**
+   * Update - Update an existing person
+   * 
+   * @param id     - The id of the eperson to update
+   * @param person - The person object updated
+   * @return
+   */
+  @PutMapping("/person/{id}")
+  public MappingJacksonValue updatePerson(@PathVariable("id") final Long id, @RequestBody Person person) {
+    Optional<Person> e = personService.getPerson(id);
+    if (e.isPresent()) {
+      Person currentPerson = e.get();
+
+      String address = person.getAddress();
+      if (address != null) {
+        currentPerson.setAddress(address);
+      }
+      String city = person.getCity();
+      if (city != null) {
+        currentPerson.setCity(city);
+        ;
+      }
+      String zip = person.getZip();
+      if (zip != null) {
+        currentPerson.setZip(zip);
+      }
+      String phone = person.getPhone();
+      if (phone != null) {
+        currentPerson.setPhone(phone);
+        ;
+      }
+      String email = person.getEmail();
+      if (email != null) {
+        currentPerson.setEmail(email);
+        ;
+      }
+      personService.savePerson(currentPerson);
+      SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "firstName", "lastName",
+          "address", "city", "email", "phone");
+      FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
+      MappingJacksonValue filteredPersonList = new MappingJacksonValue(currentPerson);
+      filteredPersonList.setFilters(filterList);
+      return filteredPersonList;
+    } else {
+      return null;
+    }
+  }
 
 
   /**

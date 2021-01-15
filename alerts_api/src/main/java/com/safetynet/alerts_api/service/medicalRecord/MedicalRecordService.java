@@ -2,8 +2,28 @@ package com.safetynet.alerts_api.service.medicalRecord;
 
 import com.safetynet.alerts_api.model.MedicalRecord;
 import java.util.List;
+import java.util.Optional;
 
 public interface MedicalRecordService {
+
+  /**
+   * Delete a MedicalRecord
+   * 
+   * @param first name and last name
+   * 
+   */
+  public void deleteMedicalRecord(final String firstname, final String lastname);
+
+
+  /**
+   * Get a MedicalRecord
+   * 
+   * @param MedicalRecord to get
+   * @return the medicalRecord
+   * 
+   */
+  public Optional<MedicalRecord> getMedicalRecord(final Long id);
+
 
   /**
    * Save the medical record list

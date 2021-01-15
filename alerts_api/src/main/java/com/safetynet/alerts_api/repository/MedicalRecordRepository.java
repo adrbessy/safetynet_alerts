@@ -10,5 +10,6 @@ public interface MedicalRecordRepository extends CrudRepository<MedicalRecord, L
 
   List<MedicalRecord> findByFirstNameAndLastNameAllIgnoreCase(String firstName, String lastName);
 
+  void deletePersonByFirstNameAndLastNameAllIgnoreCase(String firstname, String lastname);
 
 }

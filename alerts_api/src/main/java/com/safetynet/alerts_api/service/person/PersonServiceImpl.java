@@ -15,6 +15,7 @@ import com.safetynet.alerts_api.service.fireStation.FireStationServiceImpl;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,24 @@ public class PersonServiceImpl implements PersonService {
   private FireStationServiceImpl firestationService;
 
 
+  @Override
+  public void deletePerson(String firstName, String lastName) {
+    try {
+      personRepository.deletePersonByFirstNameAndLastNameAllIgnoreCase(firstName, lastName);
+    } catch (Exception exception) {
+      logger.error("Error when we try to delete a person :" + exception.getMessage());
+    }
+  }
+
+
+
+  @Override
+  public Optional<Person> getPerson(final Long id) {
+    return personRepository.findById(id);
+  }
+
+
+  @Override
   public Person savePerson(Person person) {
     Person savedPerson = personRepository.save(person);
     return savedPerson;

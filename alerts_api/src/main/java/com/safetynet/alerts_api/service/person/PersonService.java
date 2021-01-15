@@ -8,8 +8,18 @@ import com.safetynet.alerts_api.model.PersonInfoByAddress;
 import com.safetynet.alerts_api.model.PersonNumberInfo;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface PersonService {
+
+
+  /**
+   * Delete a person.
+   * 
+   * @param a first name and a last name
+   */
+  public void deletePerson(String firstName, String lastName);
+
 
   /**
    * Get the List of Person covered by a given fire station number.
@@ -59,6 +69,17 @@ public interface PersonService {
    * @return - A List of Home
    */
   public List<Home> getChildrenListAndAdultListFromAddress(String address);
+
+
+  /**
+   * Get a Person
+   * 
+   * @param Person to get
+   * @return the person
+   * 
+   */
+  public Optional<Person> getPerson(final Long id);
+
 
   /**
    * Get the List of person by address from a given fire station number List.
