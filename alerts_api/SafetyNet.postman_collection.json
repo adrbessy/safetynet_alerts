@@ -1,0 +1,471 @@
+{
+	"info": {
+		"_postman_id": "ef502aa3-6f01-44f7-977b-fa35671f6580",
+		"name": "SafetyNet",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:9002/firestation?stationNumber=1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9002/firestation?stationNumber=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"firestation"
+					],
+					"query": [
+						{
+							"key": "stationNumber",
+							"value": "1"
+						}
+					]
+				},
+				"description": "  /**\n   * Read - Get a person list covered by a given fire station with the number of\n   * occurrences of children and adults.\n   * \n   * @param a fire station number\n   * @return - A List of FireStationInfo\n   */"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9002/childAlert?address=1509%20Culver%20St",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9002/childAlert?address=1509%20Culver%20St",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"childAlert"
+					],
+					"query": [
+						{
+							"key": "address",
+							"value": "1509%20Culver%20St"
+						}
+					]
+				},
+				"description": "/**\n   * Read - Get a children list (inferior or equal 18) living to a particular\n   * address, with a list of other people living there. If no children living\n   * there, returns an empty list\n   * \n   * @param an address\n   * @return - A List of Home\n   */"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9002/phoneAlert?firestation=3",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9002/phoneAlert?firestation=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"phoneAlert"
+					],
+					"query": [
+						{
+							"key": "firestation",
+							"value": "3"
+						}
+					]
+				},
+				"description": "/**\n   * Read - Get the list of all phone numbers of persons covered by a given fire\n   * station.\n   * \n   * @param a fire station number\n   * @return - A List of phone number\n   */"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9002/fire?address=112%20Steppes%20Pl",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9002/fire?address=112%20Steppes%20Pl",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"fire"
+					],
+					"query": [
+						{
+							"key": "address",
+							"value": "112%20Steppes%20Pl"
+						}
+					]
+				},
+				"description": "/**\n   * Read - Get a person list living to a particular address, with a the number of\n   * the fire station deserving it.\n   * \n   * @param an address\n   * @return - A List of PersonInfo\n   */"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9002/flood?stations=1,2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9002/flood?stations=1,2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"flood"
+					],
+					"query": [
+						{
+							"key": "stations",
+							"value": "1,2"
+						}
+					]
+				},
+				"description": "/**\n   * Read - Get a person list grouped by address and grouped by the number of the\n   * fire station deserving it.\n   * \n   * @param a List of number of fire station\n   * @return - A List of PersonInfoByAddress\n   */"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9002/personInfo?firstName=Jacob&lastName=Boyd",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9002/personInfo?firstName=Jacob&lastName=Boyd",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"personInfo"
+					],
+					"query": [
+						{
+							"key": "firstName",
+							"value": "Jacob"
+						},
+						{
+							"key": "lastName",
+							"value": "Boyd"
+						}
+					]
+				},
+				"description": "/**\n   * Read - Get the information about a person from his first name and his last\n   * name; get also the information about the persons having the same last name.\n   * \n   * @param a List of number of fire station\n   * @return - A List of Person\n   */"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9002/communityEmail?city=culver",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9002/communityEmail?city=culver",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"communityEmail"
+					],
+					"query": [
+						{
+							"key": "city",
+							"value": "culver"
+						}
+					]
+				},
+				"description": "/**\n   * Read - Get the list of all email of persons living in a given city.\n   * \n   * @param a city\n   * @return - A List of email\n   */"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9002/person",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"id\": 24,\n        \"address\": \"12 rue des ecoles\",\n        \"city\": \"Bourges\"\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9002/person",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"person"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9002/firestation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"id\": 13,\n        \"address\": \"12 rue des ecoles\",\n        \"station\": 3\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9002/firestation",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"firestation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9002/medicalRecord",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"id\": 26,\n        \"birthdate\": \"19/01/1991\",\n        \"firstName\": \"Alex\",\n        \"lastName\": \"Sentissi\",\n        \"allergies\": [\"pollen\",\"chats\"]\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9002/medicalRecord",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"medicalRecord"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9002/firestation/1",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\":\"1 rue antonio vivaldi\",\n    \"station\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9002/firestation/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"firestation",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9002/person/5",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\":\"1 rue antonio vivaldi\",\n    \"city\": \"Paris\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9002/person/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"person",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9002/medicalRecord/2",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"birthdate\":\"12/12/12\",\n    \"medications\": [\"pills\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9002/medicalRecord/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"medicalRecord",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9002/person?firstName=Jacob&lastName=Boyd",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9002/person?firstName=Jacob&lastName=Boyd",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"person"
+					],
+					"query": [
+						{
+							"key": "firstName",
+							"value": "Jacob"
+						},
+						{
+							"key": "lastName",
+							"value": "Boyd"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9002/firestation/7",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9002/firestation/7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"firestation",
+						"7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9002/medicalRecord?firstName=Jacob&lastName=Boyd",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9002/medicalRecord?firstName=Jacob&lastName=Boyd",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"medicalRecord"
+					],
+					"query": [
+						{
+							"key": "firstName",
+							"value": "Jacob"
+						},
+						{
+							"key": "lastName",
+							"value": "Boyd"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

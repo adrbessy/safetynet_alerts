@@ -46,6 +46,8 @@ public class MedicalRecordController {
    */
   @PostMapping("/medicalRecord")
   public MappingJacksonValue createMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
+    logger.info("Post request with the endpoint 'medicalRecord' received with the medicalRecord :"
+        + medicalRecord.toString());
     MedicalRecord savedMedicalRecord = medicalRecordService.saveMedicalRecord(medicalRecord);
     SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "firstName", "lastName",
         "address",
@@ -67,6 +69,8 @@ public class MedicalRecordController {
   @PutMapping("/medicalRecord/{id}")
   public MappingJacksonValue updateMedicalRecord(@PathVariable("id") final Long id,
       @RequestBody MedicalRecord medicalRecord) {
+    logger.info("Put request with the endpoint 'medicalRecord' received with the medicalRecord Id:"
+        + id.toString());
     Optional<MedicalRecord> e = medicalRecordService.getMedicalRecord(id);
     if (e.isPresent()) {
       MedicalRecord currentMedicalRecord = e.get();

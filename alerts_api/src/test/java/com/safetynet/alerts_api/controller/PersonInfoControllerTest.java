@@ -8,7 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @WebMvcTest(controllers = PersonInfoController.class)
 class PersonInfoControllerTest {
@@ -50,6 +54,21 @@ class PersonInfoControllerTest {
   public void testGetPersonInfoFromFirstNameAndLastName() throws Exception {
     mockMvc.perform(get("/personInfo?firstName=Jacob&lastName=Boyd"))
         .andExpect(status().isOk());
+  }
+
+  @Test
+  public void testUpdatePerson() throws Exception {
+    long id = 2;
+    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put("/person/" + id)
+        .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
+        .content(getPersonInJson(2));
+
+    this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
+
+  }
+
+  private String getPersonInJson(long id) {
+    return "{\"id\":" + id + ", \"address\":\"1 rue Antonio Vivaldi\"}";
   }
 
 }

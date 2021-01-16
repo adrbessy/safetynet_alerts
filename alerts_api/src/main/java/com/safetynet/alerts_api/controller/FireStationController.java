@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.service.fireStation.FireStationService;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class FireStationController {
 
+  private static final Logger logger = LogManager.getLogger(FireStationController.class);
+
   @Autowired
   private FireStationService fireStationService;
 
@@ -29,6 +33,8 @@ public class FireStationController {
    */
   @DeleteMapping("/firestation/{id}")
   public void deleteFireStation(@PathVariable("id") final Long id) {
+    logger.info(
+        "Delete request of the endpoint 'firestation' with the firestation Id : {" + id.toString() + "}");
     fireStationService.deleteFireStation(id);
   }
 
@@ -43,6 +49,8 @@ public class FireStationController {
   @PutMapping("/firestation/{id}")
   public MappingJacksonValue updateFireStation(@PathVariable("id") final Long id,
       @RequestBody FireStation fireStation) {
+    logger.info(
+        "Put request of the endpoint 'firestation' with the firestation Id : {" + id.toString() + "}");
     Optional<FireStation> e = fireStationService.getFireStation(id);
     if (e.isPresent()) {
       FireStation currentFireStation = e.get();
@@ -71,6 +79,8 @@ public class FireStationController {
    */
   @PostMapping("/firestation")
   public MappingJacksonValue createFireStation(@RequestBody FireStation fireStation) {
+    logger.info(
+        "Post request of the endpoint 'firestation' with the firestation : {" + fireStation.toString() + "}");
     FireStation savedFireStation = fireStationService.saveFireStation(fireStation);
     SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "firstName", "lastName",
         "address",
