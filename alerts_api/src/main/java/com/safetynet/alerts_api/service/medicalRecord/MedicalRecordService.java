@@ -2,7 +2,6 @@ package com.safetynet.alerts_api.service.medicalRecord;
 
 import com.safetynet.alerts_api.model.MedicalRecord;
 import java.util.List;
-import java.util.Optional;
 
 public interface MedicalRecordService {
 
@@ -22,7 +21,7 @@ public interface MedicalRecordService {
    * @return the medicalRecord
    * 
    */
-  public Optional<MedicalRecord> getMedicalRecord(final Long id);
+  public MedicalRecord getMedicalRecord(final Long id);
 
 
   /**

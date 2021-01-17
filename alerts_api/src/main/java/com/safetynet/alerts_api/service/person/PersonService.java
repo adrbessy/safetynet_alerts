@@ -8,7 +8,6 @@ import com.safetynet.alerts_api.model.PersonInfoByAddress;
 import com.safetynet.alerts_api.model.PersonNumberInfo;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface PersonService {
 
@@ -78,7 +77,7 @@ public interface PersonService {
    * @return the person
    * 
    */
-  public Optional<Person> getPerson(final Long id);
+  public Person getPerson(final Long id);
 
 
   /**

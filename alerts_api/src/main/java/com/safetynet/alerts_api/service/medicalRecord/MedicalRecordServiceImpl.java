@@ -30,10 +30,15 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
   }
 
 
-
   @Override
-  public Optional<MedicalRecord> getMedicalRecord(final Long id) {
-    return medicalRecordRepository.findById(id);
+  public MedicalRecord getMedicalRecord(final Long id) {
+    Optional<MedicalRecord> medRec = medicalRecordRepository.findById(id);
+    if (medRec.isPresent()) {
+      MedicalRecord medicalRecordToUpdate = medRec.get();
+      return medicalRecordToUpdate;
+    } else {
+      return null;
+    }
   }
 
 

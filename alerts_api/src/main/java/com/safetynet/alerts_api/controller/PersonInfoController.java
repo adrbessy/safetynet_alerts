@@ -10,7 +10,6 @@ import com.safetynet.alerts_api.model.PersonInfoByAddress;
 import com.safetynet.alerts_api.model.PersonNumberInfo;
 import com.safetynet.alerts_api.service.person.PersonService;
 import java.util.List;
-import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,38 +56,36 @@ public class PersonInfoController {
    */
   @PutMapping("/person/{id}")
   public MappingJacksonValue updatePerson(@PathVariable("id") final Long id, @RequestBody Person person) {
-    Optional<Person> e = personService.getPerson(id);
-    if (e.isPresent()) {
-      Person currentPerson = e.get();
-
+    Person persToUpdate = personService.getPerson(id);
+    if (persToUpdate != null) {
       String address = person.getAddress();
       if (address != null) {
-        currentPerson.setAddress(address);
+        persToUpdate.setAddress(address);
       }
       String city = person.getCity();
       if (city != null) {
-        currentPerson.setCity(city);
+        persToUpdate.setCity(city);
         ;
       }
       String zip = person.getZip();
       if (zip != null) {
-        currentPerson.setZip(zip);
+        persToUpdate.setZip(zip);
       }
       String phone = person.getPhone();
       if (phone != null) {
-        currentPerson.setPhone(phone);
+        persToUpdate.setPhone(phone);
         ;
       }
       String email = person.getEmail();
       if (email != null) {
-        currentPerson.setEmail(email);
+        persToUpdate.setEmail(email);
         ;
       }
-      personService.savePerson(currentPerson);
+      personService.savePerson(persToUpdate);
       SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "firstName", "lastName",
           "address", "city", "email", "phone");
       FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
-      MappingJacksonValue filteredPersonList = new MappingJacksonValue(currentPerson);
+      MappingJacksonValue filteredPersonList = new MappingJacksonValue(persToUpdate);
       filteredPersonList.setFilters(filterList);
       return filteredPersonList;
     } else {

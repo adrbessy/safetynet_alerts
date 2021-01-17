@@ -1,7 +1,9 @@
 package com.safetynet.alerts_api.controller;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.JsonReaderRepository;
 import com.safetynet.alerts_api.service.person.PersonService;
 import org.junit.jupiter.api.Test;
@@ -25,6 +27,8 @@ class PersonInfoControllerTest {
 
   @MockBean
   private JsonReaderRepository jsonReaderRepository;
+
+  private Person person;
 
   @Test
   public void testGetPersonListCoveredByThisStation() throws Exception {
@@ -58,7 +62,17 @@ class PersonInfoControllerTest {
 
   @Test
   public void testUpdatePerson() throws Exception {
+    person = new Person();
+    person.setFirstName("Adrien");
+    person.setLastName("Adrien");
+    person.setAddress("82 Alexander Road");
+    person.setCity("New York");
+    person.setZip("1648462");
+    person.setPhone("04815644");
+    person.setEmail("uttoxuballo-8128@yopmail.com");
+
     long id = 2;
+    when(personService.getPerson(id)).thenReturn(person);
     MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put("/person/" + id)
         .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
         .content(getPersonInJson(2));
@@ -68,7 +82,8 @@ class PersonInfoControllerTest {
   }
 
   private String getPersonInJson(long id) {
-    return "{\"id\":" + id + ", \"address\":\"1 rue Antonio Vivaldi\"}";
+    return "{\"id\":" + id
+        + ", \"address\":\"1 rue Antonio Vivaldi\", \"city\":\"Paris\", \"zip\":\"04545\", \"phone\":\"0454577\", \"email\":\"uttoxuballo-8128@yopmail.com\"}";
   }
 
 }

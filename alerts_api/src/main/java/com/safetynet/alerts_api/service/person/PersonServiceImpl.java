@@ -54,8 +54,14 @@ public class PersonServiceImpl implements PersonService {
 
 
   @Override
-  public Optional<Person> getPerson(final Long id) {
-    return personRepository.findById(id);
+  public Person getPerson(final Long id) {
+    Optional<Person> pers = personRepository.findById(id);
+    if (pers.isPresent()) {
+      Person personToUpdate = pers.get();
+      return personToUpdate;
+    } else {
+      return null;
+    }
   }
 
 

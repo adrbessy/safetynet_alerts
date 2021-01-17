@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.service.medicalRecord.MedicalRecordService;
 import java.util.List;
-import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,27 +70,26 @@ public class MedicalRecordController {
       @RequestBody MedicalRecord medicalRecord) {
     logger.info("Put request with the endpoint 'medicalRecord' received with the medicalRecord Id:"
         + id.toString());
-    Optional<MedicalRecord> e = medicalRecordService.getMedicalRecord(id);
-    if (e.isPresent()) {
-      MedicalRecord currentMedicalRecord = e.get();
+    MedicalRecord medicalRecordToUpdate = medicalRecordService.getMedicalRecord(id);
+    if (medicalRecordToUpdate != null) {
 
       String birthdate = medicalRecord.getBirthdate();
       if (birthdate != null) {
-        currentMedicalRecord.setBirthdate(birthdate);
+        medicalRecordToUpdate.setBirthdate(birthdate);
       }
       List<String> medications = medicalRecord.getMedications();
       if (medications != null) {
-        currentMedicalRecord.setMedications(medications);
+        medicalRecordToUpdate.setMedications(medications);
       }
       List<String> allergies = medicalRecord.getAllergies();
       if (allergies != null) {
-        currentMedicalRecord.setAllergies(allergies);
+        medicalRecordToUpdate.setAllergies(allergies);
       }
-      medicalRecordService.saveMedicalRecord(currentMedicalRecord);
+      medicalRecordService.saveMedicalRecord(medicalRecordToUpdate);
       SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "firstName", "lastName",
           "birthdate", "medications", "allergies");
       FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
-      MappingJacksonValue filteredFireStationList = new MappingJacksonValue(currentMedicalRecord);
+      MappingJacksonValue filteredFireStationList = new MappingJacksonValue(medicalRecordToUpdate);
       filteredFireStationList.setFilters(filterList);
       return filteredFireStationList;
     } else {
