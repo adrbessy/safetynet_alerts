@@ -7,11 +7,11 @@ import lombok.Data;
 public class PersonInfo {
 
   private List<Person> personList;
-  private List<Integer> firestationNumber;
+  private List<Integer> firestationNumberList;
 
-  public PersonInfo(List<Person> personList, List<Integer> firestationNumber) {
+  public PersonInfo(List<Person> personList, List<Integer> firestationNumberList) {
     this.personList = personList;
-    this.firestationNumber = firestationNumber;
+    this.firestationNumberList = firestationNumberList;
   }
 
 }

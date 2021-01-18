@@ -3,6 +3,7 @@ package com.safetynet.alerts_api.controller;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.JsonReaderRepository;
 import com.safetynet.alerts_api.service.person.PersonService;
@@ -30,29 +31,6 @@ class PersonInfoControllerTest {
 
   private Person person;
 
-  @Test
-  public void testGetPersonListCoveredByThisStation() throws Exception {
-    mockMvc.perform(get("/firestation?stationNumber=1"))
-        .andExpect(status().isOk());
-  }
-
-  @Test
-  public void testGetChildListLivingToThisAdress() throws Exception {
-    mockMvc.perform(get("/childAlert?address=1509%20Culver%20St"))
-        .andExpect(status().isOk());
-  }
-
-  @Test
-  public void testGetPersonListLivingToThisAdressAndFirestationNumber() throws Exception {
-    mockMvc.perform(get("/fire?address=112%20Steppes%20Pl"))
-        .andExpect(status().isOk());
-  }
-
-  @Test
-  public void testGetAddressCoveredByTheseStation() throws Exception {
-    mockMvc.perform(get("/flood?stations=1,2"))
-        .andExpect(status().isOk());
-  }
 
   @Test
   public void testGetPersonInfoFromFirstNameAndLastName() throws Exception {
@@ -61,10 +39,40 @@ class PersonInfoControllerTest {
   }
 
   @Test
+  public void testCreatePerson() throws Exception {
+    person = new Person();
+    // person.setId((long) 2);
+    person.setFirstName("Adrien");
+    person.setLastName("Bessy");
+    person.setAddress("82 Alexander Road");
+    person.setCity("New York");
+    person.setZip("1648462");
+    person.setPhone("04815644");
+    person.setEmail("uttoxuballo-8128@yopmail.com");
+
+    /*
+     * SimpleBeanPropertyFilter filter =
+     * SimpleBeanPropertyFilter.filterOutAllExcept("id", "firstName", "lastName",
+     * "address", "city", "email", "phone"); FilterProvider filterList = new
+     * SimpleFilterProvider().addFilter("dynamicFilter", filter);
+     * MappingJacksonValue filteredPerson = new MappingJacksonValue(person);
+     * filteredPerson.setFilters(filterList);
+     */
+
+    when(personService.savePerson(person)).thenReturn(person);
+    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/person")
+        .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
+        .content(new ObjectMapper().writeValueAsString(person));
+
+    this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
+  }
+
+
+  @Test
   public void testUpdatePerson() throws Exception {
     person = new Person();
     person.setFirstName("Adrien");
-    person.setLastName("Adrien");
+    person.setLastName("Bessy");
     person.setAddress("82 Alexander Road");
     person.setCity("New York");
     person.setZip("1648462");
@@ -75,15 +83,15 @@ class PersonInfoControllerTest {
     when(personService.getPerson(id)).thenReturn(person);
     MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put("/person/" + id)
         .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
-        .content(getPersonInJson(2));
+        .content(new ObjectMapper().writeValueAsString(person));
 
     this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
 
   }
-
-  private String getPersonInJson(long id) {
-    return "{\"id\":" + id
-        + ", \"address\":\"1 rue Antonio Vivaldi\", \"city\":\"Paris\", \"zip\":\"04545\", \"phone\":\"0454577\", \"email\":\"uttoxuballo-8128@yopmail.com\"}";
-  }
+  /*
+   * private String getPersonInJson(long id) { return "{\"id\":" + id +
+   * ", \"address\":\"1 rue Antonio Vivaldi\", \"city\":\"Paris\", \"zip\":\"04545\", \"phone\":\"0454577\", \"email\":\"uttoxuballo-8128@yopmail.com\"}"
+   * ; }
+   */
 
 }

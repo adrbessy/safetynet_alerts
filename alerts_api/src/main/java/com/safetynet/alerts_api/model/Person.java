@@ -1,6 +1,11 @@
 package com.safetynet.alerts_api.model;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.safetynet.alerts_api.controller.ChildrenController;
+import com.safetynet.alerts_api.controller.CommunityCoveredByFireStationController;
+import com.safetynet.alerts_api.controller.HomeController;
+import com.safetynet.alerts_api.controller.PersonInfoController;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -18,33 +23,45 @@ import lombok.Data;
 
 @Data
 @Entity
-@JsonFilter("dynamicFilter")
+//@JsonFilter("dynamicFilter")
 @Table(name = "persons")
 public class Person {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonIgnore
   private Long id;
 
+  @JsonView({ CommunityCoveredByFireStationController.class, ChildrenController.class })
   private String firstName;
 
+  @JsonView({ CommunityCoveredByFireStationController.class, ChildrenController.class, HomeController.class,
+      PersonInfoController.class })
   private String lastName;
 
+  @JsonView({ CommunityCoveredByFireStationController.class, PersonInfoController.class })
   private String address;
 
+  @JsonView({ CommunityCoveredByFireStationController.class, PersonInfoController.class })
   private String city;
 
+  @JsonView({ CommunityCoveredByFireStationController.class, PersonInfoController.class })
   private String zip;
 
+  @JsonView({ CommunityCoveredByFireStationController.class, HomeController.class })
   private String phone;
 
+  @JsonView({ PersonInfoController.class })
   private String email;
 
+  @JsonView({ ChildrenController.class, HomeController.class, PersonInfoController.class })
   private int age;
 
+  @JsonView({ HomeController.class, PersonInfoController.class })
   @ElementCollection
   private List<String> medications;
 
+  @JsonView({ HomeController.class, PersonInfoController.class })
   @ElementCollection
   private List<String> allergies;
 
