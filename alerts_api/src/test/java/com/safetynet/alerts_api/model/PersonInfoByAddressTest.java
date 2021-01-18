@@ -4,10 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.safetynet.alerts_api.repository.JsonReaderRepository;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import nl.jqno.equalsverifier.EqualsVerifier;
 
 @WebMvcTest(controllers = PersonInfoByAddress.class)
 class PersonInfoByAddressTest {
@@ -41,15 +43,30 @@ class PersonInfoByAddressTest {
   }
 
   @Test
-  public void testGetChildList() throws Exception {
+  public void testSetAndGetPersonList() throws Exception {
+    Person person3 = new Person();
+    person3.setId((long) 98);
+    personList.add(person3);
+    personInfoByAddress.setPersonList(personList);
     assertThat(personInfoByAddress.getPersonList()).isEqualTo(personList);
   }
 
   @Test
-  public void testGetFirestationNumber() throws Exception {
-    assertThat(personInfoByAddress.getAddress()).isEqualTo(address);
+  public void testSetAndGetAddress() throws Exception {
+    personInfoByAddress.setAddress("1 rue antonio vivaldi");
+    assertThat(personInfoByAddress.getAddress()).isEqualTo("1 rue antonio vivaldi");
   }
 
+  @Test
+  public void simpleEqualsPersonInfoByAddress() {
+    EqualsVerifier.simple().forClass(PersonInfoByAddress.class).verify();
+  }
 
+  @Test
+  public void testToString() {
+    String expected = "PersonInfoByAddress(address=" + address + ", personList=" + personList + ")";
+    ; // put the expected value here
+    Assert.assertEquals(expected, personInfoByAddress.toString());
+  }
 
 }

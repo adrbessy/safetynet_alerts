@@ -15,14 +15,13 @@
 	<description>API with Spring Boot</description>
 	
 
-	<!-- 
 	<properties>
 		<java.version>1.8</java.version>
-		<dep.junit.version>4.13.1</dep.junit.version>
 	</properties>
- 	-->
+
 
 	<dependencies>
+	
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>

@@ -6,16 +6,16 @@ import com.safetynet.alerts_api.service.address.AddressServiceImpl;
 import com.safetynet.alerts_api.service.person.PersonServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest()
 class PersonServiceTest {
 
   private PersonServiceImpl personService;
 
-  @Mock
+  @MockBean
   private FireStationRepository firestationRepository;
 
   @Mock

@@ -2,7 +2,6 @@ package com.safetynet.alerts_api.service.fireStation;
 
 import com.safetynet.alerts_api.model.FireStation;
 import java.util.List;
-import java.util.Optional;
 
 public interface FireStationService {
 
@@ -23,7 +22,7 @@ public interface FireStationService {
    * @return the fireStation
    * 
    */
-  public Optional<FireStation> getFireStation(final Long id);
+  public FireStation getFireStation(final Long id);
 
 
   /**

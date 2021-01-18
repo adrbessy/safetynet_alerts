@@ -7,6 +7,7 @@ import com.safetynet.alerts_api.repository.JsonReaderRepository;
 import com.safetynet.alerts_api.service.medicalRecord.MedicalRecordService;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -32,9 +33,8 @@ public class MedicalRecordControllerTest {
 
   private MedicalRecord medicalRecord;
 
-  @Test
-  public void testUpdateMedicalRecord() throws Exception {
-
+  @BeforeEach
+  private void setUp() {
     medicalRecord = new MedicalRecord();
     medicalRecord.setLastName("myLastName");
     medicalRecord.setFirstName("myFirstName");
@@ -50,7 +50,21 @@ public class MedicalRecordControllerTest {
     medicationList.add("medicament 1");
     medicationList.add("medicament 2");
     medicalRecord.setMedications(medicationList);
+  }
 
+  @Test
+  public void testCreateMedicalRecord() throws Exception {
+    when(medicalRecordService.saveMedicalRecord(medicalRecord)).thenReturn(medicalRecord);
+    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/medicalRecord")
+        .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
+        .content(new ObjectMapper().writeValueAsString(medicalRecord));
+
+    this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
+  }
+
+
+  @Test
+  public void testUpdateMedicalRecord() throws Exception {
     long id = 1;
     when(medicalRecordService.getMedicalRecord(id)).thenReturn(medicalRecord);
     MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put("/medicalRecord/" + id)

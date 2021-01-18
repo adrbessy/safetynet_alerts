@@ -19,14 +19,21 @@ public class FireStationServiceImpl implements FireStationService {
   private FireStationRepository fireStationRepository;
 
 
+  @Override
   public void deleteFireStation(final Long id) {
     fireStationRepository.deleteById(id);
   }
 
 
   @Override
-  public Optional<FireStation> getFireStation(final Long id) {
-    return fireStationRepository.findById(id);
+  public FireStation getFireStation(final Long id) {
+    Optional<FireStation> fireStation = fireStationRepository.findById(id);
+    if (fireStation.isPresent()) {
+      FireStation fireStationToUpdate = fireStation.get();
+      return fireStationToUpdate;
+    } else {
+      return null;
+    }
   }
 
 

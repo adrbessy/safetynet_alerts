@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.service.fireStation.FireStationService;
-import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,18 +50,16 @@ public class FireStationController {
       @RequestBody FireStation fireStation) {
     logger.info(
         "Put request of the endpoint 'firestation' with the firestation Id : {" + id.toString() + "}");
-    Optional<FireStation> e = fireStationService.getFireStation(id);
-    if (e.isPresent()) {
-      FireStation currentFireStation = e.get();
-
+    FireStation fireStationToUpdate = fireStationService.getFireStation(id);
+    if (fireStationToUpdate != null) {
       Integer station = fireStation.getStation();
       if (station != null) {
-        currentFireStation.setStation(station);
+        fireStationToUpdate.setStation(station);
       }
-      fireStationService.saveFireStation(currentFireStation);
+      fireStationService.saveFireStation(fireStationToUpdate);
       SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "address", "station");
       FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
-      MappingJacksonValue filteredFireStationList = new MappingJacksonValue(currentFireStation);
+      MappingJacksonValue filteredFireStationList = new MappingJacksonValue(fireStationToUpdate);
       filteredFireStationList.setFilters(filterList);
       return filteredFireStationList;
     } else {
