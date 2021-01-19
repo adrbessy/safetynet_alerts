@@ -76,14 +76,6 @@ public class PersonInfoController {
         ;
       }
       personService.savePerson(persToUpdate);
-      /*
-       * SimpleBeanPropertyFilter filter =
-       * SimpleBeanPropertyFilter.filterOutAllExcept("id", "firstName", "lastName",
-       * "address", "city", "email", "phone"); FilterProvider filterList = new
-       * SimpleFilterProvider().addFilter("dynamicFilter", filter);
-       * MappingJacksonValue filteredPersonList = new
-       * MappingJacksonValue(persToUpdate); filteredPersonList.setFilters(filterList);
-       */
       return persToUpdate;
     } else {
       return null;
@@ -100,14 +92,6 @@ public class PersonInfoController {
   @PostMapping("/person")
   public Person createPerson(@RequestBody Person person) {
     Person newPerson = personService.savePerson(person);
-    /*
-     * SimpleBeanPropertyFilter filter =
-     * SimpleBeanPropertyFilter.filterOutAllExcept("id", "firstName", "lastName",
-     * "address", "city", "email", "phone"); FilterProvider filterList = new
-     * SimpleFilterProvider().addFilter("dynamicFilter", filter);
-     * MappingJacksonValue filteredPerson = new MappingJacksonValue(newPerson);
-     * filteredPerson.setFilters(filterList);
-     */
     return newPerson;
   }
 
@@ -127,15 +111,6 @@ public class PersonInfoController {
             + lastName);
     List<Person> personInfoByaddressList = personService.getPersonListByFirstNameAndLastNameThenOnlyLastName(firstName,
         lastName);
-    /*
-     * SimpleBeanPropertyFilter filter =
-     * SimpleBeanPropertyFilter.filterOutAllExcept("firstName", "lastName",
-     * "address", "age", "email", "medications", "allergies"); FilterProvider
-     * filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
-     * MappingJacksonValue filteredFireStationPersonList = new
-     * MappingJacksonValue(personInfoByaddressList);
-     * filteredFireStationPersonList.setFilters(filterList);
-     */
     ObjectMapper mapper = new ObjectMapper();
     try {
       String normalView = mapper.writerWithView(PersonInfoController.class)

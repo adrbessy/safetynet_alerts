@@ -33,6 +33,13 @@ class PersonInfoControllerTest {
 
 
   @Test
+  public void testDeletePerson() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.delete("/person?firstName=Jacob&lastName=Boyd"))
+        .andExpect(status().isOk());
+  }
+
+
+  @Test
   public void testGetPersonInfoFromFirstNameAndLastName() throws Exception {
     mockMvc.perform(get("/personInfo?firstName=Jacob&lastName=Boyd"))
         .andExpect(status().isOk());
@@ -49,15 +56,6 @@ class PersonInfoControllerTest {
     person.setZip("1648462");
     person.setPhone("04815644");
     person.setEmail("uttoxuballo-8128@yopmail.com");
-
-    /*
-     * SimpleBeanPropertyFilter filter =
-     * SimpleBeanPropertyFilter.filterOutAllExcept("id", "firstName", "lastName",
-     * "address", "city", "email", "phone"); FilterProvider filterList = new
-     * SimpleFilterProvider().addFilter("dynamicFilter", filter);
-     * MappingJacksonValue filteredPerson = new MappingJacksonValue(person);
-     * filteredPerson.setFilters(filterList);
-     */
 
     when(personService.savePerson(person)).thenReturn(person);
     MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/person")
@@ -88,10 +86,5 @@ class PersonInfoControllerTest {
     this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
 
   }
-  /*
-   * private String getPersonInJson(long id) { return "{\"id\":" + id +
-   * ", \"address\":\"1 rue Antonio Vivaldi\", \"city\":\"Paris\", \"zip\":\"04545\", \"phone\":\"0454577\", \"email\":\"uttoxuballo-8128@yopmail.com\"}"
-   * ; }
-   */
 
 }

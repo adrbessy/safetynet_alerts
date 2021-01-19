@@ -1,6 +1,7 @@
 package com.safetynet.alerts_api.controller;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.repository.JsonReaderRepository;
@@ -53,6 +54,12 @@ public class MedicalRecordControllerTest {
   }
 
   @Test
+  public void testDeleteMedicalRecord() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.delete("/medicalRecord?firstName=Jacob&lastName=Boyd"))
+        .andExpect(status().isOk());
+  }
+
+  @Test
   public void testCreateMedicalRecord() throws Exception {
     when(medicalRecordService.saveMedicalRecord(medicalRecord)).thenReturn(medicalRecord);
     MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/medicalRecord")
@@ -75,11 +82,5 @@ public class MedicalRecordControllerTest {
 
   }
 
-  /*
-   * private String getMedicalRecordInJson(long id, List<String> medicationList,
-   * List<String> allergiesList) { return "{\"id\":" + id +
-   * ", \"birthdate\":\"16/06/1988\", \"medications\":[\"medicament 1\", \"medicament 2\"], \"medications\":[\"Allergie 1\", \"Allergie 2\"]}"
-   * ; }
-   */
 }
 

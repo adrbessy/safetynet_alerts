@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class CommunityCoveredByFireStationController {
+public class FireStationCommunityController {
 
-  private static final Logger logger = LogManager.getLogger(CommunityCoveredByFireStationController.class);
+  private static final Logger logger = LogManager.getLogger(FireStationCommunityController.class);
 
   @Autowired
   private PersonService personService;
@@ -25,8 +25,8 @@ public class CommunityCoveredByFireStationController {
    * occurrences of children and adults.
    * 
    * @param a fire station number
-   * @return - List<PersonNumberInfo> : A List of persons covered by a FireStation
-   *         number and the number of children and adults
+   * @return A List of persons covered by a FireStation and the number of children
+   *         and adults
    */
   @GetMapping("/firestation")
   public String getPersonListCoveredByThisStation(@RequestParam Integer stationNumber) {
@@ -34,18 +34,9 @@ public class CommunityCoveredByFireStationController {
         "Get request of the endpoint 'fireStation' with the stationNumber : {" + stationNumber.toString() + "}");
     List<PersonNumberInfo> personNumberInfoList = personService
         .getPersonNumberInfoListFromStationNumber(stationNumber);
-    /*
-     * SimpleBeanPropertyFilter filter =
-     * SimpleBeanPropertyFilter.filterOutAllExcept("firstName", "lastName",
-     * "address", "phone"); FilterProvider filterList = new
-     * SimpleFilterProvider().addFilter("dynamicFilter", filter);
-     * MappingJacksonValue filteredFireStationPersonList = new
-     * MappingJacksonValue(FireStationPersonList);
-     * filteredFireStationPersonList.setFilters(filterList);
-     */
     ObjectMapper mapper = new ObjectMapper();
     try {
-      String normalView = mapper.writerWithView(CommunityCoveredByFireStationController.class)
+      String normalView = mapper.writerWithView(FireStationCommunityController.class)
           .writeValueAsString(personNumberInfoList);
       return normalView;
     } catch (JsonProcessingException e) {

@@ -3,7 +3,7 @@ package com.safetynet.alerts_api.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.safetynet.alerts_api.controller.ChildrenController;
-import com.safetynet.alerts_api.controller.CommunityCoveredByFireStationController;
+import com.safetynet.alerts_api.controller.FireStationCommunityController;
 import com.safetynet.alerts_api.controller.HomeController;
 import com.safetynet.alerts_api.controller.PersonInfoController;
 import java.text.ParseException;
@@ -32,23 +32,23 @@ public class Person {
   @JsonIgnore
   private Long id;
 
-  @JsonView({ CommunityCoveredByFireStationController.class, ChildrenController.class })
+  @JsonView({ FireStationCommunityController.class, ChildrenController.class })
   private String firstName;
 
-  @JsonView({ CommunityCoveredByFireStationController.class, ChildrenController.class, HomeController.class,
+  @JsonView({ FireStationCommunityController.class, ChildrenController.class, HomeController.class,
       PersonInfoController.class })
   private String lastName;
 
-  @JsonView({ CommunityCoveredByFireStationController.class, PersonInfoController.class })
+  @JsonView({ FireStationCommunityController.class, PersonInfoController.class })
   private String address;
 
-  @JsonView({ CommunityCoveredByFireStationController.class, PersonInfoController.class })
+  @JsonView({ FireStationCommunityController.class, PersonInfoController.class })
   private String city;
 
-  @JsonView({ CommunityCoveredByFireStationController.class, PersonInfoController.class })
+  @JsonView({ FireStationCommunityController.class, PersonInfoController.class })
   private String zip;
 
-  @JsonView({ CommunityCoveredByFireStationController.class, HomeController.class })
+  @JsonView({ FireStationCommunityController.class, HomeController.class })
   private String phone;
 
   @JsonView({ PersonInfoController.class })

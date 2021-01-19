@@ -23,7 +23,6 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
   public void deleteMedicalRecord(final String firstname, final String lastname) {
     try {
       medicalRecordRepository.deletePersonByFirstNameAndLastNameAllIgnoreCase(firstname, lastname);
-
     } catch (Exception exception) {
       logger.error("Error when we try to delete a medical record:" + exception.getMessage());
     }
