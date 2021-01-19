@@ -28,6 +28,7 @@ public class CommunityEmailController {
     logger.info(
         "Get request of the endpoint 'communityEmail' with the city : {" + city + "}");
     List<String> emailList = emailService.getPersonEmailFromCity(city);
+    logger.info("response following the Get on the endpoint 'communityEmail' with the given city : {" + city + "}");
     return emailList;
   }
 

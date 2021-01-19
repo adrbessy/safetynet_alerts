@@ -26,8 +26,8 @@ public class FireStationServiceImpl implements FireStationService {
 
 
   @Override
-  public FireStation getFireStation(final Long id) {
-    Optional<FireStation> fireStation = fireStationRepository.findById(id);
+  public FireStation getFireStation(final String address) {
+    Optional<FireStation> fireStation = fireStationRepository.findByAddress(address);
     if (fireStation.isPresent()) {
       FireStation fireStationToUpdate = fireStation.get();
       return fireStationToUpdate;

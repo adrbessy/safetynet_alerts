@@ -33,23 +33,16 @@ public class HomeController {
     logger.info(
         "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
     List<PersonInfo> personList = personService.getPersonListWithStationNumber(address);
-    /*
-     * SimpleBeanPropertyFilter filter =
-     * SimpleBeanPropertyFilter.filterOutAllExcept("lastName", "phone", "age",
-     * "medications", "allergies"); FilterProvider filterList = new
-     * SimpleFilterProvider().addFilter("dynamicFilter", filter);
-     * MappingJacksonValue filteredFireStationPersonList = new
-     * MappingJacksonValue(personList);
-     * filteredFireStationPersonList.setFilters(filterList);
-     */
+    logger.info(
+        "response following the Get on the endpoint 'fire' with the given address : {"
+            + address + "}");
     ObjectMapper mapper = new ObjectMapper();
     try {
       String normalView = mapper.writerWithView(HomeController.class)
           .writeValueAsString(personList);
       return normalView;
     } catch (JsonProcessingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      logger.error("Unable to process the filter in getPersonListLivingToThisAdressAndFirestationNumber: ", e);
       return null;
     }
   }
@@ -66,23 +59,16 @@ public class HomeController {
     logger.info(
         "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + stations.toString() + "}");
     List<PersonInfoByAddress> personInfoByaddressList = personService.getPersonInfoByAddressList(stations);
-    /*
-     * SimpleBeanPropertyFilter filter =
-     * SimpleBeanPropertyFilter.filterOutAllExcept("lastName", "phone", "age",
-     * "medications", "allergies"); FilterProvider filterList = new
-     * SimpleFilterProvider().addFilter("dynamicFilter", filter);
-     * MappingJacksonValue filteredFireStationPersonList = new
-     * MappingJacksonValue(personInfoByaddressList);
-     * filteredFireStationPersonList.setFilters(filterList);
-     */
+    logger.info(
+        "response following the Get on the endpoint 'flood' with the given stationNumber List : {"
+            + stations.toString() + "}");
     ObjectMapper mapper = new ObjectMapper();
     try {
       String normalView = mapper.writerWithView(HomeController.class)
           .writeValueAsString(personInfoByaddressList);
       return normalView;
     } catch (JsonProcessingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      logger.error("Unable to process the filter in getAddressCoveredByTheseStation: ", e);
       return null;
     }
   }

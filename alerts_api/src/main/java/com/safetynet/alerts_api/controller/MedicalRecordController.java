@@ -1,15 +1,11 @@
 package com.safetynet.alerts_api.controller;
 
-import com.fasterxml.jackson.databind.ser.FilterProvider;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.service.medicalRecord.MedicalRecordService;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,8 +28,11 @@ public class MedicalRecordController {
   @DeleteMapping("/medicalRecord")
   public void deleteMedicalRecord(@RequestParam String firstName, @RequestParam String lastName) {
     logger.info("Delete request with the endpoint 'medicalRecord' received with parameters firstName :" + firstName
-        + " and lastName : " + lastName);
+        + " and the given lastName : " + lastName);
     medicalRecordService.deleteMedicalRecord(firstName, lastName);
+    logger.info(
+        "response following the Delete on the endpoint 'medicalRecord' with the given firstName : {"
+            + firstName + "and the given lastName : {" + lastName + "}");
   }
 
 
@@ -44,17 +43,14 @@ public class MedicalRecordController {
    * @return The medical record object saved
    */
   @PostMapping("/medicalRecord")
-  public MappingJacksonValue createMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
+  public MedicalRecord createMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
     logger.info("Post request with the endpoint 'medicalRecord' received with the medicalRecord :"
         + medicalRecord.toString());
     MedicalRecord savedMedicalRecord = medicalRecordService.saveMedicalRecord(medicalRecord);
-    SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "firstName", "lastName",
-        "address",
-        "phone");
-    FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
-    MappingJacksonValue filteredMedicalRecordList = new MappingJacksonValue(savedMedicalRecord);
-    filteredMedicalRecordList.setFilters(filterList);
-    return filteredMedicalRecordList;
+    logger.info(
+        "response following the Post on the endpoint 'medicalRecord' with the given fireStation : {"
+            + medicalRecord.toString() + "}");
+    return savedMedicalRecord;
   }
 
 
@@ -66,11 +62,14 @@ public class MedicalRecordController {
    * @return
    */
   @PutMapping("/medicalRecord/{id}")
-  public MappingJacksonValue updateMedicalRecord(@PathVariable("id") final Long id,
+  public MedicalRecord updateMedicalRecord(@PathVariable("id") final Long id,
       @RequestBody MedicalRecord medicalRecord) {
     logger.info("Put request with the endpoint 'medicalRecord' received with the medicalRecord Id:"
         + id.toString());
     MedicalRecord medicalRecordToUpdate = medicalRecordService.getMedicalRecord(id);
+    logger.info(
+        "response following the Put on the endpoint 'medicalRecord' with the given id : {"
+            + id.toString() + "}");
     if (medicalRecordToUpdate != null) {
 
       String birthdate = medicalRecord.getBirthdate();
@@ -86,12 +85,7 @@ public class MedicalRecordController {
         medicalRecordToUpdate.setAllergies(allergies);
       }
       medicalRecordService.saveMedicalRecord(medicalRecordToUpdate);
-      SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "firstName", "lastName",
-          "birthdate", "medications", "allergies");
-      FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
-      MappingJacksonValue filteredFireStationList = new MappingJacksonValue(medicalRecordToUpdate);
-      filteredFireStationList.setFilters(filterList);
-      return filteredFireStationList;
+      return medicalRecordToUpdate;
     } else {
       return null;
     }

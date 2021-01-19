@@ -45,21 +45,18 @@ public class FireStationControllerTest {
     MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/firestation")
         .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
         .content(new ObjectMapper().writeValueAsString(fireStation));
-
     this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
   }
 
 
   @Test
   public void testUpdateFireStation() throws Exception {
-    long id = 1;
-    when(fireStationService.getFireStation(id)).thenReturn(fireStation);
-    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put("/firestation/" + id)
+    String address = "12 rue des ecoles";
+    when(fireStationService.getFireStation(address)).thenReturn(fireStation);
+    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put("/firestation/" + address)
         .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
         .content(new ObjectMapper().writeValueAsString(fireStation));
-
     this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
-
   }
 
 }

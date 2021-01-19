@@ -51,8 +51,6 @@ public class PersonServiceImpl implements PersonService {
     }
   }
 
-
-
   @Override
   public Person getPerson(final Long id) {
     Optional<Person> pers = personRepository.findById(id);
@@ -63,7 +61,6 @@ public class PersonServiceImpl implements PersonService {
       return null;
     }
   }
-
 
   @Override
   public Person savePerson(Person person) {

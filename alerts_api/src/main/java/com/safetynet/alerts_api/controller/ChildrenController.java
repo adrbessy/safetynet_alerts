@@ -34,23 +34,14 @@ public class ChildrenController {
     logger.info(
         "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
     List<Home> homeList = personService.getChildrenListAndAdultListFromAddress(address);
-    /*
-     * SimpleBeanPropertyFilter filter =
-     * SimpleBeanPropertyFilter.filterOutAllExcept("firstName", "lastName", "age");
-     * FilterProvider filterList = new
-     * SimpleFilterProvider().addFilter("dynamicFilter", filter);
-     * MappingJacksonValue filteredFireStationPersonList = new
-     * MappingJacksonValue(homeList);
-     * filteredFireStationPersonList.setFilters(filterList);
-     */
+    logger.info("response following the Get on the endpoint 'childAlert' with the given address : {" + address + "}");
     ObjectMapper mapper = new ObjectMapper();
     try {
       String normalView = mapper.writerWithView(ChildrenController.class)
           .writeValueAsString(homeList);
       return normalView;
     } catch (JsonProcessingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      logger.error("Unable to process the filter in getChildListLivingToThisAdress: ", e);
       return null;
     }
   }

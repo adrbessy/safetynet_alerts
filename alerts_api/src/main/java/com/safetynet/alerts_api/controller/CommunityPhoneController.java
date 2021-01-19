@@ -29,6 +29,8 @@ public class CommunityPhoneController {
     logger.info(
         "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + firestation.toString() + "}");
     List<String> phoneList = phoneService.getPhoneNumberList(firestation);
+    logger.info("response following the Get on the endpoint 'phoneAlert' with the given firestation number : {"
+        + firestation.toString() + "}");
     return phoneList;
   }
 

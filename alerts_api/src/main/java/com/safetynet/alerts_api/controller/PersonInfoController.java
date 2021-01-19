@@ -38,6 +38,9 @@ public class PersonInfoController {
     logger.info("Delete request with the endpoint 'person' received with parameters firstName :" + firstName
         + " and lastName : " + lastName);
     personService.deletePerson(firstName, lastName);
+    logger.info(
+        "response following the Delete on the endpoint 'person' with the given firstName : {"
+            + firstName + "and the given lastName : {" + lastName + "}");
   }
 
 
@@ -51,6 +54,9 @@ public class PersonInfoController {
   @PutMapping("/person/{id}")
   public Person updatePerson(@PathVariable("id") final Long id, @RequestBody Person person) {
     Person persToUpdate = personService.getPerson(id);
+    logger.info(
+        "response following the Put on the endpoint 'person' with the given id : {"
+            + id.toString() + "}");
     if (persToUpdate != null) {
       String address = person.getAddress();
       if (address != null) {
@@ -92,6 +98,9 @@ public class PersonInfoController {
   @PostMapping("/person")
   public Person createPerson(@RequestBody Person person) {
     Person newPerson = personService.savePerson(person);
+    logger.info(
+        "response following the Post on the endpoint 'person' with the given person : {"
+            + person.toString() + "}");
     return newPerson;
   }
 
@@ -111,14 +120,17 @@ public class PersonInfoController {
             + lastName);
     List<Person> personInfoByaddressList = personService.getPersonListByFirstNameAndLastNameThenOnlyLastName(firstName,
         lastName);
+    logger.info(
+        "response following the Get on the endpoint 'personInfo' with the given address :{" + firstName
+            + "} and the last name :{"
+            + lastName + "}");
     ObjectMapper mapper = new ObjectMapper();
     try {
       String normalView = mapper.writerWithView(PersonInfoController.class)
           .writeValueAsString(personInfoByaddressList);
       return normalView;
     } catch (JsonProcessingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      logger.error("Unable to process the filter in getPersonInfoFromFirstNameAndLastName: ", e);
       return null;
     }
   }

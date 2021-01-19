@@ -34,14 +34,16 @@ public class FireStationCommunityController {
         "Get request of the endpoint 'fireStation' with the stationNumber : {" + stationNumber.toString() + "}");
     List<PersonNumberInfo> personNumberInfoList = personService
         .getPersonNumberInfoListFromStationNumber(stationNumber);
+    logger.info(
+        "response following the Get on the endpoint 'firestation' with the given stationNumber : {"
+            + stationNumber.toString() + "}");
     ObjectMapper mapper = new ObjectMapper();
     try {
       String normalView = mapper.writerWithView(FireStationCommunityController.class)
           .writeValueAsString(personNumberInfoList);
       return normalView;
     } catch (JsonProcessingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      logger.error("Unable to process the filter in getPersonListCoveredByThisStation: ", e);
       return null;
     }
   }

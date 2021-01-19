@@ -22,7 +22,7 @@ public interface FireStationService {
    * @return the fireStation
    * 
    */
-  public FireStation getFireStation(final Long id);
+  public FireStation getFireStation(final String address);
 
 
   /**
