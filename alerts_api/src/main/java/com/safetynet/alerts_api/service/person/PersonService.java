@@ -67,7 +67,7 @@ public interface PersonService {
    * @param an address
    * @return - A List of Home
    */
-  public List<Home> getChildrenListAndAdultListFromAddress(String address);
+  public Home getChildrenListAndAdultListFromAddress(String address);
 
 
   /**

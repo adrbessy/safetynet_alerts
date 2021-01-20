@@ -1,10 +1,7 @@
 package com.safetynet.alerts_api.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts_api.model.Home;
 import com.safetynet.alerts_api.service.person.PersonService;
-import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,20 +27,24 @@ public class ChildrenController {
    * @return - A List of Home
    */
   @GetMapping("/childAlert")
-  public String getChildListLivingToThisAdress(@RequestParam String address) {
+  public Home getChildListLivingToThisAdress(@RequestParam String address) {
     logger.info(
         "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
-    List<Home> homeList = personService.getChildrenListAndAdultListFromAddress(address);
+    Home home = personService.getChildrenListAndAdultListFromAddress(address);
     logger.info("response following the Get on the endpoint 'childAlert' with the given address : {" + address + "}");
-    ObjectMapper mapper = new ObjectMapper();
-    try {
-      String normalView = mapper.writerWithView(ChildrenController.class)
-          .writeValueAsString(homeList);
-      return normalView;
-    } catch (JsonProcessingException e) {
-      logger.error("Unable to process the filter in getChildListLivingToThisAdress: ", e);
-      return null;
-    }
+
+    /*
+     * ObjectMapper mapper = new ObjectMapper(); try { String normalView =
+     * mapper.writerWithView(ChildrenController.class) .writeValueAsString(home);
+     * System.out.println("normalView : " + normalView); String result =
+     * normalView.substring(1, normalView.length() - 1); JSONParser parser = new
+     * JSONParser(); JSONObject json = (JSONObject) parser.parse(result); return
+     * json; } catch (JsonProcessingException e) { logger.
+     * error("Unable to process the filter in getChildListLivingToThisAdress: ", e);
+     * return null; } catch (ParseException e) { // TODO Auto-generated catch block
+     * e.printStackTrace(); return null; }
+     */
+    return home;
   }
 
 }

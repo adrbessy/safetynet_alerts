@@ -1,5 +1,6 @@
 package com.safetynet.alerts_api.service.person;
 
+import com.safetynet.alerts_api.model.ChildAlertDTO;
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.model.Home;
 import com.safetynet.alerts_api.model.MedicalRecord;
@@ -169,7 +170,7 @@ public class PersonServiceImpl implements PersonService {
 
 
   @Override
-  public List<Home> getChildrenListAndAdultListFromAddress(String address) {
+  public Home getChildrenListAndAdultListFromAddress(String address) {
 
     // we retrieve the list of persons corresponding to the address
     List<Person> filteredPersonList = personRepository.findDistinctByAddress(address);
@@ -179,15 +180,27 @@ public class PersonServiceImpl implements PersonService {
     List<Person> adultList = new ArrayList<>();
     fullChildrenListAndAdultListFromPersonList(filteredPersonList, childrenList, adultList);
 
-    // We create an object including the list of children and the list of adults
-    Home home = new Home(childrenList, adultList);
-    if (childrenList.isEmpty()) {
-      return new ArrayList<>();
-    }
-    List<Home> homeList = new ArrayList<>();
-    homeList.add(home);
+    List<ChildAlertDTO> childrenDTOList = new ArrayList<>();
+    childrenList.forEach(personIterator -> {
+      ChildAlertDTO childAlertDTO = new ChildAlertDTO(personIterator.getLastName(), personIterator.getFirstName(),
+          personIterator.getAge());
+      childrenDTOList.add(childAlertDTO);
+    });
 
-    return homeList;
+    List<ChildAlertDTO> adultDTOList = new ArrayList<>();
+    adultList.forEach(personIterator -> {
+      ChildAlertDTO childAlertDTO = new ChildAlertDTO(personIterator.getLastName(), personIterator.getFirstName(),
+          personIterator.getAge());
+      adultDTOList.add(childAlertDTO);
+    });
+
+    // We create an object including the list of children and the list of adults
+    Home home = new Home(childrenDTOList, adultDTOList);
+    if (childrenList.isEmpty()) {
+      return new Home(new ArrayList<>(), new ArrayList<>());
+    }
+
+    return home;
   }
 
 
