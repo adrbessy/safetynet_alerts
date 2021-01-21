@@ -4,6 +4,7 @@ import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.repository.MedicalRecordRepository;
 import com.safetynet.alerts_api.service.fireStation.FireStationServiceImpl;
 import java.util.List;
+import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,28 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
   @Autowired
   private MedicalRecordRepository medicalRecordRepository;
+
+
+  @Override
+  public void deleteMedicalRecord(final String firstname, final String lastname) {
+    try {
+      medicalRecordRepository.deletePersonByFirstNameAndLastNameAllIgnoreCase(firstname, lastname);
+    } catch (Exception exception) {
+      logger.error("Error when we try to delete a medical record:" + exception.getMessage());
+    }
+  }
+
+
+  @Override
+  public MedicalRecord getMedicalRecord(final Long id) {
+    Optional<MedicalRecord> medRec = medicalRecordRepository.findById(id);
+    if (medRec.isPresent()) {
+      MedicalRecord medicalRecordToUpdate = medRec.get();
+      return medicalRecordToUpdate;
+    } else {
+      return null;
+    }
+  }
 
 
   @Override

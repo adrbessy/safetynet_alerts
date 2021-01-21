@@ -15,30 +15,24 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 class HomeTest {
 
   private Home home;
-  List<Person> childList;
-  List<Person> adultList;
+  List<ChildAlertDTO> childList;
+  List<ChildAlertDTO> adultList;
 
   @MockBean
   private JsonReaderRepository jsonReaderRepository;
 
   @BeforeEach
   private void setUp() {
-    Person adult = new Person();
-    Person children = new Person();
-    adult.setId((long) 56);
-    adult.setFirstName("Adrien");
-    adult.setLastName("Bessy");
-    adult.setAddress("82 Alexander Road");
-    adult.setCity("New York");
+    ChildAlertDTO adult = new ChildAlertDTO("Bessy", "Adrien", 51);
+    ChildAlertDTO children = new ChildAlertDTO("Bernard", "Paul", 11);
+    ChildAlertDTO adult2 = new ChildAlertDTO("Poulet", "Adrien", 78);
+    ChildAlertDTO children2 = new ChildAlertDTO("Bessy", "marie", 14);
     adultList = new ArrayList<>();
     adultList.add(adult);
-    children.setId((long) 97);
-    children.setFirstName("Christian");
-    children.setLastName("Legal");
-    children.setAddress("12 rue des ecoles");
-    children.setCity("Paris");
+    adultList.add(adult2);
     childList = new ArrayList<>();
     childList.add(children);
+    childList.add(children2);
     home = new Home(childList, adultList);
   }
 

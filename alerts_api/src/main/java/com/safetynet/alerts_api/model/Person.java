@@ -1,6 +1,6 @@
 package com.safetynet.alerts_api.model;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -14,16 +14,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import lombok.Data;
 
 @Data
 @Entity
-@JsonFilter("dynamicFilter")
 @Table(name = "persons")
 public class Person {
 
+  private static final Logger logger = LogManager.getLogger(Person.class);
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonIgnore
   private Long id;
 
   private String firstName;
@@ -66,8 +70,7 @@ public class Person {
       this.setMedications(medicalRecord.getMedications());
       this.setAllergies(medicalRecord.getAllergies());
     } catch (ParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      logger.error("setAge_Medications_Allergies error : " + e);
     }
   }
 

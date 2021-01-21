@@ -6,6 +6,25 @@ import java.util.List;
 public interface MedicalRecordService {
 
   /**
+   * Delete a MedicalRecord
+   * 
+   * @param first name and last name
+   * 
+   */
+  public void deleteMedicalRecord(final String firstname, final String lastname);
+
+
+  /**
+   * Get a MedicalRecord
+   * 
+   * @param MedicalRecord to get
+   * @return the medicalRecord
+   * 
+   */
+  public MedicalRecord getMedicalRecord(final Long id);
+
+
+  /**
    * Save the medical record list
    * 
    * @param MedicalRecordList to save

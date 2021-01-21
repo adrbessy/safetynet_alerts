@@ -5,6 +5,26 @@ import java.util.List;
 
 public interface FireStationService {
 
+
+  /**
+   * Delete a FireStation
+   * 
+   * @param FireStation to delete
+   * 
+   */
+  public void deleteFireStation(final Long id);
+
+
+  /**
+   * Get a FireStation
+   * 
+   * @param FireStation to get
+   * @return the fireStation
+   * 
+   */
+  public FireStation getFireStation(final String address);
+
+
   /**
    * Read - Get the List of the fire station number from a list of fire station.
    * 

@@ -5,10 +5,10 @@ import lombok.Data;
 
 @Data
 public class Home {
-  private List<Person> childList;
-  private List<Person> adultList;
+  private List<ChildAlertDTO> childList;
+  private List<ChildAlertDTO> adultList;
 
-  public Home(List<Person> childList, List<Person> adultList) {
+  public Home(List<ChildAlertDTO> childList, List<ChildAlertDTO> adultList) {
     this.childList = childList;
     this.adultList = adultList;
   }

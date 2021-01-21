@@ -1,21 +1,19 @@
 package com.safetynet.alerts_api.controller;
 
-import com.fasterxml.jackson.databind.ser.FilterProvider;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.safetynet.alerts_api.model.Home;
 import com.safetynet.alerts_api.model.Person;
-import com.safetynet.alerts_api.model.PersonInfo;
-import com.safetynet.alerts_api.model.PersonInfoByAddress;
-import com.safetynet.alerts_api.model.PersonNumberInfo;
+import com.safetynet.alerts_api.model.PersonInfo2DTO;
+import com.safetynet.alerts_api.service.email.EmailService;
 import com.safetynet.alerts_api.service.person.PersonService;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +26,70 @@ public class PersonInfoController {
   @Autowired
   private PersonService personService;
 
+  @Autowired
+  private EmailService emailService;
+
+  /**
+   * Delete - Delete an person
+   * 
+   * @param id - The id of the person to delete
+   */
+  @Transactional
+  @DeleteMapping("/person")
+  public void deletePerson(@RequestParam String firstName, @RequestParam String lastName) {
+    logger.info("Delete request with the endpoint 'person' received with parameters firstName :" + firstName
+        + " and lastName : " + lastName);
+    personService.deletePerson(firstName, lastName);
+    logger.info(
+        "response following the Delete on the endpoint 'person' with the given firstName : {"
+            + firstName + "and the given lastName : {" + lastName + "}");
+  }
+
+
+  /**
+   * Update - Update an existing person
+   * 
+   * @param id     - The id of the eperson to update
+   * @param person - The person object updated
+   * @return
+   */
+  @PutMapping("/person/{id}")
+  public Person updatePerson(@PathVariable("id") final Long id, @RequestBody Person person) {
+    Person persToUpdate = personService.getPerson(id);
+    logger.info(
+        "response following the Put on the endpoint 'person' with the given id : {"
+            + id.toString() + "}");
+    if (persToUpdate != null) {
+      String address = person.getAddress();
+      if (address != null) {
+        persToUpdate.setAddress(address);
+      }
+      String city = person.getCity();
+      if (city != null) {
+        persToUpdate.setCity(city);
+        ;
+      }
+      String zip = person.getZip();
+      if (zip != null) {
+        persToUpdate.setZip(zip);
+      }
+      String phone = person.getPhone();
+      if (phone != null) {
+        persToUpdate.setPhone(phone);
+        ;
+      }
+      String email = person.getEmail();
+      if (email != null) {
+        persToUpdate.setEmail(email);
+        ;
+      }
+      personService.savePerson(persToUpdate);
+      return persToUpdate;
+    } else {
+      return null;
+    }
+  }
+
 
   /**
    * Create - Add a new person
@@ -36,99 +98,14 @@ public class PersonInfoController {
    * @return The person object saved
    */
   @PostMapping("/person")
-  public MappingJacksonValue createPerson(@RequestBody Person person) {
-    Person person1 = personService.savePerson(person);
-    SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "firstName", "lastName",
-        "address",
-        "phone");
-    FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
-    MappingJacksonValue filteredFireStationPersonList = new MappingJacksonValue(person1);
-    filteredFireStationPersonList.setFilters(filterList);
-    return filteredFireStationPersonList;
-  }
-
-
-  /**
-   * Read - Get a person list covered by a given fire station with the number of
-   * occurrences of children and adults.
-   * 
-   * @param a fire station number
-   * @return - A List of FireStationInfo
-   */
-  @GetMapping("/firestation")
-  public MappingJacksonValue getPersonListCoveredByThisStation(@RequestParam Integer stationNumber) {
+  public Person createPerson(@RequestBody Person person) {
+    Person newPerson = personService.savePerson(person);
     logger.info(
-        "Get request of the endpoint 'fireStation' with the stationNumber : {" + stationNumber.toString() + "}");
-    List<PersonNumberInfo> FireStationPersonList = personService
-        .getPersonNumberInfoListFromStationNumber(stationNumber);
-    SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("firstName", "lastName", "address",
-        "phone");
-    FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
-    MappingJacksonValue filteredFireStationPersonList = new MappingJacksonValue(FireStationPersonList);
-    filteredFireStationPersonList.setFilters(filterList);
-    return filteredFireStationPersonList;
+        "response following the Post on the endpoint 'person' with the given person : {"
+            + person.toString() + "}");
+    return newPerson;
   }
 
-
-  /**
-   * Read - Get a children list (inferior or equal 18) living to a particular
-   * address, with a list of other people living there. If no children living
-   * there, returns an empty list
-   * 
-   * @param an address
-   * @return - A List of Home
-   */
-  @GetMapping("/childAlert")
-  public MappingJacksonValue getChildListLivingToThisAdress(@RequestParam String address) {
-    logger.info(
-        "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
-    List<Home> homeList = personService.getChildrenListAndAdultListFromAddress(address);
-    SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("firstName", "lastName", "age");
-    FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
-    MappingJacksonValue filteredFireStationPersonList = new MappingJacksonValue(homeList);
-    filteredFireStationPersonList.setFilters(filterList);
-    return filteredFireStationPersonList;
-  }
-
-  /**
-   * Read - Get a person list living to a particular address, with a the number of
-   * the fire station deserving it.
-   * 
-   * @param an address
-   * @return - A List of PersonInfo
-   */
-  @GetMapping("/fire")
-  public MappingJacksonValue getPersonListLivingToThisAdressAndFirestationNumber(@RequestParam String address) {
-    logger.info(
-        "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
-    List<PersonInfo> personList = personService.getPersonListWithStationNumber(address);
-    SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("lastName", "phone", "age",
-        "medications", "allergies");
-    FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
-    MappingJacksonValue filteredFireStationPersonList = new MappingJacksonValue(personList);
-    filteredFireStationPersonList.setFilters(filterList);
-    return filteredFireStationPersonList;
-  }
-
-  /**
-   * Read - Get a person list grouped by address and grouped by the number of the
-   * fire station deserving it.
-   * 
-   * @param a List of number of fire station
-   * @return - A List of PersonInfoByAddress
-   */
-  @GetMapping("/flood")
-  public MappingJacksonValue getAddressCoveredByTheseStation(@RequestParam List<Integer> stations) {
-    logger.info(
-        "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + stations.toString() + "}");
-    List<PersonInfoByAddress> personInfoByaddressList = personService.getPersonInfoByAddressList(stations);
-    SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("lastName", "phone", "age",
-        "medications", "allergies");
-    FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
-    MappingJacksonValue filteredFireStationPersonList = new MappingJacksonValue(personInfoByaddressList);
-    filteredFireStationPersonList.setFilters(filterList);
-    return filteredFireStationPersonList;
-  }
 
   /**
    * Read - Get the information about a person from his first name and his last
@@ -138,20 +115,35 @@ public class PersonInfoController {
    * @return - A List of Person
    */
   @GetMapping("/personInfo")
-  public MappingJacksonValue getPersonInfoFromFirstNameAndLastName(@RequestParam String firstName,
+  public List<PersonInfo2DTO> getPersonInfoFromFirstNameAndLastName(@RequestParam String firstName,
       @RequestParam String lastName) {
     logger.info(
         "Get request of the endpoint 'personInfo' with the first name : {" + firstName + "} and the last name : "
             + lastName);
-    List<Person> personInfoByaddressList = personService.getPersonListByFirstNameAndLastNameThenOnlyLastName(firstName,
+    List<PersonInfo2DTO> personInfoByaddressList = personService.getPersonListByFirstNameAndLastNameThenOnlyLastName(
+        firstName,
         lastName);
-    SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("firstName", "lastName", "address",
-        "age", "email",
-        "medications", "allergies");
-    FilterProvider filterList = new SimpleFilterProvider().addFilter("dynamicFilter", filter);
-    MappingJacksonValue filteredFireStationPersonList = new MappingJacksonValue(personInfoByaddressList);
-    filteredFireStationPersonList.setFilters(filterList);
-    return filteredFireStationPersonList;
+    logger.info(
+        "response following the Get on the endpoint 'personInfo' with the given address :{" + firstName
+            + "} and the last name :{"
+            + lastName + "}");
+    return personInfoByaddressList;
+  }
+
+
+  /**
+   * Read - Get the list of all email of persons living in a given city.
+   * 
+   * @param a city
+   * @return - A List of email
+   */
+  @GetMapping("/communityEmail")
+  public List<String> getEmailListFromCity(@RequestParam String city) {
+    logger.info(
+        "Get request of the endpoint 'communityEmail' with the city : {" + city + "}");
+    List<String> emailList = emailService.getPersonEmailFromCity(city);
+    logger.info("response following the Get on the endpoint 'communityEmail' with the given city : {" + city + "}");
+    return emailList;
   }
 
 }

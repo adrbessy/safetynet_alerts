@@ -4,6 +4,7 @@ import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.repository.FireStationRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,25 @@ public class FireStationServiceImpl implements FireStationService {
 
   @Autowired
   private FireStationRepository fireStationRepository;
+
+
+  @Override
+  public void deleteFireStation(final Long id) {
+    fireStationRepository.deleteById(id);
+  }
+
+
+  @Override
+  public FireStation getFireStation(final String address) {
+    Optional<FireStation> fireStation = fireStationRepository.findByAddress(address);
+    if (fireStation.isPresent()) {
+      FireStation fireStationToUpdate = fireStation.get();
+      return fireStationToUpdate;
+    } else {
+      return null;
+    }
+  }
+
 
   @Override
   public FireStation saveFireStation(FireStation fireStation) {
