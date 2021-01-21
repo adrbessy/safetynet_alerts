@@ -7,9 +7,9 @@ import lombok.Data;
 public class PersonInfoByAddress {
 
   private String address;
-  private List<Person> personList;
+  private List<PersonInfoDTO> personList;
 
-  public PersonInfoByAddress(String address, List<Person> personList) {
+  public PersonInfoByAddress(String address, List<PersonInfoDTO> personList) {
     this.address = address;
     this.personList = personList;
   }

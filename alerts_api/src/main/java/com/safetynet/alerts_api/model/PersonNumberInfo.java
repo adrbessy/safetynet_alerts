@@ -10,11 +10,11 @@ import lombok.Data;
 public class PersonNumberInfo {
 
 
-  private List<Person> personList;
+  private List<PersonNumberInfoDTO> personList;
   private int numberOfChildren;
   private int numberOfAdults;
 
-  public PersonNumberInfo(List<Person> personList, int numberOfChildren, int numberOfAdults) {
+  public PersonNumberInfo(List<PersonNumberInfoDTO> personList, int numberOfChildren, int numberOfAdults) {
     this.personList = personList;
     this.numberOfChildren = numberOfChildren;
     this.numberOfAdults = numberOfAdults;

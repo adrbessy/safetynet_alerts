@@ -4,6 +4,7 @@ import com.safetynet.alerts_api.model.Home;
 import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.model.PersonInfo;
+import com.safetynet.alerts_api.model.PersonInfo2DTO;
 import com.safetynet.alerts_api.model.PersonInfoByAddress;
 import com.safetynet.alerts_api.model.PersonNumberInfo;
 import java.time.LocalDate;
@@ -34,7 +35,7 @@ public interface PersonService {
    * @param a fire station number
    * @return - A List of PersonNumberInfo
    */
-  public List<PersonNumberInfo> getPersonNumberInfoListFromStationNumber(Integer stationNumber);
+  public PersonNumberInfo getPersonNumberInfoListFromStationNumber(Integer stationNumber);
 
   /**
    * full the List of children and adults from a given Person List.
@@ -111,7 +112,7 @@ public interface PersonService {
    * @param a first name and a last name
    * @return - A List of Person
    */
-  public List<Person> getPersonListByFirstNameAndLastNameThenOnlyLastName(String firstName, String lastName);
+  public List<PersonInfo2DTO> getPersonListByFirstNameAndLastNameThenOnlyLastName(String firstName, String lastName);
 
   /**
    * Get the Person List from a given address.
@@ -127,7 +128,7 @@ public interface PersonService {
    * @param an address
    * @return - A List of PersonInfo
    */
-  public List<PersonInfo> getPersonListWithStationNumber(String address);
+  public PersonInfo getPersonListWithStationNumber(String address);
 
   /**
    * Save the person list

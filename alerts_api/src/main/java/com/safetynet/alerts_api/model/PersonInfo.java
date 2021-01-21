@@ -6,10 +6,10 @@ import lombok.Data;
 @Data
 public class PersonInfo {
 
-  private List<Person> personList;
+  private List<PersonInfoDTO> personList;
   private List<Integer> firestationNumberList;
 
-  public PersonInfo(List<Person> personList, List<Integer> firestationNumberList) {
+  public PersonInfo(List<PersonInfoDTO> personList, List<Integer> firestationNumberList) {
     this.personList = personList;
     this.firestationNumberList = firestationNumberList;
   }

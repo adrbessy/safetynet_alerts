@@ -29,8 +29,8 @@ public class HomeControllerTest {
   }
 
   @Test
-  public void testGetAddressCoveredByTheseStation() throws Exception {
-    mockMvc.perform(get("/flood?stations=1,2"))
+  public void testGetChildListLivingToThisAdress() throws Exception {
+    mockMvc.perform(get("/childAlert?address=1509%20Culver%20St"))
         .andExpect(status().isOk());
   }
 

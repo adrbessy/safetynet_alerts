@@ -6,8 +6,11 @@ import com.safetynet.alerts_api.model.Home;
 import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.model.PersonInfo;
+import com.safetynet.alerts_api.model.PersonInfo2DTO;
 import com.safetynet.alerts_api.model.PersonInfoByAddress;
+import com.safetynet.alerts_api.model.PersonInfoDTO;
 import com.safetynet.alerts_api.model.PersonNumberInfo;
+import com.safetynet.alerts_api.model.PersonNumberInfoDTO;
 import com.safetynet.alerts_api.repository.FireStationRepository;
 import com.safetynet.alerts_api.repository.MedicalRecordRepository;
 import com.safetynet.alerts_api.repository.PersonRepository;
@@ -92,7 +95,7 @@ public class PersonServiceImpl implements PersonService {
 
 
   @Override
-  public List<PersonNumberInfo> getPersonNumberInfoListFromStationNumber(Integer stationNumber) {
+  public PersonNumberInfo getPersonNumberInfoListFromStationNumber(Integer stationNumber) {
     if (stationNumber != null) {
       try {
         List<Person> filteredPersonList = getPersonListFromStationNumber(stationNumber);
@@ -107,12 +110,21 @@ public class PersonServiceImpl implements PersonService {
 
         // We create an object including the list of persons and the number of adults
         // and children
-        PersonNumberInfo personNumberInfo = new PersonNumberInfo(filteredPersonList,
+        List<PersonNumberInfoDTO> PersonNumberInfoDTOList = new ArrayList<>();
+        filteredPersonList.forEach(personIterator -> {
+          PersonNumberInfoDTO personNumberInfoDTO = new PersonNumberInfoDTO(personIterator.getFirstName(),
+              personIterator.getLastName(),
+              personIterator.getAddress(),
+              personIterator.getCity(),
+              personIterator.getZip(), personIterator.getPhone());
+          PersonNumberInfoDTOList.add(personNumberInfoDTO);
+        });
+        PersonNumberInfo personNumberInfo = new PersonNumberInfo(PersonNumberInfoDTOList,
             child, adult);
-        List<PersonNumberInfo> personNumberInfoList = new ArrayList<>();
-        personNumberInfoList.add(personNumberInfo);
+        // List<PersonNumberInfo> personNumberInfoList = new ArrayList<>();
+        // personNumberInfoList.add(personNumberInfo);
 
-        return personNumberInfoList;
+        return personNumberInfo;
 
       } catch (Exception exception) {
         logger
@@ -199,7 +211,6 @@ public class PersonServiceImpl implements PersonService {
     if (childrenList.isEmpty()) {
       return new Home(new ArrayList<>(), new ArrayList<>());
     }
-
     return home;
   }
 
@@ -208,12 +219,19 @@ public class PersonServiceImpl implements PersonService {
   public List<PersonInfoByAddress> getPersonInfoByAddressList(List<Integer> stationsList) {
     // We create an object including the list of persons and the list of fireStation
     // number deserving the address.
-    List<PersonInfoByAddress> personInfoByAddressList = new ArrayList<>();
     List<String> addressList = addressService.getAddressListFromStationNumberList(stationsList);
+    List<PersonInfoByAddress> personInfoByAddressList = new ArrayList<>();
     if (addressList != null) {
       addressList.forEach(addressIterator -> {
+        List<Person> personList = getPersonListByAddress(addressIterator);
+        List<PersonInfoDTO> PersonInfoDTOList = new ArrayList<>();
+        personList.forEach(personIterator -> {
+          PersonInfoDTO personInfoDTO = new PersonInfoDTO(personIterator.getLastName(), personIterator.getAge(),
+              personIterator.getPhone(), personIterator.getMedications(), personIterator.getAllergies());
+          PersonInfoDTOList.add(personInfoDTO);
+        });
         PersonInfoByAddress personInfoByAddress = new PersonInfoByAddress(addressIterator,
-            getPersonListByAddress(addressIterator));
+            PersonInfoDTOList);
         personInfoByAddressList.add(personInfoByAddress);
       });
     }
@@ -240,14 +258,21 @@ public class PersonServiceImpl implements PersonService {
 
 
   @Override
-  public List<Person> getPersonListByFirstNameAndLastNameThenOnlyLastName(String firstName, String lastName) {
+  public List<PersonInfo2DTO> getPersonListByFirstNameAndLastNameThenOnlyLastName(String firstName, String lastName) {
     List<Person> personInfoByFirstNameAndLastName = getPersonListByFirstNameAndLastName(firstName, lastName);
     List<Person> personInfoByLastName = getPersonListByLastName(lastName);
     personInfoByLastName.forEach(personIterator -> {
       if (!personInfoByFirstNameAndLastName.contains(personIterator))
         personInfoByFirstNameAndLastName.add(personIterator);
     });
-    return personInfoByFirstNameAndLastName;
+    List<PersonInfo2DTO> PersonInfo2DTOList = new ArrayList<>();
+    personInfoByFirstNameAndLastName.forEach(personIterator -> {
+      PersonInfo2DTO personInfo2DTO = new PersonInfo2DTO(personIterator.getLastName(), personIterator.getAge(),
+          personIterator.getAddress(), personIterator.getCity(), personIterator.getZip(), personIterator.getEmail(),
+          personIterator.getMedications(), personIterator.getAllergies());
+      PersonInfo2DTOList.add(personInfo2DTO);
+    });
+    return PersonInfo2DTOList;
   }
 
 
@@ -261,7 +286,7 @@ public class PersonServiceImpl implements PersonService {
 
 
   @Override
-  public List<PersonInfo> getPersonListWithStationNumber(String address) {
+  public PersonInfo getPersonListWithStationNumber(String address) {
 
     List<Person> filteredPersonList = getPersonListByAddress(address);
 
@@ -270,12 +295,19 @@ public class PersonServiceImpl implements PersonService {
     List<Integer> fireStationNumberList = firestationService
         .getStationNumberListFromFireStationList(filteredFireStationList);
 
+    List<PersonInfoDTO> PersonInfoDTOList = new ArrayList<>();
+    filteredPersonList.forEach(personIterator -> {
+      PersonInfoDTO personInfoDTO = new PersonInfoDTO(personIterator.getLastName(), personIterator.getAge(),
+          personIterator.getPhone(), personIterator.getMedications(), personIterator.getAllergies());
+      PersonInfoDTOList.add(personInfoDTO);
+    });
+
     // We create an object including the list of persons and the list of fireStation
     // number deserving the address.
-    PersonInfo personInfo = new PersonInfo(filteredPersonList, fireStationNumberList);
-    List<PersonInfo> personInfoList = new ArrayList<>();
-    personInfoList.add(personInfo);
-    return personInfoList;
+    PersonInfo personInfo = new PersonInfo(PersonInfoDTOList, fireStationNumberList);
+    // List<PersonInfo> personInfoList = new ArrayList<>();
+    // personInfoList.add(personInfo);
+    return personInfo;
   }
 
 

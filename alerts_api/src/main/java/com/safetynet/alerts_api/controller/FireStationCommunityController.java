@@ -1,9 +1,9 @@
 package com.safetynet.alerts_api.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.safetynet.alerts_api.model.PersonInfoByAddress;
 import com.safetynet.alerts_api.model.PersonNumberInfo;
 import com.safetynet.alerts_api.service.person.PersonService;
+import com.safetynet.alerts_api.service.phone.PhoneService;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +20,9 @@ public class FireStationCommunityController {
   @Autowired
   private PersonService personService;
 
+  @Autowired
+  private PhoneService phoneService;
+
   /**
    * Read - Get a person list covered by a given fire station with the number of
    * occurrences of children and adults.
@@ -29,23 +32,54 @@ public class FireStationCommunityController {
    *         and adults
    */
   @GetMapping("/firestation")
-  public String getPersonListCoveredByThisStation(@RequestParam Integer stationNumber) {
+  public PersonNumberInfo getPersonListCoveredByThisStation(@RequestParam Integer stationNumber) {
     logger.info(
         "Get request of the endpoint 'fireStation' with the stationNumber : {" + stationNumber.toString() + "}");
-    List<PersonNumberInfo> personNumberInfoList = personService
+    PersonNumberInfo personNumberInfo = personService
         .getPersonNumberInfoListFromStationNumber(stationNumber);
     logger.info(
         "response following the Get on the endpoint 'firestation' with the given stationNumber : {"
             + stationNumber.toString() + "}");
-    ObjectMapper mapper = new ObjectMapper();
-    try {
-      String normalView = mapper.writerWithView(FireStationCommunityController.class)
-          .writeValueAsString(personNumberInfoList);
-      return normalView;
-    } catch (JsonProcessingException e) {
-      logger.error("Unable to process the filter in getPersonListCoveredByThisStation: ", e);
-      return null;
-    }
+    return personNumberInfo;
   }
+
+
+  /**
+   * Read - Get the list of all phone numbers of persons covered by a given fire
+   * station.
+   * 
+   * @param a fire station number
+   * @return - A List of phone number
+   */
+  @GetMapping("/phoneAlert")
+  public List<String> getPhoneNumberCoveredByThisStation(@RequestParam Integer firestation) {
+    logger.info(
+        "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + firestation.toString() + "}");
+    List<String> phoneList = phoneService.getPhoneNumberList(firestation);
+    logger.info("response following the Get on the endpoint 'phoneAlert' with the given firestation number : {"
+        + firestation.toString() + "}");
+    return phoneList;
+  }
+
+
+  /**
+   * Read - Get a person list grouped by address and grouped by the number of the
+   * fire station deserving it.
+   * 
+   * @param a List of number of fire station
+   * @return - A List of PersonInfoByAddress
+   */
+  @GetMapping("/flood")
+  public List<PersonInfoByAddress> getHomesCoveredByTheseStation(@RequestParam List<Integer> stations) {
+    logger.info(
+        "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + stations.toString() + "}");
+    List<PersonInfoByAddress> personInfoByaddressList = personService.getPersonInfoByAddressList(stations);
+    logger.info(
+        "response following the Get on the endpoint 'flood' with the given stationNumber List : {"
+            + stations.toString() + "}");
+    return personInfoByaddressList;
+  }
+
+
 
 }

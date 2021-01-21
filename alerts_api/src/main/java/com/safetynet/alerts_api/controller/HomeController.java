@@ -1,11 +1,8 @@
 package com.safetynet.alerts_api.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.safetynet.alerts_api.model.Home;
 import com.safetynet.alerts_api.model.PersonInfo;
-import com.safetynet.alerts_api.model.PersonInfoByAddress;
 import com.safetynet.alerts_api.service.person.PersonService;
-import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,51 +23,34 @@ public class HomeController {
    * the fire station deserving it.
    * 
    * @param an address
-   * @return - A List of PersonInfo
+   * @return - A PersonInfo object
    */
   @GetMapping("/fire")
-  public String getPersonListLivingToThisAdressAndFirestationNumber(@RequestParam String address) {
+  public PersonInfo getPersonInfo(@RequestParam String address) {
     logger.info(
         "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
-    List<PersonInfo> personList = personService.getPersonListWithStationNumber(address);
+    PersonInfo personInfo = personService.getPersonListWithStationNumber(address);
     logger.info(
         "response following the Get on the endpoint 'fire' with the given address : {"
             + address + "}");
-    ObjectMapper mapper = new ObjectMapper();
-    try {
-      String normalView = mapper.writerWithView(HomeController.class)
-          .writeValueAsString(personList);
-      return normalView;
-    } catch (JsonProcessingException e) {
-      logger.error("Unable to process the filter in getPersonListLivingToThisAdressAndFirestationNumber: ", e);
-      return null;
-    }
+    return personInfo;
   }
 
   /**
-   * Read - Get a person list grouped by address and grouped by the number of the
-   * fire station deserving it.
+   * Read - Get a children list (inferior or equal 18) living to a particular
+   * address, with a list of other people living there. If no children living
+   * there, returns an empty list
    * 
-   * @param a List of number of fire station
-   * @return - A List of PersonInfoByAddress
+   * @param an address
+   * @return - A Home : a List of children and adults living at a given address
    */
-  @GetMapping("/flood")
-  public String getAddressCoveredByTheseStation(@RequestParam List<Integer> stations) {
+  @GetMapping("/childAlert")
+  public Home getChildListLivingToThisAdress(@RequestParam String address) {
     logger.info(
-        "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + stations.toString() + "}");
-    List<PersonInfoByAddress> personInfoByaddressList = personService.getPersonInfoByAddressList(stations);
-    logger.info(
-        "response following the Get on the endpoint 'flood' with the given stationNumber List : {"
-            + stations.toString() + "}");
-    ObjectMapper mapper = new ObjectMapper();
-    try {
-      String normalView = mapper.writerWithView(HomeController.class)
-          .writeValueAsString(personInfoByaddressList);
-      return normalView;
-    } catch (JsonProcessingException e) {
-      logger.error("Unable to process the filter in getAddressCoveredByTheseStation: ", e);
-      return null;
-    }
+        "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
+    Home home = personService.getChildrenListAndAdultListFromAddress(address);
+    logger.info("response following the Get on the endpoint 'childAlert' with the given address : {" + address + "}");
+    return home;
   }
 
 }

@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.JsonReaderRepository;
+import com.safetynet.alerts_api.service.email.EmailService;
 import com.safetynet.alerts_api.service.person.PersonService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ class PersonInfoControllerTest {
   private PersonService personService;
 
   @MockBean
+  private EmailService emailService;
+
+  @MockBean
   private JsonReaderRepository jsonReaderRepository;
 
   private Person person;
@@ -38,6 +42,11 @@ class PersonInfoControllerTest {
         .andExpect(status().isOk());
   }
 
+  @Test
+  public void testGetEmailListFromCity() throws Exception {
+    mockMvc.perform(get("/communityEmail?city=culver"))
+        .andExpect(status().isOk());
+  }
 
   @Test
   public void testGetPersonInfoFromFirstNameAndLastName() throws Exception {

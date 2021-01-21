@@ -1,8 +1,8 @@
 package com.safetynet.alerts_api.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts_api.model.Person;
+import com.safetynet.alerts_api.model.PersonInfo2DTO;
+import com.safetynet.alerts_api.service.email.EmailService;
 import com.safetynet.alerts_api.service.person.PersonService;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -26,6 +26,8 @@ public class PersonInfoController {
   @Autowired
   private PersonService personService;
 
+  @Autowired
+  private EmailService emailService;
 
   /**
    * Delete - Delete an person
@@ -113,26 +115,35 @@ public class PersonInfoController {
    * @return - A List of Person
    */
   @GetMapping("/personInfo")
-  public String getPersonInfoFromFirstNameAndLastName(@RequestParam String firstName,
+  public List<PersonInfo2DTO> getPersonInfoFromFirstNameAndLastName(@RequestParam String firstName,
       @RequestParam String lastName) {
     logger.info(
         "Get request of the endpoint 'personInfo' with the first name : {" + firstName + "} and the last name : "
             + lastName);
-    List<Person> personInfoByaddressList = personService.getPersonListByFirstNameAndLastNameThenOnlyLastName(firstName,
+    List<PersonInfo2DTO> personInfoByaddressList = personService.getPersonListByFirstNameAndLastNameThenOnlyLastName(
+        firstName,
         lastName);
     logger.info(
         "response following the Get on the endpoint 'personInfo' with the given address :{" + firstName
             + "} and the last name :{"
             + lastName + "}");
-    ObjectMapper mapper = new ObjectMapper();
-    try {
-      String normalView = mapper.writerWithView(PersonInfoController.class)
-          .writeValueAsString(personInfoByaddressList);
-      return normalView;
-    } catch (JsonProcessingException e) {
-      logger.error("Unable to process the filter in getPersonInfoFromFirstNameAndLastName: ", e);
-      return null;
-    }
+    return personInfoByaddressList;
+  }
+
+
+  /**
+   * Read - Get the list of all email of persons living in a given city.
+   * 
+   * @param a city
+   * @return - A List of email
+   */
+  @GetMapping("/communityEmail")
+  public List<String> getEmailListFromCity(@RequestParam String city) {
+    logger.info(
+        "Get request of the endpoint 'communityEmail' with the city : {" + city + "}");
+    List<String> emailList = emailService.getPersonEmailFromCity(city);
+    logger.info("response following the Get on the endpoint 'communityEmail' with the given city : {" + city + "}");
+    return emailList;
   }
 
 }

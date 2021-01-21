@@ -15,7 +15,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 class PersonInfoTest {
 
   private PersonInfo personInfo;
-  List<Person> personList;
+  private List<PersonInfoDTO> personInfoDTOList;
   List<Integer> firestationNumberList;
 
   @MockBean
@@ -23,34 +23,35 @@ class PersonInfoTest {
 
   @BeforeEach
   private void setUp() {
-    Person person = new Person();
-    firestationNumberList = new ArrayList<Integer>();
-    firestationNumberList.add(4);
-    firestationNumberList.add(5);
-    person.setId((long) 56);
-    person.setFirstName("Adrien");
-    person.setLastName("Bessy");
-    person.setAddress("82 Alexander Road");
-    person.setCity("New York");
-    personList = new ArrayList<>();
-    personList.add(person);
-    Person person2 = new Person();
-    person2.setId((long) 97);
-    person2.setFirstName("Christian");
-    person2.setLastName("Legal");
-    person2.setAddress("12 rue des ecoles");
-    person2.setCity("Paris");
-    personList.add(person2);
-    personInfo = new PersonInfo(personList, firestationNumberList);
+    List<String> medications = new ArrayList<>();
+    medications.add("DAFALGAN");
+    List<String> allergies = new ArrayList<>();
+    PersonInfoDTO personInfoDTO = new PersonInfoDTO("Bessy", 6,
+        "05604660", medications, allergies);
+    List<String> medications2 = new ArrayList<>();
+    List<String> allergies2 = new ArrayList<>();
+    allergies2.add("pollen");
+    allergies2.add("chat");
+    PersonInfoDTO personInfoDTO2 = new PersonInfoDTO("Morabito", 41,
+        "05656468", medications2, allergies2);
+    personInfoDTOList = new ArrayList<>();
+    personInfoDTOList.add(personInfoDTO);
+    personInfoDTOList.add(personInfoDTO2);
+    firestationNumberList = new ArrayList<>();
+    personInfo = new PersonInfo(personInfoDTOList, firestationNumberList);
   }
 
   @Test
   public void testGetChildList() throws Exception {
-    Person person3 = new Person();
-    person3.setId((long) 98);
-    personList.add(person3);
-    personInfo.setPersonList(personList);
-    assertThat(personInfo.getPersonList()).isEqualTo(personList);
+    List<String> medications3 = new ArrayList<>();
+    List<String> allergies3 = new ArrayList<>();
+    allergies3.add("pollen");
+    PersonInfoDTO personInfoDTO3 = new PersonInfoDTO("Dupond", 71,
+        "05658768", medications3, allergies3);
+    List<PersonInfoDTO> PersonInfoDTOList2 = new ArrayList<>();
+    PersonInfoDTOList2.add(personInfoDTO3);
+    personInfo.setPersonList(PersonInfoDTOList2);
+    assertThat(personInfo.getPersonList()).isEqualTo(PersonInfoDTOList2);
   }
 
   @Test
@@ -67,7 +68,8 @@ class PersonInfoTest {
 
   @Test
   public void testToString() {
-    String expected = "PersonInfo(personList=" + personList + ", firestationNumberList=" + firestationNumberList + ")";
+    String expected = "PersonInfo(personList=" + personInfoDTOList + ", firestationNumberList=" + firestationNumberList
+        + ")";
     ; // put the expected value here
     Assert.assertEquals(expected, personInfo.toString());
   }

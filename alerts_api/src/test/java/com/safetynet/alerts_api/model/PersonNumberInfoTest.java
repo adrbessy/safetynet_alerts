@@ -15,7 +15,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 class PersonNumberInfoTest {
 
   private PersonNumberInfo personNumberInfo;
-  List<Person> personList;
+  List<PersonNumberInfoDTO> personNumberInfoDTOList;
   private int numberOfChildren;
   private int numberOfAdults;
 
@@ -24,29 +24,27 @@ class PersonNumberInfoTest {
 
   @BeforeEach
   private void setUp() {
-    Person person = new Person();
-    person.setId((long) 56);
-    person.setFirstName("Adrien");
-    person.setLastName("Bessy");
-    person.setAddress("82 Alexander Road");
-    person.setCity("New York");
-    personList = new ArrayList<>();
-    personList.add(person);
-    Person person2 = new Person();
-    person2.setId((long) 97);
-    person2.setFirstName("Christian");
-    person2.setLastName("Legal");
-    person2.setAddress("12 rue des ecoles");
-    person2.setCity("Paris");
-    personList.add(person2);
+    PersonNumberInfoDTO personNumberInfoDTO = new PersonNumberInfoDTO("Adrien",
+        "Bessy",
+        "82 Alexander Road",
+        "Londres",
+        "15465", "0689454515");
+    PersonNumberInfoDTO personNumberInfoDTO2 = new PersonNumberInfoDTO("Julie",
+        "Garnier",
+        "8 Alexander Road",
+        "New York",
+        "15645", "0689445485");
+    personNumberInfoDTOList = new ArrayList<>();
+    personNumberInfoDTOList.add(personNumberInfoDTO);
+    personNumberInfoDTOList.add(personNumberInfoDTO2);
     numberOfChildren = 4;
     numberOfAdults = 4;
-    personNumberInfo = new PersonNumberInfo(personList, numberOfChildren, numberOfAdults);
+    personNumberInfo = new PersonNumberInfo(personNumberInfoDTOList, numberOfChildren, numberOfAdults);
   }
 
   @Test
   public void testGetPersonList() throws Exception {
-    assertThat(personNumberInfo.getPersonList()).isEqualTo(personList);
+    assertThat(personNumberInfo.getPersonList()).isEqualTo(personNumberInfoDTOList);
   }
 
   @Test
@@ -66,7 +64,8 @@ class PersonNumberInfoTest {
 
   @Test
   public void testToString() {
-    String expected = "PersonNumberInfo(personList=" + personList + ", numberOfChildren=" + numberOfChildren
+    String expected = "PersonNumberInfo(personList=" + personNumberInfoDTOList + ", numberOfChildren="
+        + numberOfChildren
         + ", numberOfAdults=" + numberOfAdults + ")";
     ; // put the expected value here
     Assert.assertEquals(expected, personNumberInfo.toString());
