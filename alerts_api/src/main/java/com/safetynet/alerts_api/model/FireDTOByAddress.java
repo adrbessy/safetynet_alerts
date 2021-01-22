@@ -4,12 +4,12 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class PersonInfoByAddress {
+public class FireDTOByAddress {
 
   private String address;
-  private List<PersonInfoDTO> personList;
+  private List<FireDTO> personList;
 
-  public PersonInfoByAddress(String address, List<PersonInfoDTO> personList) {
+  public FireDTOByAddress(String address, List<FireDTO> personList) {
     this.address = address;
     this.personList = personList;
   }

@@ -7,11 +7,11 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
-@WebMvcTest(controllers = Home.class)
+@SpringBootTest()
 class HomeTest {
 
   private Home home;

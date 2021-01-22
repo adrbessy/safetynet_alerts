@@ -1,7 +1,7 @@
 package com.safetynet.alerts_api.controller;
 
 import com.safetynet.alerts_api.model.Person;
-import com.safetynet.alerts_api.model.PersonInfo2DTO;
+import com.safetynet.alerts_api.model.PersonInfoDTO;
 import com.safetynet.alerts_api.service.email.EmailService;
 import com.safetynet.alerts_api.service.person.PersonService;
 import java.util.List;
@@ -115,12 +115,12 @@ public class PersonInfoController {
    * @return - A List of Person
    */
   @GetMapping("/personInfo")
-  public List<PersonInfo2DTO> getPersonInfoFromFirstNameAndLastName(@RequestParam String firstName,
+  public List<PersonInfoDTO> getPersonInfoFromFirstNameAndLastName(@RequestParam String firstName,
       @RequestParam String lastName) {
     logger.info(
         "Get request of the endpoint 'personInfo' with the first name : {" + firstName + "} and the last name : "
             + lastName);
-    List<PersonInfo2DTO> personInfoByaddressList = personService.getPersonListByFirstNameAndLastNameThenOnlyLastName(
+    List<PersonInfoDTO> personInfoByaddressList = personService.getPersonListByFirstNameAndLastNameThenOnlyLastName(
         firstName,
         lastName);
     logger.info(

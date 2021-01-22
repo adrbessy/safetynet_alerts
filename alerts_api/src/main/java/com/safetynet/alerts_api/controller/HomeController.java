@@ -1,7 +1,7 @@
 package com.safetynet.alerts_api.controller;
 
+import com.safetynet.alerts_api.model.Fire;
 import com.safetynet.alerts_api.model.Home;
-import com.safetynet.alerts_api.model.PersonInfo;
 import com.safetynet.alerts_api.service.person.PersonService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,14 +26,14 @@ public class HomeController {
    * @return - A PersonInfo object
    */
   @GetMapping("/fire")
-  public PersonInfo getPersonInfo(@RequestParam String address) {
+  public Fire getFire(@RequestParam String address) {
     logger.info(
         "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
-    PersonInfo personInfo = personService.getPersonListWithStationNumber(address);
+    Fire fire = personService.getPersonListWithStationNumber(address);
     logger.info(
         "response following the Get on the endpoint 'fire' with the given address : {"
             + address + "}");
-    return personInfo;
+    return fire;
   }
 
   /**

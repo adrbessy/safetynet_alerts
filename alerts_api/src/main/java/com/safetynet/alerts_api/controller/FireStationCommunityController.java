@@ -1,7 +1,7 @@
 package com.safetynet.alerts_api.controller;
 
-import com.safetynet.alerts_api.model.PersonInfoByAddress;
-import com.safetynet.alerts_api.model.PersonNumberInfo;
+import com.safetynet.alerts_api.model.FireDTOByAddress;
+import com.safetynet.alerts_api.model.FireStationCommunity;
 import com.safetynet.alerts_api.service.person.PersonService;
 import com.safetynet.alerts_api.service.phone.PhoneService;
 import java.util.List;
@@ -32,10 +32,10 @@ public class FireStationCommunityController {
    *         and adults
    */
   @GetMapping("/firestation")
-  public PersonNumberInfo getPersonListCoveredByThisStation(@RequestParam Integer stationNumber) {
+  public FireStationCommunity getPersonListCoveredByThisStation(@RequestParam Integer stationNumber) {
     logger.info(
         "Get request of the endpoint 'fireStation' with the stationNumber : {" + stationNumber.toString() + "}");
-    PersonNumberInfo personNumberInfo = personService
+    FireStationCommunity personNumberInfo = personService
         .getPersonNumberInfoListFromStationNumber(stationNumber);
     logger.info(
         "response following the Get on the endpoint 'firestation' with the given stationNumber : {"
@@ -70,10 +70,10 @@ public class FireStationCommunityController {
    * @return - A List of PersonInfoByAddress
    */
   @GetMapping("/flood")
-  public List<PersonInfoByAddress> getHomesCoveredByTheseStation(@RequestParam List<Integer> stations) {
+  public List<FireDTOByAddress> getHomesCoveredByTheseStation(@RequestParam List<Integer> stations) {
     logger.info(
         "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + stations.toString() + "}");
-    List<PersonInfoByAddress> personInfoByaddressList = personService.getPersonInfoByAddressList(stations);
+    List<FireDTOByAddress> personInfoByaddressList = personService.getPersonInfoByAddressList(stations);
     logger.info(
         "response following the Get on the endpoint 'flood' with the given stationNumber List : {"
             + stations.toString() + "}");

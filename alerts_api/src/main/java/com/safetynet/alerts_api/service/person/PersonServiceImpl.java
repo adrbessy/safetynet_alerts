@@ -1,16 +1,16 @@
 package com.safetynet.alerts_api.service.person;
 
 import com.safetynet.alerts_api.model.ChildAlertDTO;
+import com.safetynet.alerts_api.model.Fire;
+import com.safetynet.alerts_api.model.FireDTO;
+import com.safetynet.alerts_api.model.FireDTOByAddress;
 import com.safetynet.alerts_api.model.FireStation;
+import com.safetynet.alerts_api.model.FireStationCommunity;
+import com.safetynet.alerts_api.model.FireStationCommunityDTO;
 import com.safetynet.alerts_api.model.Home;
 import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.model.Person;
-import com.safetynet.alerts_api.model.PersonInfo;
-import com.safetynet.alerts_api.model.PersonInfo2DTO;
-import com.safetynet.alerts_api.model.PersonInfoByAddress;
 import com.safetynet.alerts_api.model.PersonInfoDTO;
-import com.safetynet.alerts_api.model.PersonNumberInfo;
-import com.safetynet.alerts_api.model.PersonNumberInfoDTO;
 import com.safetynet.alerts_api.repository.FireStationRepository;
 import com.safetynet.alerts_api.repository.MedicalRecordRepository;
 import com.safetynet.alerts_api.repository.PersonRepository;
@@ -57,19 +57,29 @@ public class PersonServiceImpl implements PersonService {
 
   @Override
   public Person getPerson(final Long id) {
-    Optional<Person> pers = personRepository.findById(id);
-    if (pers.isPresent()) {
-      Person personToUpdate = pers.get();
-      return personToUpdate;
-    } else {
+    try {
+      Optional<Person> pers = personRepository.findById(id);
+      if (pers.isPresent()) {
+        Person personToUpdate = pers.get();
+        return personToUpdate;
+      } else {
+        return null;
+      }
+    } catch (Exception exception) {
+      logger.error("Error when we try to get a person :" + exception.getMessage());
       return null;
     }
   }
 
   @Override
   public Person savePerson(Person person) {
-    Person savedPerson = personRepository.save(person);
-    return savedPerson;
+    try {
+      Person savedPerson = personRepository.save(person);
+      return savedPerson;
+    } catch (Exception exception) {
+      logger.error("Error when we try to save a person :" + exception.getMessage());
+      return null;
+    }
   }
 
 
@@ -95,7 +105,7 @@ public class PersonServiceImpl implements PersonService {
 
 
   @Override
-  public PersonNumberInfo getPersonNumberInfoListFromStationNumber(Integer stationNumber) {
+  public FireStationCommunity getPersonNumberInfoListFromStationNumber(Integer stationNumber) {
     if (stationNumber != null) {
       try {
         List<Person> filteredPersonList = getPersonListFromStationNumber(stationNumber);
@@ -110,21 +120,19 @@ public class PersonServiceImpl implements PersonService {
 
         // We create an object including the list of persons and the number of adults
         // and children
-        List<PersonNumberInfoDTO> PersonNumberInfoDTOList = new ArrayList<>();
+        List<FireStationCommunityDTO> PersonNumberInfoDTOList = new ArrayList<>();
         filteredPersonList.forEach(personIterator -> {
-          PersonNumberInfoDTO personNumberInfoDTO = new PersonNumberInfoDTO(personIterator.getFirstName(),
+          FireStationCommunityDTO personNumberInfoDTO = new FireStationCommunityDTO(personIterator.getFirstName(),
               personIterator.getLastName(),
               personIterator.getAddress(),
               personIterator.getCity(),
               personIterator.getZip(), personIterator.getPhone());
           PersonNumberInfoDTOList.add(personNumberInfoDTO);
         });
-        PersonNumberInfo personNumberInfo = new PersonNumberInfo(PersonNumberInfoDTOList,
+        FireStationCommunity fireStationCommunity = new FireStationCommunity(PersonNumberInfoDTOList,
             child, adult);
-        // List<PersonNumberInfo> personNumberInfoList = new ArrayList<>();
-        // personNumberInfoList.add(personNumberInfo);
 
-        return personNumberInfo;
+        return fireStationCommunity;
 
       } catch (Exception exception) {
         logger
@@ -141,13 +149,17 @@ public class PersonServiceImpl implements PersonService {
   @Override
   public void fullChildrenListAndAdultListFromPersonList(List<Person> personList, List<Person> childrenList,
       List<Person> adultList) {
-    personList.forEach(personIterator -> {
-      addPersonToListFromFireStationList(personIterator,
-          medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
-              personIterator.getFirstName(), personIterator.getLastName()),
-          childrenList,
-          adultList, LocalDate.now());
-    });
+    try {
+      personList.forEach(personIterator -> {
+        addPersonToListFromFireStationList(personIterator,
+            medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
+                personIterator.getFirstName(), personIterator.getLastName()),
+            childrenList,
+            adultList, LocalDate.now());
+      });
+    } catch (Exception exception) {
+      logger.error("Error when we try to full children list and adult list :" + exception.getMessage());
+    }
   }
 
 
@@ -155,165 +167,206 @@ public class PersonServiceImpl implements PersonService {
   public void addPersonToListFromFireStationList(Person personIterator, List<MedicalRecord> medicalRecordList,
       List<Person> childrenList,
       List<Person> adultList, LocalDate currentDate) {
-    medicalRecordList.forEach(medicalRecordIterator -> {
-      if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
-        personIterator.setAge_Medications_Allergies(medicalRecordIterator, currentDate);
-        if (personIterator.getAge() <= 18) {
-          childrenList.add(personIterator);
-        } else {
-          adultList.add(personIterator);
+    try {
+      medicalRecordList.forEach(medicalRecordIterator -> {
+        if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
+          personIterator.setAge_Medications_Allergies(medicalRecordIterator, currentDate);
+          if (personIterator.getAge() <= 18) {
+            childrenList.add(personIterator);
+          } else {
+            adultList.add(personIterator);
+          }
         }
-      }
-    });
+      });
+    } catch (Exception exception) {
+      logger.error("Error when we try to add persons to list :" + exception.getMessage());
+    }
   }
 
 
   @Override
   public void setAgeAndMedicationsAndAllergiesFromPersonList(List<Person> personList) {
-    personList.forEach(personIterator -> {
-      medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
-          personIterator.getFirstName(), personIterator.getLastName()).forEach(medicalRecordIterator -> {
-            if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
-              personIterator.setAge_Medications_Allergies(medicalRecordIterator, LocalDate.now());
-            }
-          });
-    });
+    try {
+      personList.forEach(personIterator -> {
+        medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
+            personIterator.getFirstName(), personIterator.getLastName()).forEach(medicalRecordIterator -> {
+              if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
+                personIterator.setAge_Medications_Allergies(medicalRecordIterator, LocalDate.now());
+              }
+            });
+      });
+    } catch (Exception exception) {
+      logger.error("Error when we try to set age, medications and allergies :" + exception.getMessage());
+    }
   }
 
 
   @Override
   public Home getChildrenListAndAdultListFromAddress(String address) {
+    try {
 
-    // we retrieve the list of persons corresponding to the address
-    List<Person> filteredPersonList = personRepository.findDistinctByAddress(address);
+      // we retrieve the list of persons corresponding to the address
+      List<Person> filteredPersonList = personRepository.findDistinctByAddress(address);
 
-    // we retrieve the list of children from the list of persons
-    List<Person> childrenList = new ArrayList<>();
-    List<Person> adultList = new ArrayList<>();
-    fullChildrenListAndAdultListFromPersonList(filteredPersonList, childrenList, adultList);
+      // we retrieve the list of children from the list of persons
+      List<Person> childrenList = new ArrayList<>();
+      List<Person> adultList = new ArrayList<>();
+      fullChildrenListAndAdultListFromPersonList(filteredPersonList, childrenList, adultList);
 
-    List<ChildAlertDTO> childrenDTOList = new ArrayList<>();
-    childrenList.forEach(personIterator -> {
-      ChildAlertDTO childAlertDTO = new ChildAlertDTO(personIterator.getLastName(), personIterator.getFirstName(),
-          personIterator.getAge());
-      childrenDTOList.add(childAlertDTO);
-    });
+      List<ChildAlertDTO> childrenDTOList = new ArrayList<>();
+      childrenList.forEach(personIterator -> {
+        ChildAlertDTO childAlertDTO = new ChildAlertDTO(personIterator.getLastName(), personIterator.getFirstName(),
+            personIterator.getAge());
+        childrenDTOList.add(childAlertDTO);
+      });
 
-    List<ChildAlertDTO> adultDTOList = new ArrayList<>();
-    adultList.forEach(personIterator -> {
-      ChildAlertDTO childAlertDTO = new ChildAlertDTO(personIterator.getLastName(), personIterator.getFirstName(),
-          personIterator.getAge());
-      adultDTOList.add(childAlertDTO);
-    });
+      List<ChildAlertDTO> adultDTOList = new ArrayList<>();
+      adultList.forEach(personIterator -> {
+        ChildAlertDTO childAlertDTO = new ChildAlertDTO(personIterator.getLastName(), personIterator.getFirstName(),
+            personIterator.getAge());
+        adultDTOList.add(childAlertDTO);
+      });
 
-    // We create an object including the list of children and the list of adults
-    Home home = new Home(childrenDTOList, adultDTOList);
-    if (childrenList.isEmpty()) {
-      return new Home(new ArrayList<>(), new ArrayList<>());
+      // We create an object including the list of children and the list of adults
+      Home home = new Home(childrenDTOList, adultDTOList);
+      if (childrenList.isEmpty()) {
+        return new Home(new ArrayList<>(), new ArrayList<>());
+      }
+      return home;
+    } catch (Exception exception) {
+      logger.error("Error when we try to get ChildrenList And AdultList From an address :" + exception.getMessage());
+      return null;
     }
-    return home;
   }
 
 
   @Override
-  public List<PersonInfoByAddress> getPersonInfoByAddressList(List<Integer> stationsList) {
+  public List<FireDTOByAddress> getPersonInfoByAddressList(List<Integer> stationsList) {
     // We create an object including the list of persons and the list of fireStation
     // number deserving the address.
-    List<String> addressList = addressService.getAddressListFromStationNumberList(stationsList);
-    List<PersonInfoByAddress> personInfoByAddressList = new ArrayList<>();
-    if (addressList != null) {
-      addressList.forEach(addressIterator -> {
-        List<Person> personList = getPersonListByAddress(addressIterator);
-        List<PersonInfoDTO> PersonInfoDTOList = new ArrayList<>();
-        personList.forEach(personIterator -> {
-          PersonInfoDTO personInfoDTO = new PersonInfoDTO(personIterator.getLastName(), personIterator.getAge(),
-              personIterator.getPhone(), personIterator.getMedications(), personIterator.getAllergies());
-          PersonInfoDTOList.add(personInfoDTO);
+    try {
+      List<String> addressList = addressService.getAddressListFromStationNumberList(stationsList);
+      List<FireDTOByAddress> personInfoByAddressList = new ArrayList<>();
+      if (addressList != null) {
+        addressList.forEach(addressIterator -> {
+          List<Person> personList = getPersonListByAddress(addressIterator);
+          List<FireDTO> FireDTOList = new ArrayList<>();
+          personList.forEach(personIterator -> {
+            FireDTO FireDTO = new FireDTO(personIterator.getLastName(), personIterator.getAge(),
+                personIterator.getPhone(), personIterator.getMedications(), personIterator.getAllergies());
+            FireDTOList.add(FireDTO);
+          });
+          FireDTOByAddress personInfoByAddress = new FireDTOByAddress(addressIterator,
+              FireDTOList);
+          personInfoByAddressList.add(personInfoByAddress);
         });
-        PersonInfoByAddress personInfoByAddress = new PersonInfoByAddress(addressIterator,
-            PersonInfoDTOList);
-        personInfoByAddressList.add(personInfoByAddress);
-      });
+      }
+      return personInfoByAddressList;
+    } catch (Exception exception) {
+      logger.error("Error when we try to get PersonInfoByAddressList :" + exception.getMessage());
+      return null;
     }
-    return personInfoByAddressList;
   }
 
 
   @Override
   public List<Person> getPersonListByFirstNameAndLastName(String firstName, String lastName) {
-    // we retrieve the list of persons corresponding to the address
-    List<Person> filteredPersonList = personRepository.findByFirstNameAndLastNameAllIgnoreCase(firstName, lastName);
-    setAgeAndMedicationsAndAllergiesFromPersonList(filteredPersonList);
-    return filteredPersonList;
+    try {
+      // we retrieve the list of persons corresponding to the address
+      List<Person> filteredPersonList = personRepository.findByFirstNameAndLastNameAllIgnoreCase(firstName, lastName);
+      setAgeAndMedicationsAndAllergiesFromPersonList(filteredPersonList);
+      return filteredPersonList;
+    } catch (Exception exception) {
+      logger.error("Error when we try to get PersonList By FirstName And LastName :" + exception.getMessage());
+      return null;
+    }
   }
 
 
   @Override
   public List<Person> getPersonListByLastName(String lastName) {
-    // we retrieve the list of persons corresponding to the address
-    List<Person> filteredPersonList = personRepository.findByLastNameAllIgnoreCase(lastName);
-    setAgeAndMedicationsAndAllergiesFromPersonList(filteredPersonList);
-    return filteredPersonList;
+    try {
+      // we retrieve the list of persons corresponding to the address
+      List<Person> filteredPersonList = personRepository.findByLastNameAllIgnoreCase(lastName);
+      setAgeAndMedicationsAndAllergiesFromPersonList(filteredPersonList);
+      return filteredPersonList;
+    } catch (Exception exception) {
+      logger.error("Error when we try to get PersonList By LastName :" + exception.getMessage());
+      return null;
+    }
   }
 
 
   @Override
-  public List<PersonInfo2DTO> getPersonListByFirstNameAndLastNameThenOnlyLastName(String firstName, String lastName) {
-    List<Person> personInfoByFirstNameAndLastName = getPersonListByFirstNameAndLastName(firstName, lastName);
-    List<Person> personInfoByLastName = getPersonListByLastName(lastName);
-    personInfoByLastName.forEach(personIterator -> {
-      if (!personInfoByFirstNameAndLastName.contains(personIterator))
-        personInfoByFirstNameAndLastName.add(personIterator);
-    });
-    List<PersonInfo2DTO> PersonInfo2DTOList = new ArrayList<>();
-    personInfoByFirstNameAndLastName.forEach(personIterator -> {
-      PersonInfo2DTO personInfo2DTO = new PersonInfo2DTO(personIterator.getLastName(), personIterator.getAge(),
-          personIterator.getAddress(), personIterator.getCity(), personIterator.getZip(), personIterator.getEmail(),
-          personIterator.getMedications(), personIterator.getAllergies());
-      PersonInfo2DTOList.add(personInfo2DTO);
-    });
-    return PersonInfo2DTOList;
+  public List<PersonInfoDTO> getPersonListByFirstNameAndLastNameThenOnlyLastName(String firstName, String lastName) {
+    try {
+      List<Person> personInfoByFirstNameAndLastName = getPersonListByFirstNameAndLastName(firstName, lastName);
+      List<Person> personInfoByLastName = getPersonListByLastName(lastName);
+      personInfoByLastName.forEach(personIterator -> {
+        if (!personInfoByFirstNameAndLastName.contains(personIterator))
+          personInfoByFirstNameAndLastName.add(personIterator);
+      });
+      List<PersonInfoDTO> PersonInfoDTOList = new ArrayList<>();
+      personInfoByFirstNameAndLastName.forEach(personIterator -> {
+        PersonInfoDTO personInfoDTO = new PersonInfoDTO(personIterator.getLastName(), personIterator.getAge(),
+            personIterator.getAddress(), personIterator.getCity(), personIterator.getZip(), personIterator.getEmail(),
+            personIterator.getMedications(), personIterator.getAllergies());
+        PersonInfoDTOList.add(personInfoDTO);
+      });
+      return PersonInfoDTOList;
+    } catch (Exception exception) {
+      logger.error("Error when we try to get PersonList By FirstName And LastName Then Only LastName :"
+          + exception.getMessage());
+      return null;
+    }
   }
 
 
   @Override
   public List<Person> getPersonListByAddress(String address) {
-    // we retrieve the list of persons corresponding to the address
-    List<Person> filteredPersonList = personRepository.findDistinctByAddress(address);
-    setAgeAndMedicationsAndAllergiesFromPersonList(filteredPersonList);
-    return filteredPersonList;
+    try {
+      // we retrieve the list of persons corresponding to the address
+      List<Person> filteredPersonList = personRepository.findDistinctByAddress(address);
+      setAgeAndMedicationsAndAllergiesFromPersonList(filteredPersonList);
+      return filteredPersonList;
+    } catch (Exception exception) {
+      logger.error("Error when we try to get PersonList By address :"
+          + exception.getMessage());
+      return null;
+    }
   }
 
 
   @Override
-  public PersonInfo getPersonListWithStationNumber(String address) {
+  public Fire getPersonListWithStationNumber(String address) {
+    try {
+      List<Person> filteredPersonList = getPersonListByAddress(address);
 
-    List<Person> filteredPersonList = getPersonListByAddress(address);
+      List<FireStation> filteredFireStationList = firestationRepository.findDistinctByAddress(address);
 
-    List<FireStation> filteredFireStationList = firestationRepository.findDistinctByAddress(address);
+      List<Integer> fireStationNumberList = firestationService
+          .getStationNumberListFromFireStationList(filteredFireStationList);
 
-    List<Integer> fireStationNumberList = firestationService
-        .getStationNumberListFromFireStationList(filteredFireStationList);
-
-    List<PersonInfoDTO> PersonInfoDTOList = new ArrayList<>();
-    filteredPersonList.forEach(personIterator -> {
-      PersonInfoDTO personInfoDTO = new PersonInfoDTO(personIterator.getLastName(), personIterator.getAge(),
-          personIterator.getPhone(), personIterator.getMedications(), personIterator.getAllergies());
-      PersonInfoDTOList.add(personInfoDTO);
-    });
-
-    // We create an object including the list of persons and the list of fireStation
-    // number deserving the address.
-    PersonInfo personInfo = new PersonInfo(PersonInfoDTOList, fireStationNumberList);
-    // List<PersonInfo> personInfoList = new ArrayList<>();
-    // personInfoList.add(personInfo);
-    return personInfo;
+      List<FireDTO> FireDTOList = new ArrayList<>();
+      filteredPersonList.forEach(personIterator -> {
+        FireDTO fireDTO = new FireDTO(personIterator.getLastName(), personIterator.getAge(),
+            personIterator.getPhone(), personIterator.getMedications(), personIterator.getAllergies());
+        FireDTOList.add(fireDTO);
+      });
+      // We create an object including the list of persons and the list of fireStation
+      // number deserving the address.
+      Fire fire = new Fire(FireDTOList, fireStationNumberList);
+      return fire;
+    } catch (Exception exception) {
+      logger.error("Error when we try to get PersonList w :"
+          + exception.getMessage());
+      return null;
+    }
   }
 
 
   @Override
   public boolean saveAllPersons(List<Person> personList) {
-
     if (personList != null) {
       try {
         personRepository.saveAll(personList);

@@ -3,7 +3,7 @@ package com.safetynet.alerts_api.model;
 import lombok.Data;
 
 @Data
-public class PersonNumberInfoDTO {
+public class FireStationCommunityDTO {
 
   private String firstName;
 
@@ -17,7 +17,8 @@ public class PersonNumberInfoDTO {
 
   private String phone;
 
-  public PersonNumberInfoDTO(String firstName, String lastName, String address, String city, String zip, String phone) {
+  public FireStationCommunityDTO(String firstName, String lastName, String address, String city, String zip,
+      String phone) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.address = address;

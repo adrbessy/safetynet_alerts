@@ -1,12 +1,12 @@
 package com.safetynet.alerts_api.service.person;
 
+import com.safetynet.alerts_api.model.Fire;
+import com.safetynet.alerts_api.model.FireDTOByAddress;
+import com.safetynet.alerts_api.model.FireStationCommunity;
 import com.safetynet.alerts_api.model.Home;
 import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.model.Person;
-import com.safetynet.alerts_api.model.PersonInfo;
-import com.safetynet.alerts_api.model.PersonInfo2DTO;
-import com.safetynet.alerts_api.model.PersonInfoByAddress;
-import com.safetynet.alerts_api.model.PersonNumberInfo;
+import com.safetynet.alerts_api.model.PersonInfoDTO;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -35,7 +35,7 @@ public interface PersonService {
    * @param a fire station number
    * @return - A List of PersonNumberInfo
    */
-  public PersonNumberInfo getPersonNumberInfoListFromStationNumber(Integer stationNumber);
+  public FireStationCommunity getPersonNumberInfoListFromStationNumber(Integer stationNumber);
 
   /**
    * full the List of children and adults from a given Person List.
@@ -87,7 +87,7 @@ public interface PersonService {
    * @param a List of fire station number
    * @return - A List of PersonInfoByAddress
    */
-  public List<PersonInfoByAddress> getPersonInfoByAddressList(List<Integer> stationsList);
+  public List<FireDTOByAddress> getPersonInfoByAddressList(List<Integer> stationsList);
 
   /**
    * Get the Person List from a given first name and a given last name.
@@ -112,7 +112,7 @@ public interface PersonService {
    * @param a first name and a last name
    * @return - A List of Person
    */
-  public List<PersonInfo2DTO> getPersonListByFirstNameAndLastNameThenOnlyLastName(String firstName, String lastName);
+  public List<PersonInfoDTO> getPersonListByFirstNameAndLastNameThenOnlyLastName(String firstName, String lastName);
 
   /**
    * Get the Person List from a given address.
@@ -128,7 +128,7 @@ public interface PersonService {
    * @param an address
    * @return - A List of PersonInfo
    */
-  public PersonInfo getPersonListWithStationNumber(String address);
+  public Fire getPersonListWithStationNumber(String address);
 
   /**
    * Save the person list
