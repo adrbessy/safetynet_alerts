@@ -28,12 +28,17 @@ public class FireStationController {
    */
   @DeleteMapping("/firestation/{id}")
   public void deleteFireStation(@PathVariable("id") final Long id) {
-    logger.info(
-        "Delete request of the endpoint 'firestation' with the firestation Id : {" + id.toString() + "}");
-    fireStationService.deleteFireStation(id);
-    logger.info(
-        "response following the Delete on the endpoint 'firestation' with the given id : {"
-            + id.toString() + "}");
+    try {
+      logger.info(
+          "Delete request of the endpoint 'firestation' with the firestation Id : {" + id.toString() + "}");
+      fireStationService.deleteFireStation(id);
+      logger.info(
+          "response following the Delete on the endpoint 'firestation' with the given id : {"
+              + id.toString() + "}");
+    } catch (Exception exception) {
+      logger.error("Error in the fireStationController in the method deleteFireStation :"
+          + exception.getMessage());
+    }
   }
 
 
@@ -46,20 +51,26 @@ public class FireStationController {
   @PutMapping("/firestation/{address}")
   public FireStation updateFireStation(@PathVariable("address") final String address,
       @RequestBody FireStation fireStation) {
-    logger.info(
-        "Put request of the endpoint 'firestation' with the firestation address : {" + address + "}");
-    FireStation fireStationToUpdate = fireStationService.getFireStation(address);
-    logger.info(
-        "response following the Put on the endpoint 'firestation' with the given address : {"
-            + address + "}");
-    if (fireStationToUpdate != null) {
-      Integer station = fireStation.getStation();
-      if (station != null) {
-        fireStationToUpdate.setStation(station);
+    try {
+      logger.info(
+          "Put request of the endpoint 'firestation' with the firestation address : {" + address + "}");
+      FireStation fireStationToUpdate = fireStationService.getFireStation(address);
+      logger.info(
+          "response following the Put on the endpoint 'firestation' with the given address : {"
+              + address + "}");
+      if (fireStationToUpdate != null) {
+        Integer station = fireStation.getStation();
+        if (station != null) {
+          fireStationToUpdate.setStation(station);
+        }
+        fireStationService.saveFireStation(fireStationToUpdate);
+        return fireStationToUpdate;
+      } else {
+        return null;
       }
-      fireStationService.saveFireStation(fireStationToUpdate);
-      return fireStationToUpdate;
-    } else {
+    } catch (Exception exception) {
+      logger.error("Error in the fireStationController in the method updateFireStation :"
+          + exception.getMessage());
       return null;
     }
   }
@@ -73,13 +84,19 @@ public class FireStationController {
    */
   @PostMapping("/firestation")
   public FireStation createFireStation(@RequestBody FireStation fireStation) {
-    logger.info(
-        "Post request of the endpoint 'firestation' with the firestation : {" + fireStation.toString() + "}");
-    FireStation savedFireStation = fireStationService.saveFireStation(fireStation);
-    logger.info(
-        "response following the Post on the endpoint 'firestation' with the given fireStation : {"
-            + fireStation.toString() + "}");
-    return savedFireStation;
+    try {
+      logger.info(
+          "Post request of the endpoint 'firestation' with the firestation : {" + fireStation.toString() + "}");
+      FireStation savedFireStation = fireStationService.saveFireStation(fireStation);
+      logger.info(
+          "response following the Post on the endpoint 'firestation' with the given fireStation : {"
+              + fireStation.toString() + "}");
+      return savedFireStation;
+    } catch (Exception exception) {
+      logger.error("Error in the fireStationController in the method createFireStation :"
+          + exception.getMessage());
+      return null;
+    }
   }
 
 }

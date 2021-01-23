@@ -23,17 +23,23 @@ public class HomeController {
    * the fire station deserving it.
    * 
    * @param an address
-   * @return - A PersonInfo object
+   * @return - A Fire object
    */
   @GetMapping("/fire")
   public Fire getFire(@RequestParam String address) {
-    logger.info(
-        "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
-    Fire fire = personService.getPersonListWithStationNumber(address);
-    logger.info(
-        "response following the Get on the endpoint 'fire' with the given address : {"
-            + address + "}");
-    return fire;
+    try {
+      logger.info(
+          "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
+      Fire fire = personService.getPersonListWithStationNumber(address);
+      logger.info(
+          "response following the Get on the endpoint 'fire' with the given address : {"
+              + address + "}");
+      return fire;
+    } catch (Exception exception) {
+      logger.error("Error in the HomeController in the method getFire :"
+          + exception.getMessage());
+      return null;
+    }
   }
 
   /**
@@ -45,12 +51,18 @@ public class HomeController {
    * @return - A Home : a List of children and adults living at a given address
    */
   @GetMapping("/childAlert")
-  public Home getChildListLivingToThisAdress(@RequestParam String address) {
-    logger.info(
-        "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
-    Home home = personService.getChildrenListAndAdultListFromAddress(address);
-    logger.info("response following the Get on the endpoint 'childAlert' with the given address : {" + address + "}");
-    return home;
+  public Home getHome(@RequestParam String address) {
+    try {
+      logger.info(
+          "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
+      Home home = personService.getChildrenListAndAdultListFromAddress(address);
+      logger.info("response following the Get on the endpoint 'childAlert' with the given address : {" + address + "}");
+      return home;
+    } catch (Exception exception) {
+      logger.error("Error in the HomeController in the method getHome :"
+          + exception.getMessage());
+      return null;
+    }
   }
 
 }

@@ -32,15 +32,21 @@ public class FireStationCommunityController {
    *         and adults
    */
   @GetMapping("/firestation")
-  public FireStationCommunity getPersonListCoveredByThisStation(@RequestParam Integer stationNumber) {
-    logger.info(
-        "Get request of the endpoint 'fireStation' with the stationNumber : {" + stationNumber.toString() + "}");
-    FireStationCommunity personNumberInfo = personService
-        .getPersonNumberInfoListFromStationNumber(stationNumber);
-    logger.info(
-        "response following the Get on the endpoint 'firestation' with the given stationNumber : {"
-            + stationNumber.toString() + "}");
-    return personNumberInfo;
+  public FireStationCommunity getFireStationCommunity(@RequestParam Integer stationNumber) {
+    try {
+      logger.info(
+          "Get request of the endpoint 'fireStation' with the stationNumber : {" + stationNumber.toString() + "}");
+      FireStationCommunity personNumberInfo = personService
+          .getPersonNumberInfoListFromStationNumber(stationNumber);
+      logger.info(
+          "response following the Get on the endpoint 'firestation' with the given stationNumber : {"
+              + stationNumber.toString() + "}");
+      return personNumberInfo;
+    } catch (Exception exception) {
+      logger.error("Error in the fireStationCommunityController in the method getFireStationCommunity :"
+          + exception.getMessage());
+      return null;
+    }
   }
 
 
@@ -53,12 +59,18 @@ public class FireStationCommunityController {
    */
   @GetMapping("/phoneAlert")
   public List<String> getPhoneNumberCoveredByThisStation(@RequestParam Integer firestation) {
-    logger.info(
-        "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + firestation.toString() + "}");
-    List<String> phoneList = phoneService.getPhoneNumberList(firestation);
-    logger.info("response following the Get on the endpoint 'phoneAlert' with the given firestation number : {"
-        + firestation.toString() + "}");
-    return phoneList;
+    try {
+      logger.info(
+          "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + firestation.toString() + "}");
+      List<String> phoneList = phoneService.getPhoneNumberList(firestation);
+      logger.info("response following the Get on the endpoint 'phoneAlert' with the given firestation number : {"
+          + firestation.toString() + "}");
+      return phoneList;
+    } catch (Exception exception) {
+      logger.error("Error in the fireStationCommunityController in the method getPhoneNumberCoveredByThisStation :"
+          + exception.getMessage());
+      return null;
+    }
   }
 
 
@@ -71,13 +83,19 @@ public class FireStationCommunityController {
    */
   @GetMapping("/flood")
   public List<FireDTOByAddress> getHomesCoveredByTheseStation(@RequestParam List<Integer> stations) {
-    logger.info(
-        "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + stations.toString() + "}");
-    List<FireDTOByAddress> personInfoByaddressList = personService.getPersonInfoByAddressList(stations);
-    logger.info(
-        "response following the Get on the endpoint 'flood' with the given stationNumber List : {"
-            + stations.toString() + "}");
-    return personInfoByaddressList;
+    try {
+      logger.info(
+          "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + stations.toString() + "}");
+      List<FireDTOByAddress> personInfoByaddressList = personService.getPersonInfoByAddressList(stations);
+      logger.info(
+          "response following the Get on the endpoint 'flood' with the given stationNumber List : {"
+              + stations.toString() + "}");
+      return personInfoByaddressList;
+    } catch (Exception exception) {
+      logger.error("Error in the fireStationCommunityController in the method getHomesCoveredByTheseStation :"
+          + exception.getMessage());
+      return null;
+    }
   }
 
 
