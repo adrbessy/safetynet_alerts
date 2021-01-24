@@ -1,36 +1,41 @@
 package com.safetynet.alerts_api.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import com.safetynet.alerts_api.model.FireStation;
+import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.FireStationRepository;
 import com.safetynet.alerts_api.repository.PersonRepository;
 import com.safetynet.alerts_api.service.address.AddressServiceImpl;
-import com.safetynet.alerts_api.service.person.PersonServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
+import com.safetynet.alerts_api.service.person.PersonService;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-@SpringBootTest()
+@SpringBootTest
 class PersonServiceTest {
 
-  private PersonServiceImpl personService;
+  @Autowired
+  private PersonService personService;
 
   @MockBean
   private FireStationRepository firestationRepository;
 
-  @Mock
+  @MockBean
   private AddressServiceImpl addressServiceMock;
 
-  @Mock
+  @MockBean
   private PersonRepository personRepositoryMock;
 
   // private Person person;
-
-  @BeforeEach
-  private void setUp() {
-    personService = new PersonServiceImpl();
-  }
-
+  /*
+   * @BeforeEach private void setUp() { personService = new PersonServiceImpl(); }
+   */
   /**
    * test to get a list of person from a list of fireStation number.
    * 
@@ -38,41 +43,50 @@ class PersonServiceTest {
   @Test
   public void testGetPersonListFromStationNumber() {
     // GIVEN
-    /*
-     * FireStation fireStation1 = new FireStation(); fireStation1.setId((long) 5);
-     * fireStation1.setAddress("82 Alexander Road"); fireStation1.setStation(6);
-     * FireStation fireStation2 = new FireStation(); fireStation2.setId((long) 2);
-     * fireStation2.setAddress("1 rue Antonio Vivaldi"); fireStation2.setStation(2);
-     * List<FireStation> fireStationList = new ArrayList<>();
-     * fireStationList.add(fireStation1); fireStationList.add(fireStation2);
-     * 
-     * List<String> addressList = new ArrayList<>();
-     * addressList.add("82 Alexander Road");
-     * addressList.add("1 rue Antonio Vivaldi");
-     * 
-     * Person person = new Person();
-     * person.setEmail("ballapolorra-7977@yopmail.com");
-     * person.setAddress("82 Alexander Road"); List<Person> personList = new
-     * ArrayList<>(); personList.add(person); Person person2 = new Person();
-     * person2.setEmail("unoddicab-5625@yopmail.com");
-     * person2.setAddress("12 rue des ecoles"); personList.add(person2); Person
-     * person3 = new Person(); person3.setEmail("unoddicab-5625@yopmail.com");
-     * person3.setAddress("1 rue des ecoles"); personList.add(person3);
-     * 
-     * 
-     * when(firestationRepository.findDistinctByStation(org.mockito.ArgumentMatchers
-     * .anyInt())).thenReturn(fireStationList);
-     * when(addressServiceMock.getAddressListFromFireStationList(fireStationList)).
-     * thenReturn(addressList);
-     * when(personRepositoryMock.findAllByAddressInOrderByAddress(addressList)).
-     * thenReturn(personList); List<Person> result =
-     * personService.getPersonListFromStationNumber(1);
-     */
+
+    FireStation fireStation1 = new FireStation();
+    fireStation1.setId((long) 5);
+    fireStation1.setAddress("82 Alexander Road");
+    fireStation1.setStation(6);
+    FireStation fireStation2 = new FireStation();
+    fireStation2.setId((long) 2);
+    fireStation2.setAddress("1 rue Antonio Vivaldi");
+    fireStation2.setStation(2);
+    List<FireStation> fireStationList = new ArrayList<>();
+    fireStationList.add(fireStation1);
+    fireStationList.add(fireStation2);
+
+    List<String> addressList = new ArrayList<>();
+    addressList.add("82 Alexander Road");
+    addressList.add("1 rue Antonio Vivaldi");
+
+    Person person = new Person();
+    person.setEmail("ballapolorra-7977@yopmail.com");
+    person.setAddress("82 Alexander Road");
+    List<Person> personList = new ArrayList<>();
+    personList.add(person);
+    Person person2 = new Person();
+    person2.setEmail("unoddicab-5625@yopmail.com");
+    person2.setAddress("12 rue des ecoles");
+    personList.add(person2);
+    Person person3 = new Person();
+    person3.setEmail("unoddicab-5625@yopmail.com");
+    person3.setAddress("1 rue des ecoles");
+    personList.add(person3);
+
+
+    when(firestationRepository.findDistinctByStation(org.mockito.ArgumentMatchers
+        .anyInt())).thenReturn(fireStationList);
+    when(addressServiceMock.getAddressListFromFireStationList(fireStationList)).thenReturn(addressList);
+    when(personRepositoryMock.findAllByAddressInOrderByAddress(addressList)).thenReturn(personList);
+    List<Person> result = personService.getPersonListFromStationNumber(1);
+
     // THEN
-    /*
-     * assertThat(result).isEqualTo(personList); verify(personRepositoryMock,
-     * Mockito.times(1)).findAllByAddressInOrderByAddress(addressList);
-     */
+
+    assertThat(result).isEqualTo(personList);
+    verify(personRepositoryMock,
+        Mockito.times(1)).findAllByAddressInOrderByAddress(addressList);
+
   }
 
   /**
