@@ -9,7 +9,6 @@ import lombok.Data;
 @Data
 public class FireStationCommunity {
 
-
   private List<FireStationCommunityDTO> personList;
   private int numberOfChildren;
   private int numberOfAdults;
@@ -19,5 +18,6 @@ public class FireStationCommunity {
     this.numberOfChildren = numberOfChildren;
     this.numberOfAdults = numberOfAdults;
   }
+
 
 }

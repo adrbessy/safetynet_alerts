@@ -16,6 +16,7 @@ import com.safetynet.alerts_api.repository.MedicalRecordRepository;
 import com.safetynet.alerts_api.repository.PersonRepository;
 import com.safetynet.alerts_api.service.address.AddressServiceImpl;
 import com.safetynet.alerts_api.service.fireStation.FireStationServiceImpl;
+import com.safetynet.alerts_api.service.map.MapService;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,9 @@ public class PersonServiceImpl implements PersonService {
 
   @Autowired
   private FireStationServiceImpl firestationService;
+
+  @Autowired
+  private MapService mapService;
 
 
   @Override
@@ -120,20 +124,21 @@ public class PersonServiceImpl implements PersonService {
 
         // We create an object including the list of persons and the number of adults
         // and children
-        List<FireStationCommunityDTO> PersonNumberInfoDTOList = new ArrayList<>();
-        filteredPersonList.forEach(personIterator -> {
-          FireStationCommunityDTO personNumberInfoDTO = new FireStationCommunityDTO(personIterator.getFirstName(),
-              personIterator.getLastName(),
-              personIterator.getAddress(),
-              personIterator.getCity(),
-              personIterator.getZip(), personIterator.getPhone());
-          PersonNumberInfoDTOList.add(personNumberInfoDTO);
-        });
-        FireStationCommunity fireStationCommunity = new FireStationCommunity(PersonNumberInfoDTOList,
+        /*
+         * List<FireStationCommunityDTO> fireStationCommunityDTOList = new
+         * ArrayList<>(); filteredPersonList.forEach(personIterator -> {
+         * FireStationCommunityDTO personNumberInfoDTO = new
+         * FireStationCommunityDTO(personIterator.getFirstName(),
+         * personIterator.getLastName(), personIterator.getAddress(),
+         * personIterator.getCity(), personIterator.getZip(),
+         * personIterator.getPhone());
+         * fireStationCommunityDTOList.add(personNumberInfoDTO); });
+         */
+        List<FireStationCommunityDTO> fireStationCommunityDTOList = mapService.convertToFireStationCommunityDTO(
+            filteredPersonList);
+        FireStationCommunity fireStationCommunity = new FireStationCommunity(fireStationCommunityDTOList,
             child, adult);
-
         return fireStationCommunity;
-
       } catch (Exception exception) {
         logger
             .error("Error when retrieving the list of information about the persons linked to a fire station number :"
@@ -145,6 +150,13 @@ public class PersonServiceImpl implements PersonService {
     }
   }
 
+  /*
+   * public FireStationCommunity
+   * createFireStationCommunity(List<FireStationCommunityDTO>
+   * fireStationCommunityDTOList, int child, int adult) { FireStationCommunity
+   * fireStationCommunity = new FireStationCommunity(fireStationCommunityDTOList,
+   * child, adult); return fireStationCommunity; }
+   */
 
   @Override
   public void fullChildrenListAndAdultListFromPersonList(List<Person> personList, List<Person> childrenList,
