@@ -4,9 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import com.safetynet.alerts_api.model.ChildAlertDTO;
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.model.FireStationCommunity;
 import com.safetynet.alerts_api.model.FireStationCommunityDTO;
+import com.safetynet.alerts_api.model.Home;
 import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.FireStationRepository;
@@ -181,7 +183,7 @@ class PersonServiceTest {
         "");
     List<FireStationCommunityDTO> fireStationCommunityDTOList = new ArrayList<>();
     fireStationCommunityDTOList.add(fireStationCommunityDTO);
-    when(mapServiceMock.convertToFireStationCommunityDTO(personList))
+    when(mapServiceMock.convertToFireStationCommunityDTOList(personList))
         .thenReturn(fireStationCommunityDTOList);
 
     FireStationCommunity fireStationCommunity = new FireStationCommunity(fireStationCommunityDTOList,
@@ -251,6 +253,127 @@ class PersonServiceTest {
 
     personService.addPersonToListFromFireStationList(person, medicalRecordList, childrenList, adultList, currentDate);
     assertThat(childrenList).isEqualTo(childrenList2);
+  }
+
+  /**
+   * test to get a children list and an adult list from an address.
+   * 
+   */
+  @Test
+  public void testGetChildrenListAndAdultListFromAddress() {
+    Person person = new Person();
+    person.setId((long) 5);
+    person.setFirstName("Adrien");
+    person.setLastName("Bessy");
+    person.setEmail("ballapolorra-7977@yopmail.com");
+    person.setAddress("82 Alexander Road");
+    List<Person> personList = new ArrayList<>();
+    personList.add(person);
+    String address = "1 rue antonio vivaldi";
+
+    when(personRepositoryMock.findDistinctByAddress(address)).thenReturn(personList);
+
+    MedicalRecord medicalRecord1 = new MedicalRecord();
+    medicalRecord1.setBirthdate("16/06/2020");
+    List<MedicalRecord> medicalRecordList = new ArrayList<>();
+    medicalRecordList.add(medicalRecord1);
+
+    when(medicalRecordRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy"))
+        .thenReturn(medicalRecordList);
+
+    ChildAlertDTO childAlertDTO = new ChildAlertDTO("Bessy", "Adrien", 10);
+    List<ChildAlertDTO> childAlertDTOList = new ArrayList<>();
+    childAlertDTOList.add(childAlertDTO);
+    List<ChildAlertDTO> childAlertDTOList2 = new ArrayList<>();
+
+    when(mapServiceMock.convertToChildAlertDTOList(personList))
+        .thenReturn(childAlertDTOList);
+    when(mapServiceMock.convertToChildAlertDTOList(personList))
+        .thenReturn(childAlertDTOList);
+
+    Home home = new Home(childAlertDTOList, childAlertDTOList2);
+
+    Home home2 = personService.getChildrenListAndAdultListFromAddress(address);
+    assertThat(home2).isEqualTo(home);
+  }
+
+
+  /**
+   * test to set age, medications and allergies from a person list.
+   * 
+   */
+  @Test
+  public void testSetAgeAndMedicationsAndAllergiesFromPersonList() {
+    MedicalRecord medicalRecord1 = new MedicalRecord();
+    medicalRecord1.setBirthdate("16/06/2019");
+    List<MedicalRecord> medicalRecordList = new ArrayList<>();
+    medicalRecordList.add(medicalRecord1);
+
+    when(medicalRecordRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy"))
+        .thenReturn(medicalRecordList);
+    when(medicalRecordMock.getBirthdate())
+        .thenReturn("16/06/2019");
+    doNothing().when(personMock).setAge_Medications_Allergies(medicalRecord1,
+        LocalDate.of(2021, 1, 11));
+
+    Person person = new Person();
+    person.setId((long) 5);
+    person.setFirstName("Adrien");
+    person.setLastName("Bessy");
+    person.setEmail("ballapolorra-7977@yopmail.com");
+    person.setAddress("82 Alexander Road");
+    List<Person> personList = new ArrayList<>();
+    personList.add(person);
+
+    personService.setAgeAndMedicationsAndAllergiesFromPersonList(personList);
+    assertThat(person.getAge()).isEqualTo(1);
+  }
+
+
+  /**
+   * test to get a person list by address.
+   * 
+   */
+  @Test
+  public void testGetPersonListByAddress() {
+    Person person = new Person();
+    person.setId((long) 5);
+    person.setFirstName("Adrien");
+    person.setLastName("Bessy");
+    person.setEmail("ballapolorra-7977@yopmail.com");
+    person.setAddress("82 Alexander Road");
+    List<Person> personList = new ArrayList<>();
+    personList.add(person);
+    String address = "1 rue antonio vivaldi";
+
+    when(personRepositoryMock.findDistinctByAddress(address)).thenReturn(personList);
+
+    MedicalRecord medicalRecord1 = new MedicalRecord();
+    medicalRecord1.setBirthdate("16/06/2019");
+    List<MedicalRecord> medicalRecordList = new ArrayList<>();
+    medicalRecordList.add(medicalRecord1);
+
+    when(medicalRecordRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy"))
+        .thenReturn(medicalRecordList);
+    when(medicalRecordMock.getBirthdate())
+        .thenReturn("16/06/2019");
+    doNothing().when(personMock).setAge_Medications_Allergies(medicalRecord1,
+        LocalDate.of(2021, 1, 11));
+
+    List<Person> personList2 = personService.getPersonListByAddress(address);
+    verify(personRepositoryMock,
+        Mockito.times(1)).findDistinctByAddress(address);
+    assertThat(personList2).isNotEqualTo(null);
+  }
+
+
+  /**
+   * test to get a person list with the station number from an address.
+   * 
+   */
+  @Test
+  public void testGetPersonListWithStationNumber() {
+
   }
 
 }

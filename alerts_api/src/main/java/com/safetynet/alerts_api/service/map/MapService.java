@@ -1,5 +1,6 @@
 package com.safetynet.alerts_api.service.map;
 
+import com.safetynet.alerts_api.model.ChildAlertDTO;
 import com.safetynet.alerts_api.model.FireStationCommunityDTO;
 import com.safetynet.alerts_api.model.Person;
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MapService {
 
-  public List<FireStationCommunityDTO> convertToFireStationCommunityDTO(List<Person> personList) {
+  public List<FireStationCommunityDTO> convertToFireStationCommunityDTOList(List<Person> personList) {
     List<FireStationCommunityDTO> fireStationCommunityDTOList = new ArrayList<>();
     personList.forEach(personIterator -> {
       FireStationCommunityDTO fireStationCommunityDTO = new FireStationCommunityDTO(personIterator.getFirstName(),
@@ -20,6 +21,17 @@ public class MapService {
       fireStationCommunityDTOList.add(fireStationCommunityDTO);
     });
     return fireStationCommunityDTOList;
+  }
+
+  public List<ChildAlertDTO> convertToChildAlertDTOList(List<Person> personList) {
+    List<ChildAlertDTO> childAlertDTOList = new ArrayList<>();
+    personList.forEach(personIterator -> {
+      ChildAlertDTO childAlertDTO = new ChildAlertDTO(personIterator.getLastName(),
+          personIterator.getFirstName(),
+          personIterator.getAge());
+      childAlertDTOList.add(childAlertDTO);
+    });
+    return childAlertDTOList;
   }
 
 }

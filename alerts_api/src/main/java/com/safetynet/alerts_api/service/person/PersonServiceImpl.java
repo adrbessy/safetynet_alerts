@@ -124,17 +124,8 @@ public class PersonServiceImpl implements PersonService {
 
         // We create an object including the list of persons and the number of adults
         // and children
-        /*
-         * List<FireStationCommunityDTO> fireStationCommunityDTOList = new
-         * ArrayList<>(); filteredPersonList.forEach(personIterator -> {
-         * FireStationCommunityDTO personNumberInfoDTO = new
-         * FireStationCommunityDTO(personIterator.getFirstName(),
-         * personIterator.getLastName(), personIterator.getAddress(),
-         * personIterator.getCity(), personIterator.getZip(),
-         * personIterator.getPhone());
-         * fireStationCommunityDTOList.add(personNumberInfoDTO); });
-         */
-        List<FireStationCommunityDTO> fireStationCommunityDTOList = mapService.convertToFireStationCommunityDTO(
+
+        List<FireStationCommunityDTO> fireStationCommunityDTOList = mapService.convertToFireStationCommunityDTOList(
             filteredPersonList);
         FireStationCommunity fireStationCommunity = new FireStationCommunity(fireStationCommunityDTOList,
             child, adult);
@@ -150,13 +141,6 @@ public class PersonServiceImpl implements PersonService {
     }
   }
 
-  /*
-   * public FireStationCommunity
-   * createFireStationCommunity(List<FireStationCommunityDTO>
-   * fireStationCommunityDTOList, int child, int adult) { FireStationCommunity
-   * fireStationCommunity = new FireStationCommunity(fireStationCommunityDTOList,
-   * child, adult); return fireStationCommunity; }
-   */
 
   @Override
   public void fullChildrenListAndAdultListFromPersonList(List<Person> personList, List<Person> childrenList,
@@ -225,19 +209,9 @@ public class PersonServiceImpl implements PersonService {
       List<Person> adultList = new ArrayList<>();
       fullChildrenListAndAdultListFromPersonList(filteredPersonList, childrenList, adultList);
 
-      List<ChildAlertDTO> childrenDTOList = new ArrayList<>();
-      childrenList.forEach(personIterator -> {
-        ChildAlertDTO childAlertDTO = new ChildAlertDTO(personIterator.getLastName(), personIterator.getFirstName(),
-            personIterator.getAge());
-        childrenDTOList.add(childAlertDTO);
-      });
+      List<ChildAlertDTO> childrenDTOList = mapService.convertToChildAlertDTOList(childrenList);
 
-      List<ChildAlertDTO> adultDTOList = new ArrayList<>();
-      adultList.forEach(personIterator -> {
-        ChildAlertDTO childAlertDTO = new ChildAlertDTO(personIterator.getLastName(), personIterator.getFirstName(),
-            personIterator.getAge());
-        adultDTOList.add(childAlertDTO);
-      });
+      List<ChildAlertDTO> adultDTOList = mapService.convertToChildAlertDTOList(adultList);
 
       // We create an object including the list of children and the list of adults
       Home home = new Home(childrenDTOList, adultDTOList);
@@ -370,7 +344,7 @@ public class PersonServiceImpl implements PersonService {
       Fire fire = new Fire(FireDTOList, fireStationNumberList);
       return fire;
     } catch (Exception exception) {
-      logger.error("Error when we try to get PersonList w :"
+      logger.error("Error when we try to get PersonList with a station number :"
           + exception.getMessage());
       return null;
     }
