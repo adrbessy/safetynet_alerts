@@ -1,6 +1,7 @@
 package com.safetynet.alerts_api.service.map;
 
 import com.safetynet.alerts_api.model.ChildAlertDTO;
+import com.safetynet.alerts_api.model.FireDTO;
 import com.safetynet.alerts_api.model.FireStationCommunityDTO;
 import com.safetynet.alerts_api.model.Person;
 import java.util.ArrayList;
@@ -32,6 +33,16 @@ public class MapService {
       childAlertDTOList.add(childAlertDTO);
     });
     return childAlertDTOList;
+  }
+
+  public List<FireDTO> convertToFireDTOList(List<Person> personList) {
+    List<FireDTO> fireDTOList = new ArrayList<>();
+    personList.forEach(personIterator -> {
+      FireDTO fireDTO = new FireDTO(personIterator.getLastName(), personIterator.getAge(),
+          personIterator.getPhone(), personIterator.getMedications(), personIterator.getAllergies());
+      fireDTOList.add(fireDTO);
+    });
+    return fireDTOList;
   }
 
 }

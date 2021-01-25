@@ -333,15 +333,11 @@ public class PersonServiceImpl implements PersonService {
       List<Integer> fireStationNumberList = firestationService
           .getStationNumberListFromFireStationList(filteredFireStationList);
 
-      List<FireDTO> FireDTOList = new ArrayList<>();
-      filteredPersonList.forEach(personIterator -> {
-        FireDTO fireDTO = new FireDTO(personIterator.getLastName(), personIterator.getAge(),
-            personIterator.getPhone(), personIterator.getMedications(), personIterator.getAllergies());
-        FireDTOList.add(fireDTO);
-      });
+      List<FireDTO> fireDTOList = mapService.convertToFireDTOList(filteredPersonList);
+
       // We create an object including the list of persons and the list of fireStation
       // number deserving the address.
-      Fire fire = new Fire(FireDTOList, fireStationNumberList);
+      Fire fire = new Fire(fireDTOList, fireStationNumberList);
       return fire;
     } catch (Exception exception) {
       logger.error("Error when we try to get PersonList with a station number :"
