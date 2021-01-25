@@ -292,13 +292,17 @@ public class PersonServiceImpl implements PersonService {
         if (!personInfoByFirstNameAndLastName.contains(personIterator))
           personInfoByFirstNameAndLastName.add(personIterator);
       });
-      List<PersonInfoDTO> PersonInfoDTOList = new ArrayList<>();
-      personInfoByFirstNameAndLastName.forEach(personIterator -> {
-        PersonInfoDTO personInfoDTO = new PersonInfoDTO(personIterator.getLastName(), personIterator.getAge(),
-            personIterator.getAddress(), personIterator.getCity(), personIterator.getZip(), personIterator.getEmail(),
-            personIterator.getMedications(), personIterator.getAllergies());
-        PersonInfoDTOList.add(personInfoDTO);
-      });
+
+      List<PersonInfoDTO> PersonInfoDTOList = mapService.convertToPersonInfoDTOList(personInfoByFirstNameAndLastName);
+      /*
+       * List<PersonInfoDTO> PersonInfoDTOList = new ArrayList<>();
+       * personInfoByFirstNameAndLastName.forEach(personIterator -> { PersonInfoDTO
+       * personInfoDTO = new PersonInfoDTO(personIterator.getLastName(),
+       * personIterator.getAge(), personIterator.getAddress(),
+       * personIterator.getCity(), personIterator.getZip(), personIterator.getEmail(),
+       * personIterator.getMedications(), personIterator.getAllergies());
+       * PersonInfoDTOList.add(personInfoDTO); });
+       */
       return PersonInfoDTOList;
     } catch (Exception exception) {
       logger.error("Error when we try to get PersonList By FirstName And LastName Then Only LastName :"

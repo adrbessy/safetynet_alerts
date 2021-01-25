@@ -13,6 +13,7 @@ import com.safetynet.alerts_api.model.FireStationCommunityDTO;
 import com.safetynet.alerts_api.model.Home;
 import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.model.Person;
+import com.safetynet.alerts_api.model.PersonInfoDTO;
 import com.safetynet.alerts_api.repository.FireStationRepository;
 import com.safetynet.alerts_api.repository.MedicalRecordRepository;
 import com.safetynet.alerts_api.repository.PersonRepository;
@@ -437,11 +438,106 @@ class PersonServiceTest {
 
 
   /**
-   * test to get a person list with the station number from an address.
+   * test to get a person list from the first name and the last name.
+   * 
+   */
+  @Test
+  public void testGetPersonListByFirstNameAndLastName() {
+    Person person = new Person();
+    person.setEmail("ballapolorra-7977@yopmail.com");
+    person.setAddress("82 Alexander Road");
+    List<Person> personList = new ArrayList<>();
+    personList.add(person);
+    when(personRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy")).thenReturn(personList);
+
+    MedicalRecord medicalRecord1 = new MedicalRecord();
+    medicalRecord1.setBirthdate("16/06/2019");
+    List<MedicalRecord> medicalRecordList = new ArrayList<>();
+    medicalRecordList.add(medicalRecord1);
+
+    when(medicalRecordRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy"))
+        .thenReturn(medicalRecordList);
+    when(medicalRecordMock.getBirthdate())
+        .thenReturn("16/06/2019");
+    doNothing().when(personMock).setAge_Medications_Allergies(medicalRecord1,
+        LocalDate.of(2021, 1, 11));
+
+    List<Person> personList2 = personService.getPersonListByFirstNameAndLastName("Adrien", "Bessy");
+    assertThat(personList2).isNotEqualTo(null);
+  }
+
+
+  /**
+   * test to get a person list from the first name and the last name, then only
+   * from the last name.
+   * 
+   */
+  @Test
+  public void testGetPersonListByLastName() {
+    Person person = new Person();
+    person.setEmail("ballapolorra-7977@yopmail.com");
+    person.setAddress("82 Alexander Road");
+    List<Person> personList = new ArrayList<>();
+    personList.add(person);
+    when(personRepositoryMock.findByLastNameAllIgnoreCase("Bessy")).thenReturn(personList);
+
+    MedicalRecord medicalRecord1 = new MedicalRecord();
+    medicalRecord1.setBirthdate("16/06/2019");
+    List<MedicalRecord> medicalRecordList = new ArrayList<>();
+    medicalRecordList.add(medicalRecord1);
+
+    when(medicalRecordRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy"))
+        .thenReturn(medicalRecordList);
+    when(medicalRecordMock.getBirthdate())
+        .thenReturn("16/06/2019");
+    doNothing().when(personMock).setAge_Medications_Allergies(medicalRecord1,
+        LocalDate.of(2021, 1, 11));
+
+    List<Person> personList2 = personService.getPersonListByLastName("Bessy");
+    assertThat(personList2).isNotEqualTo(null);
+  }
+
+
+  /**
+   * test to get a person list from the first name and the last name, then only
+   * from the last name.
    * 
    */
   @Test
   public void testGetPersonListByFirstNameAndLastNameThenOnlyLastName() {
+    Person person = new Person();
+    person.setEmail("ballapolorra-7977@yopmail.com");
+    person.setAddress("82 Alexander Road");
+    List<Person> personList = new ArrayList<>();
+    personList.add(person);
+    when(personRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy")).thenReturn(personList);
+
+    MedicalRecord medicalRecord1 = new MedicalRecord();
+    medicalRecord1.setBirthdate("16/06/2019");
+    List<MedicalRecord> medicalRecordList = new ArrayList<>();
+    medicalRecordList.add(medicalRecord1);
+
+    when(medicalRecordRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy"))
+        .thenReturn(medicalRecordList);
+    when(medicalRecordMock.getBirthdate())
+        .thenReturn("16/06/2019");
+    doNothing().when(personMock).setAge_Medications_Allergies(medicalRecord1,
+        LocalDate.of(2021, 1, 11));
+
+    when(personRepositoryMock.findByLastNameAllIgnoreCase("Bessy")).thenReturn(personList);
+
+    PersonInfoDTO personInfoDTO = new PersonInfoDTO("Bessy", 45,
+        "1 rue antonio vivaldi", "Paris", "75000", "dgsdfgf@gmail.com",
+        new ArrayList<>(), new ArrayList<>());
+    List<PersonInfoDTO> personInfoDTOList = new ArrayList<>();
+    personInfoDTOList.add(personInfoDTO);
+    when(mapServiceMock.convertToPersonInfoDTOList(personList))
+        .thenReturn(personInfoDTOList);
+
+    List<PersonInfoDTO> personInfoDTOList2 = personService.getPersonListByFirstNameAndLastNameThenOnlyLastName("Adrien",
+        "Bessy");
+
+    assertThat(personInfoDTOList2).isEqualTo(personInfoDTOList);
 
   }
 

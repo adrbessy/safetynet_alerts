@@ -4,6 +4,7 @@ import com.safetynet.alerts_api.model.ChildAlertDTO;
 import com.safetynet.alerts_api.model.FireDTO;
 import com.safetynet.alerts_api.model.FireStationCommunityDTO;
 import com.safetynet.alerts_api.model.Person;
+import com.safetynet.alerts_api.model.PersonInfoDTO;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,17 @@ public class MapService {
       fireDTOList.add(fireDTO);
     });
     return fireDTOList;
+  }
+
+  public List<PersonInfoDTO> convertToPersonInfoDTOList(List<Person> personList) {
+    List<PersonInfoDTO> personInfoDTOList = new ArrayList<>();
+    personList.forEach(personIterator -> {
+      PersonInfoDTO personInfoDTO = new PersonInfoDTO(personIterator.getLastName(), personIterator.getAge(),
+          personIterator.getAddress(), personIterator.getCity(), personIterator.getZip(), personIterator.getEmail(),
+          personIterator.getMedications(), personIterator.getAllergies());
+      personInfoDTOList.add(personInfoDTO);
+    });
+    return personInfoDTOList;
   }
 
 }
