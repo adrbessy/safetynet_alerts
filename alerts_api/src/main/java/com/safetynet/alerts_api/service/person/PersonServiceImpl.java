@@ -227,28 +227,33 @@ public class PersonServiceImpl implements PersonService {
 
 
   @Override
-  public List<FireDTOByAddress> getPersonInfoByAddressList(List<Integer> stationsList) {
+  public List<FireDTOByAddress> getPersonInfoByAddressList(List<Integer> stationNumberList) {
     // We create an object including the list of persons and the list of fireStation
     // number deserving the address.
     try {
-      List<String> addressList = addressService.getAddressListFromStationNumberList(stationsList);
+      List<String> addressList = addressService.getAddressListFromStationNumberList(stationNumberList);
+
       List<FireDTOByAddress> personInfoByAddressList = new ArrayList<>();
       if (addressList != null) {
         addressList.forEach(addressIterator -> {
           List<Person> personList = getPersonListByAddress(addressIterator);
-          List<FireDTO> FireDTOList = new ArrayList<>();
-          personList.forEach(personIterator -> {
-            FireDTO FireDTO = new FireDTO(personIterator.getLastName(), personIterator.getAge(),
-                personIterator.getPhone(), personIterator.getMedications(), personIterator.getAllergies());
-            FireDTOList.add(FireDTO);
-          });
+          List<FireDTO> fireDTOList = mapService.convertToFireDTOList(personList);
+          /*
+           * List<FireDTO> fireDTOList = new ArrayList<>();
+           * personList.forEach(personIterator -> { FireDTO FireDTO = new
+           * FireDTO(personIterator.getLastName(), personIterator.getAge(),
+           * personIterator.getPhone(), personIterator.getMedications(),
+           * personIterator.getAllergies()); FireDTOList.add(FireDTO); });
+           */
           FireDTOByAddress personInfoByAddress = new FireDTOByAddress(addressIterator,
-              FireDTOList);
+              fireDTOList);
           personInfoByAddressList.add(personInfoByAddress);
         });
       }
       return personInfoByAddressList;
-    } catch (Exception exception) {
+    } catch (
+
+    Exception exception) {
       logger.error("Error when we try to get PersonInfoByAddressList :" + exception.getMessage());
       return null;
     }
@@ -294,15 +299,7 @@ public class PersonServiceImpl implements PersonService {
       });
 
       List<PersonInfoDTO> PersonInfoDTOList = mapService.convertToPersonInfoDTOList(personInfoByFirstNameAndLastName);
-      /*
-       * List<PersonInfoDTO> PersonInfoDTOList = new ArrayList<>();
-       * personInfoByFirstNameAndLastName.forEach(personIterator -> { PersonInfoDTO
-       * personInfoDTO = new PersonInfoDTO(personIterator.getLastName(),
-       * personIterator.getAge(), personIterator.getAddress(),
-       * personIterator.getCity(), personIterator.getZip(), personIterator.getEmail(),
-       * personIterator.getMedications(), personIterator.getAllergies());
-       * PersonInfoDTOList.add(personInfoDTO); });
-       */
+
       return PersonInfoDTOList;
     } catch (Exception exception) {
       logger.error("Error when we try to get PersonList By FirstName And LastName Then Only LastName :"
