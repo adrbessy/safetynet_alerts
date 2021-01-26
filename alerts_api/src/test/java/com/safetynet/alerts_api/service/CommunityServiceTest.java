@@ -55,10 +55,6 @@ public class CommunityServiceTest {
   @MockBean
   private MedicalRecordRepository medicalRecordRepositoryMock;
 
-  /*
-   * @MockBean private FireStationRepository firestationRepositoryMock;
-   */
-
   @MockBean
   private Person personMock;
 

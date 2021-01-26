@@ -53,7 +53,7 @@ class PersonInfoControllerTest {
   }
 
   @Test
-  public void testGetPersonInfoFromFirstNameAndLastName() throws Exception {
+  public void testGetPersonInfo() throws Exception {
     mockMvc.perform(get("/personInfo?firstName=Jacob&lastName=Boyd"))
         .andExpect(status().isOk());
   }
@@ -71,6 +71,7 @@ class PersonInfoControllerTest {
     person.setEmail("uttoxuballo-8128@yopmail.com");
 
     when(personService.savePerson(person)).thenReturn(person);
+
     MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/person")
         .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
         .content(new ObjectMapper().writeValueAsString(person));
@@ -97,7 +98,28 @@ class PersonInfoControllerTest {
         .content(new ObjectMapper().writeValueAsString(person));
 
     this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
-
   }
+
+
+  @Test
+  public void testUpdatePersonIfPersToUpdateIsNull() throws Exception {
+    person = new Person();
+    person.setFirstName("Adrien");
+    person.setLastName("Bessy");
+    person.setAddress("82 Alexander Road");
+    person.setCity("New York");
+    person.setZip("1648462");
+    person.setPhone("04815644");
+    person.setEmail("uttoxuballo-8128@yopmail.com");
+
+    long id = 2;
+    when(personService.getPerson(id)).thenReturn(null);
+    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put("/person/" + id)
+        .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
+        .content(new ObjectMapper().writeValueAsString(person));
+
+    this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
+  }
+
 
 }

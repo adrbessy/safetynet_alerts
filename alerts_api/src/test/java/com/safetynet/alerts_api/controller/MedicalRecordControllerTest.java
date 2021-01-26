@@ -79,7 +79,17 @@ public class MedicalRecordControllerTest {
         .content(new ObjectMapper().writeValueAsString(medicalRecord));
 
     this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
+  }
 
+  @Test
+  public void testUpdateMedicalRecordIfMedToUpdateIsNull() throws Exception {
+    long id = 1;
+    when(medicalRecordService.getMedicalRecord(id)).thenReturn(null);
+    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put("/medicalRecord/" + id)
+        .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
+        .content(new ObjectMapper().writeValueAsString(medicalRecord));
+
+    this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
   }
 
 }

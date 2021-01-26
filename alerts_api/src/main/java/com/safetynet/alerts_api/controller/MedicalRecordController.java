@@ -75,35 +75,29 @@ public class MedicalRecordController {
   @PutMapping("/medicalRecord/{id}")
   public MedicalRecord updateMedicalRecord(@PathVariable("id") final Long id,
       @RequestBody MedicalRecord medicalRecord) {
-    try {
-      logger.info("Put request with the endpoint 'medicalRecord' received with the medicalRecord Id:"
-          + id.toString());
-      MedicalRecord medicalRecordToUpdate = medicalRecordService.getMedicalRecord(id);
-      logger.info(
-          "response following the Put on the endpoint 'medicalRecord' with the given id : {"
-              + id.toString() + "}");
-      if (medicalRecordToUpdate != null) {
-
-        String birthdate = medicalRecord.getBirthdate();
-        if (birthdate != null) {
-          medicalRecordToUpdate.setBirthdate(birthdate);
-        }
-        List<String> medications = medicalRecord.getMedications();
-        if (medications != null) {
-          medicalRecordToUpdate.setMedications(medications);
-        }
-        List<String> allergies = medicalRecord.getAllergies();
-        if (allergies != null) {
-          medicalRecordToUpdate.setAllergies(allergies);
-        }
-        medicalRecordService.saveMedicalRecord(medicalRecordToUpdate);
-        return medicalRecordToUpdate;
-      } else {
-        return null;
+    logger.info("Put request with the endpoint 'medicalRecord' received with the medicalRecord Id:"
+        + id.toString());
+    MedicalRecord medicalRecordToUpdate = medicalRecordService.getMedicalRecord(id);
+    logger.info(
+        "response following the Put on the endpoint 'medicalRecord' with the given id : {"
+            + id.toString() + "}");
+    if (medicalRecordToUpdate != null) {
+      String birthdate = medicalRecord.getBirthdate();
+      if (birthdate != null) {
+        medicalRecordToUpdate.setBirthdate(birthdate);
       }
-    } catch (Exception exception) {
-      logger.error("Error in the MedicalRecordController in the method updateMedicalRecord :"
-          + exception.getMessage());
+      List<String> medications = medicalRecord.getMedications();
+      if (medications != null) {
+        medicalRecordToUpdate.setMedications(medications);
+      }
+      List<String> allergies = medicalRecord.getAllergies();
+      if (allergies != null) {
+        medicalRecordToUpdate.setAllergies(allergies);
+      }
+      medicalRecordService.saveMedicalRecord(medicalRecordToUpdate);
+      return medicalRecordToUpdate;
+    } else {
+      logger.error("The medicalRecord with the id " + id + " doesn't exist");
       return null;
     }
   }

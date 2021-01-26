@@ -51,26 +51,21 @@ public class FireStationController {
   @PutMapping("/firestation/{address}")
   public FireStation updateFireStation(@PathVariable("address") final String address,
       @RequestBody FireStation fireStation) {
-    try {
-      logger.info(
-          "Put request of the endpoint 'firestation' with the firestation address : {" + address + "}");
-      FireStation fireStationToUpdate = fireStationService.getFireStation(address);
-      logger.info(
-          "response following the Put on the endpoint 'firestation' with the given address : {"
-              + address + "}");
-      if (fireStationToUpdate != null) {
-        Integer station = fireStation.getStation();
-        if (station != null) {
-          fireStationToUpdate.setStation(station);
-        }
-        fireStationService.saveFireStation(fireStationToUpdate);
-        return fireStationToUpdate;
-      } else {
-        return null;
+    logger.info(
+        "Put request of the endpoint 'firestation' with the firestation address : {" + address + "}");
+    FireStation fireStationToUpdate = fireStationService.getFireStation(address);
+    logger.info(
+        "response following the Put on the endpoint 'firestation' with the given address : {"
+            + address + "}");
+    if (fireStationToUpdate != null) {
+      Integer station = fireStation.getStation();
+      if (station != null) {
+        fireStationToUpdate.setStation(station);
       }
-    } catch (Exception exception) {
-      logger.error("Error in the fireStationController in the method updateFireStation :"
-          + exception.getMessage());
+      fireStationService.saveFireStation(fireStationToUpdate);
+      return fireStationToUpdate;
+    } else {
+      logger.error("The firestation with the address " + address + " doesn't exist");
       return null;
     }
   }

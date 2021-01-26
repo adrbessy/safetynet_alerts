@@ -64,45 +64,41 @@ public class PersonInfoController {
    */
   @PutMapping("/person/{id}")
   public Person updatePerson(@PathVariable("id") final Long id, @RequestBody Person person) {
-    try {
-      Person persToUpdate = personService.getPerson(id);
-      logger.info(
-          "response following the Put on the endpoint 'person' with the given id : {"
-              + id.toString() + "}");
-      if (persToUpdate != null) {
-        String address = person.getAddress();
-        if (address != null) {
-          persToUpdate.setAddress(address);
-        }
-        String city = person.getCity();
-        if (city != null) {
-          persToUpdate.setCity(city);
-          ;
-        }
-        String zip = person.getZip();
-        if (zip != null) {
-          persToUpdate.setZip(zip);
-        }
-        String phone = person.getPhone();
-        if (phone != null) {
-          persToUpdate.setPhone(phone);
-          ;
-        }
-        String email = person.getEmail();
-        if (email != null) {
-          persToUpdate.setEmail(email);
-          ;
-        }
-        personService.savePerson(persToUpdate);
-        return persToUpdate;
-      } else {
-        return null;
+    Person persToUpdate = personService.getPerson(id);
+    logger.info(
+        "response following the Put on the endpoint 'person' with the given id : {"
+            + id.toString() + "}");
+    if (persToUpdate != null) {
+      String address = person.getAddress();
+      if (address != null) {
+        persToUpdate.setAddress(address);
       }
-    } catch (Exception exception) {
-      logger.error("Error in the PersonInfoController in the method updatePerson :"
-          + exception.getMessage());
+      String city = person.getCity();
+      if (city != null) {
+        persToUpdate.setCity(city);
+        ;
+      }
+      String zip = person.getZip();
+      if (zip != null) {
+        persToUpdate.setZip(zip);
+      }
+      String phone = person.getPhone();
+      if (phone != null) {
+        persToUpdate.setPhone(phone);
+        ;
+      }
+      String email = person.getEmail();
+      if (email != null) {
+        persToUpdate.setEmail(email);
+        ;
+      }
+      personService.savePerson(persToUpdate);
+      return persToUpdate;
+    } else {
+      logger.error("The person with the id " + id + " doesn't exist");
       return null;
     }
+
   }
 
 
@@ -114,17 +110,17 @@ public class PersonInfoController {
    */
   @PostMapping("/person")
   public Person createPerson(@RequestBody Person person) {
+    Person newPerson = null;
     try {
-      Person newPerson = personService.savePerson(person);
+      newPerson = personService.savePerson(person);
       logger.info(
           "response following the Post on the endpoint 'person' with the given person : {"
               + person.toString() + "}");
-      return newPerson;
     } catch (Exception exception) {
       logger.error("Error in the PersonInfoController in the method createPerson :"
           + exception.getMessage());
-      return null;
     }
+    return newPerson;
   }
 
 
@@ -138,11 +134,12 @@ public class PersonInfoController {
   @GetMapping("/personInfo")
   public List<PersonInfoDTO> getPersonInfo(@RequestParam String firstName,
       @RequestParam String lastName) {
+    List<PersonInfoDTO> personInfoByaddressList = null;
     try {
       logger.info(
           "Get request of the endpoint 'personInfo' with the first name : {" + firstName + "} and the last name : "
               + lastName);
-      List<PersonInfoDTO> personInfoByaddressList = communityService
+      personInfoByaddressList = communityService
           .getPersonListByFirstNameAndLastNameThenOnlyLastName(
               firstName,
               lastName);
@@ -150,12 +147,11 @@ public class PersonInfoController {
           "response following the Get on the endpoint 'personInfo' with the given address :{" + firstName
               + "} and the last name :{"
               + lastName + "}");
-      return personInfoByaddressList;
     } catch (Exception exception) {
       logger.error("Error in the PersonInfoController in the method getPersonInfo :"
           + exception.getMessage());
-      return null;
     }
+    return personInfoByaddressList;
   }
 
 
@@ -167,17 +163,17 @@ public class PersonInfoController {
    */
   @GetMapping("/communityEmail")
   public List<String> getCommunityEmail(@RequestParam String city) {
+    List<String> emailList = null;
     try {
       logger.info(
           "Get request of the endpoint 'communityEmail' with the city : {" + city + "}");
-      List<String> emailList = emailService.getPersonEmailFromCity(city);
+      emailList = emailService.getPersonEmailFromCity(city);
       logger.info("response following the Get on the endpoint 'communityEmail' with the given city : {" + city + "}");
-      return emailList;
     } catch (Exception exception) {
       logger.error("Error in the PersonInfoController in the method getCommunityEmail :"
           + exception.getMessage());
-      return null;
     }
+    return emailList;
   }
 
 }

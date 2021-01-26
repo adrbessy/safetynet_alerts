@@ -1,8 +1,10 @@
 package com.safetynet.alerts_api.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class ChildAlertDTO {
 
   private String lastName;
