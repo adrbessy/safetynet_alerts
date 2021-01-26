@@ -2,7 +2,7 @@ package com.safetynet.alerts_api.controller;
 
 import com.safetynet.alerts_api.model.FireDTOByAddress;
 import com.safetynet.alerts_api.model.FireStationCommunity;
-import com.safetynet.alerts_api.service.person.PersonService;
+import com.safetynet.alerts_api.service.community.CommunityService;
 import com.safetynet.alerts_api.service.phone.PhoneService;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -18,7 +18,7 @@ public class FireStationCommunityController {
   private static final Logger logger = LogManager.getLogger(FireStationCommunityController.class);
 
   @Autowired
-  private PersonService personService;
+  private CommunityService communityService;
 
   @Autowired
   private PhoneService phoneService;
@@ -36,7 +36,7 @@ public class FireStationCommunityController {
     try {
       logger.info(
           "Get request of the endpoint 'fireStation' with the stationNumber : {" + stationNumber.toString() + "}");
-      FireStationCommunity personNumberInfo = personService
+      FireStationCommunity personNumberInfo = communityService
           .getPersonNumberInfoListFromStationNumber(stationNumber);
       logger.info(
           "response following the Get on the endpoint 'firestation' with the given stationNumber : {"
@@ -86,7 +86,7 @@ public class FireStationCommunityController {
     try {
       logger.info(
           "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + stations.toString() + "}");
-      List<FireDTOByAddress> personInfoByaddressList = personService.getPersonInfoByAddressList(stations);
+      List<FireDTOByAddress> personInfoByaddressList = communityService.getPersonInfoByAddressList(stations);
       logger.info(
           "response following the Get on the endpoint 'flood' with the given stationNumber List : {"
               + stations.toString() + "}");

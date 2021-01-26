@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.model.Person;
+import com.safetynet.alerts_api.service.community.CommunityService;
 import com.safetynet.alerts_api.service.fireStation.FireStationServiceImpl;
 import com.safetynet.alerts_api.service.medicalRecord.MedicalRecordServiceImpl;
-import com.safetynet.alerts_api.service.person.PersonServiceImpl;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,7 +35,7 @@ public class JsonReaderRepository {
   private static final Logger logger = LogManager.getLogger(JsonReaderRepository.class);
 
   @Autowired
-  private PersonServiceImpl personService;
+  private CommunityService communityService;
 
   @Autowired
   private FireStationServiceImpl fireStationService;
@@ -54,7 +54,7 @@ public class JsonReaderRepository {
       JSONObject jsonObject = (JSONObject) jsonParser.parse(inputStreamReader);
 
       List<Person> lstPerson = readListPersonFromJsonObject(jsonObject);
-      personService.saveAllPersons(lstPerson);
+      communityService.saveAllPersons(lstPerson);
 
       List<FireStation> lstFireStation = readListFireStationFromJsonObject(jsonObject);
       fireStationService.saveAllFireStations(lstFireStation);

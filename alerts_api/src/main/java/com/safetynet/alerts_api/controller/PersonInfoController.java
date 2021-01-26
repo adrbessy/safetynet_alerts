@@ -2,6 +2,7 @@ package com.safetynet.alerts_api.controller;
 
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.model.PersonInfoDTO;
+import com.safetynet.alerts_api.service.community.CommunityService;
 import com.safetynet.alerts_api.service.email.EmailService;
 import com.safetynet.alerts_api.service.person.PersonService;
 import java.util.List;
@@ -25,6 +26,9 @@ public class PersonInfoController {
 
   @Autowired
   private PersonService personService;
+
+  @Autowired
+  private CommunityService communityService;
 
   @Autowired
   private EmailService emailService;
@@ -138,9 +142,10 @@ public class PersonInfoController {
       logger.info(
           "Get request of the endpoint 'personInfo' with the first name : {" + firstName + "} and the last name : "
               + lastName);
-      List<PersonInfoDTO> personInfoByaddressList = personService.getPersonListByFirstNameAndLastNameThenOnlyLastName(
-          firstName,
-          lastName);
+      List<PersonInfoDTO> personInfoByaddressList = communityService
+          .getPersonListByFirstNameAndLastNameThenOnlyLastName(
+              firstName,
+              lastName);
       logger.info(
           "response following the Get on the endpoint 'personInfo' with the given address :{" + firstName
               + "} and the last name :{"

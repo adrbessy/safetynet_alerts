@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.JsonReaderRepository;
+import com.safetynet.alerts_api.service.community.CommunityService;
 import com.safetynet.alerts_api.service.email.EmailService;
 import com.safetynet.alerts_api.service.person.PersonService;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,9 @@ class PersonInfoControllerTest {
 
   @MockBean
   private PersonService personService;
+
+  @MockBean
+  private CommunityService communityService;
 
   @MockBean
   private EmailService emailService;

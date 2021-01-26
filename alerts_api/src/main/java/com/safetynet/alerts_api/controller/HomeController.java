@@ -2,7 +2,7 @@ package com.safetynet.alerts_api.controller;
 
 import com.safetynet.alerts_api.model.Fire;
 import com.safetynet.alerts_api.model.Home;
-import com.safetynet.alerts_api.service.person.PersonService;
+import com.safetynet.alerts_api.service.community.CommunityService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ public class HomeController {
   private static final Logger logger = LogManager.getLogger(HomeController.class);
 
   @Autowired
-  private PersonService personService;
+  private CommunityService communityService;
 
   /**
    * Read - Get a person list living to a particular address, with a the number of
@@ -30,7 +30,7 @@ public class HomeController {
     try {
       logger.info(
           "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
-      Fire fire = personService.getPersonListWithStationNumber(address);
+      Fire fire = communityService.getPersonListWithStationNumber(address);
       logger.info(
           "response following the Get on the endpoint 'fire' with the given address : {"
               + address + "}");
@@ -55,7 +55,7 @@ public class HomeController {
     try {
       logger.info(
           "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
-      Home home = personService.getChildrenListAndAdultListFromAddress(address);
+      Home home = communityService.getChildrenListAndAdultListFromAddress(address);
       logger.info("response following the Get on the endpoint 'childAlert' with the given address : {" + address + "}");
       return home;
     } catch (Exception exception) {
