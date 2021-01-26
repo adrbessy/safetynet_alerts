@@ -238,13 +238,7 @@ public class PersonServiceImpl implements PersonService {
         addressList.forEach(addressIterator -> {
           List<Person> personList = getPersonListByAddress(addressIterator);
           List<FireDTO> fireDTOList = mapService.convertToFireDTOList(personList);
-          /*
-           * List<FireDTO> fireDTOList = new ArrayList<>();
-           * personList.forEach(personIterator -> { FireDTO FireDTO = new
-           * FireDTO(personIterator.getLastName(), personIterator.getAge(),
-           * personIterator.getPhone(), personIterator.getMedications(),
-           * personIterator.getAllergies()); FireDTOList.add(FireDTO); });
-           */
+
           FireDTOByAddress personInfoByAddress = new FireDTOByAddress(addressIterator,
               fireDTOList);
           personInfoByAddressList.add(personInfoByAddress);

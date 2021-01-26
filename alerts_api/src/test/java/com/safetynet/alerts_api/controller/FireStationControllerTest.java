@@ -1,6 +1,7 @@
 package com.safetynet.alerts_api.controller;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.repository.JsonReaderRepository;
@@ -57,6 +58,12 @@ public class FireStationControllerTest {
         .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
         .content(new ObjectMapper().writeValueAsString(fireStation));
     this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
+  }
+
+  @Test
+  public void testDeleteFireStation() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.delete("/firestation/4"))
+        .andExpect(status().isOk());
   }
 
 }

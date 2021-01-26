@@ -25,6 +25,7 @@ import com.safetynet.alerts_api.service.person.PersonService;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -304,6 +305,47 @@ class PersonServiceTest {
         .thenReturn(childAlertDTOList);
 
     Home home = new Home(childAlertDTOList, childAlertDTOList2);
+
+    Home home2 = personService.getChildrenListAndAdultListFromAddress(address);
+    assertThat(home2).isEqualTo(home);
+  }
+
+
+  /**
+   * test to get a children list and an adult list from an address if children
+   * List is empty.
+   * 
+   */
+  @Test
+  public void testGetChildrenListAndAdultListFromAddressIfChildrenListIsEmpty() {
+    Person person = new Person();
+    person.setId((long) 5);
+    person.setFirstName("Adrien");
+    person.setLastName("Bessy");
+    person.setEmail("ballapolorra-7977@yopmail.com");
+    person.setAddress("82 Alexander Road");
+    List<Person> personList = new ArrayList<>();
+    personList.add(person);
+    String address = "1 rue antonio vivaldi";
+
+    when(personRepositoryMock.findDistinctByAddress(address)).thenReturn(personList);
+
+    MedicalRecord medicalRecord1 = new MedicalRecord();
+    medicalRecord1.setBirthdate("16/06/1988");
+    List<MedicalRecord> medicalRecordList = new ArrayList<>();
+    medicalRecordList.add(medicalRecord1);
+
+    when(medicalRecordRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy"))
+        .thenReturn(medicalRecordList);
+
+    List<ChildAlertDTO> childAlertDTOList = new ArrayList<>();
+
+    when(mapServiceMock.convertToChildAlertDTOList(personList))
+        .thenReturn(childAlertDTOList);
+    when(mapServiceMock.convertToChildAlertDTOList(personList))
+        .thenReturn(childAlertDTOList);
+
+    Home home = new Home(new ArrayList<>(), new ArrayList<>());
 
     Home home2 = personService.getChildrenListAndAdultListFromAddress(address);
     assertThat(home2).isEqualTo(home);
@@ -595,6 +637,48 @@ class PersonServiceTest {
     List<FireDTOByAddress> personInfoByAddressList2 = personService.getPersonInfoByAddressList(stationNumberList);
 
     assertThat(personInfoByAddressList2).isEqualTo(personInfoByAddressList);
+  }
+
+
+  /**
+   * test to get a person.
+   * 
+   */
+  @Test
+  public void testGetPerson() {
+    long id = 54;
+    Person person = new Person();
+    person.setId(id);
+    Optional<Person> optionalPerson = Optional.of(person);
+    when(personRepositoryMock.findById(id)).thenReturn(optionalPerson);
+    Person person2 = personService.getPerson(id);
+    assertThat(person2).isEqualTo(person);
+  }
+
+
+  /**
+   * test to save a person.
+   * 
+   */
+  @Test
+  public void testSavePerson() {
+    Person person = new Person();
+    when(personRepositoryMock.save(person)).thenReturn(person);
+    Person person2 = personService.savePerson(person);
+    assertThat(person2).isEqualTo(person);
+  }
+
+
+  /**
+   * test to save a person.
+   * 
+   */
+  @Test
+  public void testDeletePerson() {
+    doNothing().when(personRepositoryMock).deletePersonByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy");
+    personService.deletePerson("Adrien", "Bessy");
+    verify(personRepositoryMock,
+        Mockito.times(1)).deletePersonByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy");
   }
 
 }

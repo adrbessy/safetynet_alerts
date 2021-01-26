@@ -5,11 +5,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 @SpringBootTest()
-public class FireStationCommunityDTOTest {
+public class FireDTOTest {
 
   @Test
-  public void simpleEqualsFireStationCommunityDTO() {
-    EqualsVerifier.simple().forClass(FireStationCommunityDTO.class).verify();
+  public void simpleEqualsFireDTO() {
+    EqualsVerifier.simple().forClass(FireDTO.class).verify();
   }
 
 }
