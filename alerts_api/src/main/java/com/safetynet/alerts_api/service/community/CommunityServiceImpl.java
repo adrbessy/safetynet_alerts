@@ -254,7 +254,6 @@ public class CommunityServiceImpl implements CommunityService {
       });
 
       List<PersonInfoDTO> PersonInfoDTOList = mapService.convertToPersonInfoDTOList(personInfoByFirstNameAndLastName);
-
       return PersonInfoDTOList;
     } catch (Exception exception) {
       logger.error("Error when we try to get PersonList By FirstName And LastName Then Only LastName :"

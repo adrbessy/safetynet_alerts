@@ -15,4 +15,10 @@ public interface FireStationRepository extends CrudRepository<FireStation, Long>
 
   Optional<FireStation> findByAddress(String address);
 
+  List<FireStation> findDistinctByAddressIgnoreCase(String address);
+
+  void deleteByAddress(String address);
+
+  boolean existsByStationIgnoreCase(Integer stationNumber);
+
 }

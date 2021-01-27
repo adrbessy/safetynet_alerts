@@ -1,5 +1,6 @@
 package com.safetynet.alerts_api.controller;
 
+import com.safetynet.alerts_api.exceptions.NonexistentException;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.model.PersonInfoDTO;
 import com.safetynet.alerts_api.service.community.CommunityService;
@@ -33,74 +34,6 @@ public class PersonInfoController {
   @Autowired
   private EmailService emailService;
 
-  /**
-   * Delete - Delete an person
-   * 
-   * @param id - The id of the person to delete
-   */
-  @Transactional
-  @DeleteMapping("/person")
-  public void deletePerson(@RequestParam String firstName, @RequestParam String lastName) {
-    try {
-      logger.info("Delete request with the endpoint 'person' received with parameters firstName :" + firstName
-          + " and lastName : " + lastName);
-      personService.deletePerson(firstName, lastName);
-      logger.info(
-          "response following the Delete on the endpoint 'person' with the given firstName : {"
-              + firstName + "and the given lastName : {" + lastName + "}");
-    } catch (Exception exception) {
-      logger.error("Error in the PersonInfoController in the method deletePerson :"
-          + exception.getMessage());
-    }
-  }
-
-
-  /**
-   * Update - Update an existing person
-   * 
-   * @param id     - The id of the eperson to update
-   * @param person - The person object updated
-   * @return
-   */
-  @PutMapping("/person/{id}")
-  public Person updatePerson(@PathVariable("id") final Long id, @RequestBody Person person) {
-    Person persToUpdate = personService.getPerson(id);
-    logger.info(
-        "response following the Put on the endpoint 'person' with the given id : {"
-            + id.toString() + "}");
-    if (persToUpdate != null) {
-      String address = person.getAddress();
-      if (address != null) {
-        persToUpdate.setAddress(address);
-      }
-      String city = person.getCity();
-      if (city != null) {
-        persToUpdate.setCity(city);
-        ;
-      }
-      String zip = person.getZip();
-      if (zip != null) {
-        persToUpdate.setZip(zip);
-      }
-      String phone = person.getPhone();
-      if (phone != null) {
-        persToUpdate.setPhone(phone);
-        ;
-      }
-      String email = person.getEmail();
-      if (email != null) {
-        persToUpdate.setEmail(email);
-        ;
-      }
-      personService.savePerson(persToUpdate);
-      return persToUpdate;
-    } else {
-      logger.error("The person with the id " + id + " doesn't exist");
-      return null;
-    }
-
-  }
-
 
   /**
    * Create - Add a new person
@@ -121,6 +54,91 @@ public class PersonInfoController {
           + exception.getMessage());
     }
     return newPerson;
+  }
+
+
+  /**
+   * Delete - Delete an person
+   * 
+   * @param id - The id of the person to delete
+   */
+  @Transactional
+  @DeleteMapping("/person")
+  public void deletePerson(@RequestParam String firstName, @RequestParam String lastName) {
+    boolean existingPerson = false;
+    try {
+      logger.info("Delete request with the endpoint 'person' received with parameters firstName :" + firstName
+          + " and lastName : " + lastName);
+      existingPerson = personService.deletePerson(firstName, lastName);
+      logger.info(
+          "response following the Delete on the endpoint 'person' with the given firstName : {"
+              + firstName + "and the given lastName : {" + lastName + "}");
+    } catch (Exception exception) {
+      logger.error("Error in the PersonInfoController in the method deletePerson :"
+          + exception.getMessage());
+    }
+    if (!existingPerson) {
+      throw new NonexistentException(
+          "The person with the first name " + firstName + " and last name " + lastName + " doesn't exist.");
+    }
+  }
+
+
+  /**
+   * Update - Update an existing person
+   * 
+   * @param id     - The id of the eperson to update
+   * @param person - The person object updated
+   * @return
+   */
+  @PutMapping("/person/{id}")
+  public Person updatePerson(@PathVariable("id") final Long id, @RequestBody Person person) {
+    Person persToUpdate = null;
+    try {
+      logger.info(
+          "Put request of the endpoint 'person' with the id : {" + id + "}");
+      persToUpdate = personService.getPerson(id);
+      logger.info(
+          "response following the Put on the endpoint 'person' with the given id : {"
+              + id.toString() + "}");
+    } catch (Exception exception) {
+      logger.error("Error in the PersonInfoController in the method updatePerson :"
+          + exception.getMessage());
+    }
+    if (persToUpdate != null) {
+      try {
+        String address = person.getAddress();
+        if (address != null) {
+          persToUpdate.setAddress(address);
+        }
+        String city = person.getCity();
+        if (city != null) {
+          persToUpdate.setCity(city);
+          ;
+        }
+        String zip = person.getZip();
+        if (zip != null) {
+          persToUpdate.setZip(zip);
+        }
+        String phone = person.getPhone();
+        if (phone != null) {
+          persToUpdate.setPhone(phone);
+          ;
+        }
+        String email = person.getEmail();
+        if (email != null) {
+          persToUpdate.setEmail(email);
+        }
+        personService.savePerson(persToUpdate);
+      } catch (Exception exception) {
+        logger.error("Error in the PersonInfoController in the method updatePerson :"
+            + exception.getMessage());
+      }
+      return persToUpdate;
+    } else {
+      throw new NonexistentException(
+          "The person with the id " + id + " doesn't exist.");
+    }
   }
 
 
@@ -151,7 +169,13 @@ public class PersonInfoController {
       logger.error("Error in the PersonInfoController in the method getPersonInfo :"
           + exception.getMessage());
     }
-    return personInfoByaddressList;
+    if (!personInfoByaddressList.isEmpty()) {
+      return personInfoByaddressList;
+    } else {
+      throw new NonexistentException(
+          "The person with the the first name : " + firstName + " and the last name : " + lastName
+              + " doesn't exist.");
+    }
   }
 
 
@@ -164,16 +188,28 @@ public class PersonInfoController {
   @GetMapping("/communityEmail")
   public List<String> getCommunityEmail(@RequestParam String city) {
     List<String> emailList = null;
+    boolean cityExist = false;
     try {
       logger.info(
           "Get request of the endpoint 'communityEmail' with the city : {" + city + "}");
-      emailList = emailService.getPersonEmailFromCity(city);
-      logger.info("response following the Get on the endpoint 'communityEmail' with the given city : {" + city + "}");
+      cityExist = personService.cityExist(city);
     } catch (Exception exception) {
       logger.error("Error in the PersonInfoController in the method getCommunityEmail :"
           + exception.getMessage());
     }
-    return emailList;
+    if (cityExist) {
+      try {
+        emailList = emailService.getPersonEmailFromCity(city);
+        logger.info("response following the Get on the endpoint 'communityEmail' with the given city : {" + city + "}");
+      } catch (Exception exception) {
+        logger.error("Error in the PersonInfoController in the method getCommunityEmail :"
+            + exception.getMessage());
+      }
+      return emailList;
+    } else {
+      throw new NonexistentException(
+          "The city : " + city + " doesn't exist.");
+    }
   }
 
 }

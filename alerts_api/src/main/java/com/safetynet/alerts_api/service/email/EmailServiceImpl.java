@@ -28,6 +28,7 @@ public class EmailServiceImpl implements EmailService {
     return emailListNoDuplicates;
   }
 
+
   @Override
   public List<String> getPersonEmailFromCity(String city) {
     List<Person> filteredPersonList = personRepository.findDistinctByCityAllIgnoreCase(city);

@@ -20,8 +20,21 @@ public class FireStationServiceImpl implements FireStationService {
 
 
   @Override
-  public void deleteFireStation(final Long id) {
-    fireStationRepository.deleteById(id);
+  public boolean fireStationNumberExist(Integer stationNumber) {
+    boolean existingFireStationNumber = fireStationRepository.existsByStationIgnoreCase(stationNumber);
+    return existingFireStationNumber;
+  }
+
+
+  @Override
+  public boolean deleteFireStation(String address) {
+    List<FireStation> existingFireStationList = fireStationRepository.findDistinctByAddressIgnoreCase(address);
+    if (existingFireStationList.isEmpty()) {
+      return false;
+    } else {
+      fireStationRepository.deleteByAddress(address);
+      return true;
+    }
   }
 
 

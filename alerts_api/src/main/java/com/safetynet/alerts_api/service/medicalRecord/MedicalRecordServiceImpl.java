@@ -20,11 +20,14 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
 
   @Override
-  public void deleteMedicalRecord(final String firstname, final String lastname) {
-    try {
+  public boolean deleteMedicalRecord(final String firstname, final String lastname) {
+    List<MedicalRecord> existingMedicalRecordList = medicalRecordRepository
+        .findByFirstNameAndLastNameAllIgnoreCase(firstname, lastname);
+    if (existingMedicalRecordList.isEmpty()) {
+      return false;
+    } else {
       medicalRecordRepository.deletePersonByFirstNameAndLastNameAllIgnoreCase(firstname, lastname);
-    } catch (Exception exception) {
-      logger.error("Error when we try to delete a medical record:" + exception.getMessage());
+      return true;
     }
   }
 

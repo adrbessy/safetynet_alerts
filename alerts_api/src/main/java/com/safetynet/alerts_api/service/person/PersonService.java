@@ -9,8 +9,9 @@ public interface PersonService {
    * Delete a person.
    * 
    * @param a first name and a last name
+   * @return boolean
    */
-  public void deletePerson(String firstName, String lastName);
+  public boolean deletePerson(String firstName, String lastName);
 
 
   /**
@@ -31,4 +32,13 @@ public interface PersonService {
    * 
    */
   public Person savePerson(Person person);
+
+
+  /**
+   * Check if the city exists in the database.
+   * 
+   * @param a String city
+   * @return - A boolean
+   */
+  public boolean cityExist(String city);
 }

@@ -9,9 +9,10 @@ public interface MedicalRecordService {
    * Delete a MedicalRecord
    * 
    * @param first name and last name
+   * @return boolean
    * 
    */
-  public void deleteMedicalRecord(final String firstname, final String lastname);
+  public boolean deleteMedicalRecord(final String firstname, final String lastname);
 
 
   /**

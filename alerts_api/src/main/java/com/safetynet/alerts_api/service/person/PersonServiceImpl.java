@@ -2,6 +2,7 @@ package com.safetynet.alerts_api.service.person;
 
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.PersonRepository;
+import java.util.List;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,11 +19,21 @@ public class PersonServiceImpl implements PersonService {
 
 
   @Override
-  public void deletePerson(String firstName, String lastName) {
-    try {
+  public boolean cityExist(String city) {
+    boolean existingCity = personRepository.existsByCityIgnoreCase(city);
+    return existingCity;
+  }
+
+
+  @Override
+  public boolean deletePerson(String firstName, String lastName) {
+    List<Person> existingPersonList = personRepository
+        .findByFirstNameAndLastNameAllIgnoreCase(firstName, lastName);
+    if (existingPersonList.isEmpty()) {
+      return false;
+    } else {
       personRepository.deletePersonByFirstNameAndLastNameAllIgnoreCase(firstName, lastName);
-    } catch (Exception exception) {
-      logger.error("Error when we try to delete a person :" + exception.getMessage());
+      return true;
     }
   }
 

@@ -1,10 +1,12 @@
 package com.safetynet.alerts_api.controller;
 
+import com.safetynet.alerts_api.exceptions.NonexistentException;
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.service.fireStation.FireStationService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,19 +28,19 @@ public class FireStationController {
    * 
    * @param id - The id of the fire station to delete
    */
-  @DeleteMapping("/firestation/{id}")
-  public void deleteFireStation(@PathVariable("id") final Long id) {
-    try {
-      logger.info(
-          "Delete request of the endpoint 'firestation' with the firestation Id : {" + id.toString() + "}");
-      fireStationService.deleteFireStation(id);
-      logger.info(
-          "response following the Delete on the endpoint 'firestation' with the given id : {"
-              + id.toString() + "}");
-    } catch (Exception exception) {
-      logger.error("Error in the fireStationController in the method deleteFireStation :"
-          + exception.getMessage());
+  @Transactional
+  @DeleteMapping("/firestation/{address}")
+  public void deleteFireStation(@PathVariable("address") final String address) {
+    logger.info(
+        "Delete request of the endpoint 'firestation' with the firestation address : {" + address + "}");
+    boolean existingFireStation = fireStationService.deleteFireStation(address);
+    if (!existingFireStation) {
+      throw new NonexistentException(
+          "The firestation with the address " + address + " doesn't exist.");
     }
+    logger.info(
+        "response following the Delete on the endpoint 'firestation' with the given address : {"
+            + address + "}");
   }
 
 
@@ -51,9 +53,10 @@ public class FireStationController {
   @PutMapping("/firestation/{address}")
   public FireStation updateFireStation(@PathVariable("address") final String address,
       @RequestBody FireStation fireStation) {
+    FireStation fireStationToUpdate = null;
     logger.info(
         "Put request of the endpoint 'firestation' with the firestation address : {" + address + "}");
-    FireStation fireStationToUpdate = fireStationService.getFireStation(address);
+    fireStationToUpdate = fireStationService.getFireStation(address);
     logger.info(
         "response following the Put on the endpoint 'firestation' with the given address : {"
             + address + "}");
@@ -65,14 +68,14 @@ public class FireStationController {
       fireStationService.saveFireStation(fireStationToUpdate);
       return fireStationToUpdate;
     } else {
-      logger.error("The firestation with the address " + address + " doesn't exist");
-      return null;
+      throw new NonexistentException(
+          "The firestation with the address " + address + " doesn't exist.");
     }
   }
 
 
   /**
-   * Create - Add a new fire station
+   * Create a new fire station
    * 
    * @param fire station An object fire station
    * @return The fire station object saved

@@ -1,8 +1,10 @@
 package com.safetynet.alerts_api.controller;
 
+import com.safetynet.alerts_api.exceptions.NonexistentException;
 import com.safetynet.alerts_api.model.FireDTOByAddress;
 import com.safetynet.alerts_api.model.FireStationCommunity;
 import com.safetynet.alerts_api.service.community.CommunityService;
+import com.safetynet.alerts_api.service.fireStation.FireStationService;
 import com.safetynet.alerts_api.service.phone.PhoneService;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -23,8 +25,11 @@ public class FireStationCommunityController {
   @Autowired
   private PhoneService phoneService;
 
+  @Autowired
+  private FireStationService fireStationService;
+
   /**
-   * Read - Get a person list covered by a given fire station with the number of
+   * Get a person list covered by a given fire station with the number of
    * occurrences of children and adults.
    * 
    * @param a fire station number
@@ -33,19 +38,31 @@ public class FireStationCommunityController {
    */
   @GetMapping("/firestation")
   public FireStationCommunity getFireStationCommunity(@RequestParam Integer stationNumber) {
+    boolean existingFireStationNumber = false;
+    FireStationCommunity personNumberInfo = null;
     try {
       logger.info(
           "Get request of the endpoint 'fireStation' with the stationNumber : {" + stationNumber.toString() + "}");
-      FireStationCommunity personNumberInfo = communityService
-          .getPersonNumberInfoListFromStationNumber(stationNumber);
-      logger.info(
-          "response following the Get on the endpoint 'firestation' with the given stationNumber : {"
-              + stationNumber.toString() + "}");
-      return personNumberInfo;
+      existingFireStationNumber = fireStationService.fireStationNumberExist(stationNumber);
     } catch (Exception exception) {
-      logger.error("Error in the fireStationCommunityController in the method getFireStationCommunity :"
+      logger.error("Error in the FireStationCommunityController in the method getFireStationCommunity :"
           + exception.getMessage());
-      return null;
+    }
+    if (existingFireStationNumber) {
+      try {
+        personNumberInfo = communityService
+            .getPersonNumberInfoListFromStationNumber(stationNumber);
+        logger.info(
+            "response following the Get on the endpoint 'firestation' with the given stationNumber : {"
+                + stationNumber.toString() + "}");
+      } catch (Exception exception) {
+        logger.error("Error in the FireStationCommunityController in the method getFireStationCommunity :"
+            + exception.getMessage());
+      }
+      return personNumberInfo;
+    } else {
+      throw new NonexistentException(
+          "The station number : " + stationNumber + " doesn't exist.");
     }
   }
 

@@ -1,5 +1,6 @@
 package com.safetynet.alerts_api.controller;
 
+import com.safetynet.alerts_api.exceptions.NonexistentException;
 import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.service.medicalRecord.MedicalRecordService;
 import java.util.List;
@@ -27,17 +28,16 @@ public class MedicalRecordController {
   @Transactional
   @DeleteMapping("/medicalRecord")
   public void deleteMedicalRecord(@RequestParam String firstName, @RequestParam String lastName) {
-    try {
-      logger.info("Delete request with the endpoint 'medicalRecord' received with parameters firstName :" + firstName
-          + " and the given lastName : " + lastName);
-      medicalRecordService.deleteMedicalRecord(firstName, lastName);
-      logger.info(
-          "response following the Delete on the endpoint 'medicalRecord' with the given firstName : {"
-              + firstName + "and the given lastName : {" + lastName + "}");
-    } catch (Exception exception) {
-      logger.error("Error in the MedicalRecordController in the method deleteMedicalRecord :"
-          + exception.getMessage());
+    logger.info("Delete request with the endpoint 'medicalRecord' received with parameters firstName :" + firstName
+        + " and the given lastName : " + lastName);
+    boolean existingMedicalRecord = medicalRecordService.deleteMedicalRecord(firstName, lastName);
+    if (!existingMedicalRecord) {
+      throw new NonexistentException(
+          "The medicalRecord with the first name " + firstName + " and last name " + lastName + " doesn't exist.");
     }
+    logger.info(
+        "response following the Delete on the endpoint 'medicalRecord' with the given firstName : {"
+            + firstName + "and the given lastName : {" + lastName + "}");
   }
 
 
@@ -70,7 +70,7 @@ public class MedicalRecordController {
    * 
    * @param id     - The id of the medical record to update
    * @param person - The medical record object updated
-   * @return
+   * @return MedicalRecord updated
    */
   @PutMapping("/medicalRecord/{id}")
   public MedicalRecord updateMedicalRecord(@PathVariable("id") final Long id,
@@ -97,8 +97,8 @@ public class MedicalRecordController {
       medicalRecordService.saveMedicalRecord(medicalRecordToUpdate);
       return medicalRecordToUpdate;
     } else {
-      logger.error("The medicalRecord with the id " + id + " doesn't exist");
-      return null;
+      throw new NonexistentException(
+          "The medical record with the id " + id.toString() + " doesn't exist.");
     }
   }
 

@@ -10,9 +10,9 @@ public interface FireStationService {
    * Delete a FireStation
    * 
    * @param FireStation to delete
-   * 
+   * @return boolean
    */
-  public void deleteFireStation(final Long id);
+  public boolean deleteFireStation(String address);
 
 
   /**
@@ -50,4 +50,13 @@ public interface FireStationService {
    * 
    */
   public FireStation saveFireStation(FireStation fireStation);
+
+
+  /**
+   * Check if the fire station number exists in the database.
+   * 
+   * @param a Integer firestation number
+   * @return - A boolean
+   */
+  public boolean fireStationNumberExist(Integer stationNumber);
 }

@@ -26,4 +26,8 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
 
   void deleteByFirstNameAndLastNameAllIgnoreCase(String firstName, String lastName);
 
+  boolean existsByCity(String city);
+
+  boolean existsByCityIgnoreCase(String city);
+
 }

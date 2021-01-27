@@ -13,8 +13,9 @@ public interface EmailService {
    */
   public List<String> getPersonEmailFromCity(String city);
 
+
   /**
-   * Read - Get the List of email of persons from a Person List.
+   * Get the List of email of persons from a Person List.
    * 
    * @param a Person List
    * @return - A List of email
