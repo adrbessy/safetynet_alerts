@@ -20,6 +20,13 @@ public class FireStationServiceImpl implements FireStationService {
 
 
   @Override
+  public boolean fireStationAddressExist(String address) {
+    boolean existingFireStationAddress = fireStationRepository.existsByAddress(address);
+    return existingFireStationAddress;
+  }
+
+
+  @Override
   public boolean fireStationNumberExist(Integer stationNumber) {
     boolean existingFireStationNumber = fireStationRepository.existsByStation(stationNumber);
     return existingFireStationNumber;

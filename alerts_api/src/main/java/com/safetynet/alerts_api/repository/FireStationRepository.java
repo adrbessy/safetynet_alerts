@@ -21,4 +21,6 @@ public interface FireStationRepository extends CrudRepository<FireStation, Long>
 
   boolean existsByStation(Integer stationNumber);
 
+  boolean existsByAddress(String address);
+
 }

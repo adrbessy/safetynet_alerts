@@ -31,9 +31,15 @@ public class FireStationController {
   @Transactional
   @DeleteMapping("/firestation/{address}")
   public void deleteFireStation(@PathVariable("address") final String address) {
-    logger.info(
-        "Delete request of the endpoint 'firestation' with the firestation address : {" + address + "}");
-    boolean existingFireStation = fireStationService.deleteFireStation(address);
+    boolean existingFireStation = false;
+    try {
+      logger.info(
+          "Delete request of the endpoint 'firestation' with the firestation address : {" + address + "}");
+      existingFireStation = fireStationService.deleteFireStation(address);
+    } catch (Exception exception) {
+      logger.error("Error in the Controller in the method deleteFireStation :"
+          + exception.getMessage());
+    }
     if (!existingFireStation) {
       throw new NonexistentException(
           "The firestation with the address " + address + " doesn't exist.");
@@ -54,22 +60,36 @@ public class FireStationController {
   public FireStation updateFireStation(@PathVariable("address") final String address,
       @RequestBody FireStation fireStation) {
     FireStation fireStationToUpdate = null;
-    logger.info(
-        "Put request of the endpoint 'firestation' with the firestation address : {" + address + "}");
-    fireStationToUpdate = fireStationService.getFireStation(address);
-    logger.info(
-        "response following the Put on the endpoint 'firestation' with the given address : {"
-            + address + "}");
-    if (fireStationToUpdate != null) {
-      Integer station = fireStation.getStation();
-      if (station != null) {
-        fireStationToUpdate.setStation(station);
+    boolean existingFireStationAddress = false;
+    try {
+      logger.info(
+          "Put request of the endpoint 'firestation' with the firestation address : {" + address + "}");
+      existingFireStationAddress = fireStationService.fireStationAddressExist(address);
+    } catch (Exception exception) {
+      logger.error("Error in the FireStationController in the method updateFireStation :"
+          + exception.getMessage());
+    }
+    if (existingFireStationAddress) {
+      try {
+        fireStationToUpdate = fireStationService.getFireStation(address);
+        logger.info(
+            "response following the Put on the endpoint 'firestation' with the given address : {"
+                + address + "}");
+        if (fireStationToUpdate != null) {
+          Integer station = fireStation.getStation();
+          if (station != null) {
+            fireStationToUpdate.setStation(station);
+          }
+          fireStationService.saveFireStation(fireStationToUpdate);
+        }
+      } catch (Exception exception) {
+        logger.error("Error in the FireStationController in the method updateFireStation :"
+            + exception.getMessage());
       }
-      fireStationService.saveFireStation(fireStationToUpdate);
       return fireStationToUpdate;
     } else {
       throw new NonexistentException(
-          "The firestation with the address " + address + " doesn't exist.");
+          "The station number address" + address + " doesn't exist.");
     }
   }
 
