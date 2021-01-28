@@ -23,7 +23,6 @@ public class AddressServiceImpl implements AddressService {
         addAddressToListFromFireStationList(firestationRepository.findDistinctByStation(stationIterator), addressList);
       });
     }
-    ;
     List<String> addressListNoDuplicates = addressList.stream().distinct().collect(Collectors.toList());
     return addressListNoDuplicates;
   }

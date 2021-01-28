@@ -49,7 +49,6 @@ public class PhoneServiceImpl implements PhoneService {
 
     // we retrieve the address list corresponding to the filteredPerson list
     List<String> phoneList = getPhoneListFromPersonList(filteredPersonList);
-
     List<String> phoneListNoDuplicates = phoneList.stream().distinct().collect(Collectors.toList());
 
     return phoneListNoDuplicates;

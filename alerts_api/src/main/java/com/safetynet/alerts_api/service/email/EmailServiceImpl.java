@@ -24,6 +24,7 @@ public class EmailServiceImpl implements EmailService {
         }
       });
     }
+
     List<String> emailListNoDuplicates = emailList.stream().distinct().collect(Collectors.toList());
     return emailListNoDuplicates;
   }

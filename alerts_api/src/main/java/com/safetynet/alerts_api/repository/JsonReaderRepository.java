@@ -84,7 +84,6 @@ public class JsonReaderRepository {
         logger.error("Error while parsing input json file - persons : " + exception.getMessage());
       }
     }
-    ;
     List<Person> personListNoDuplicates = personList.stream().distinct().collect(Collectors.toList());
 
     return personListNoDuplicates;

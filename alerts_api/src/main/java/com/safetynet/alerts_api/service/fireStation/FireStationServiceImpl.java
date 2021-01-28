@@ -21,8 +21,19 @@ public class FireStationServiceImpl implements FireStationService {
 
   @Override
   public boolean fireStationNumberExist(Integer stationNumber) {
-    boolean existingFireStationNumber = fireStationRepository.existsByStationIgnoreCase(stationNumber);
+    boolean existingFireStationNumber = fireStationRepository.existsByStation(stationNumber);
     return existingFireStationNumber;
+  }
+
+  @Override
+  public List<Integer> fireStationNumberListExist(List<Integer> stationNumberList) {
+    List<Integer> FireStationNumberNotFound = new ArrayList<>();
+    stationNumberList.forEach(stationIterator -> {
+      if (!fireStationRepository.existsByStation(stationIterator)) {
+        FireStationNumberNotFound.add(stationIterator);
+      }
+    });
+    return FireStationNumberNotFound;
   }
 
 

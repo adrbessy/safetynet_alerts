@@ -19,6 +19,6 @@ public interface FireStationRepository extends CrudRepository<FireStation, Long>
 
   void deleteByAddress(String address);
 
-  boolean existsByStationIgnoreCase(Integer stationNumber);
+  boolean existsByStation(Integer stationNumber);
 
 }

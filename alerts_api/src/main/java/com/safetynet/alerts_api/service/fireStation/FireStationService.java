@@ -59,4 +59,12 @@ public interface FireStationService {
    * @return - A boolean
    */
   public boolean fireStationNumberExist(Integer stationNumber);
+
+  /**
+   * Check if all the fire station number exists in the database.
+   * 
+   * @param a List<Integer> of firestation number
+   * @return - A boolean
+   */
+  public List<Integer> fireStationNumberListExist(List<Integer> stationNumber);
 }
