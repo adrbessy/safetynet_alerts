@@ -19,6 +19,13 @@ public class PersonServiceImpl implements PersonService {
 
 
   @Override
+  public boolean personAddressExist(String address) {
+    boolean existingPersonAddress = personRepository.existsByAddress(address);
+    return existingPersonAddress;
+  }
+
+
+  @Override
   public boolean cityExist(String city) {
     boolean existingCity = personRepository.existsByCityIgnoreCase(city);
     return existingCity;

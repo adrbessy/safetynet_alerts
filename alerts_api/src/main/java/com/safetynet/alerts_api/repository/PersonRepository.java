@@ -30,4 +30,6 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
 
   boolean existsByCityIgnoreCase(String city);
 
+  boolean existsByAddress(String address);
+
 }

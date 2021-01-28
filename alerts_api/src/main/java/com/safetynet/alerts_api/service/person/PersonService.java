@@ -41,4 +41,12 @@ public interface PersonService {
    * @return - A boolean
    */
   public boolean cityExist(String city);
+
+  /**
+   * Check if the address exists in the database.
+   * 
+   * @param a String address
+   * @return - A boolean
+   */
+  public boolean personAddressExist(String address);
 }

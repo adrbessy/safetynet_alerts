@@ -72,15 +72,15 @@ public class FireStationController {
     if (existingFireStationAddress) {
       try {
         fireStationToUpdate = fireStationService.getFireStation(address);
-        logger.info(
-            "response following the Put on the endpoint 'firestation' with the given address : {"
-                + address + "}");
         if (fireStationToUpdate != null) {
           Integer station = fireStation.getStation();
           if (station != null) {
             fireStationToUpdate.setStation(station);
           }
           fireStationService.saveFireStation(fireStationToUpdate);
+          logger.info(
+              "response following the Put on the endpoint 'firestation' with the given address : {"
+                  + address + "}");
         }
       } catch (Exception exception) {
         logger.error("Error in the FireStationController in the method updateFireStation :"
