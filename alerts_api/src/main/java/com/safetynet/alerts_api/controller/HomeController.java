@@ -38,26 +38,21 @@ public class HomeController {
       logger.info(
           "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
       existingPersonAddress = personService.personAddressExist(address);
-    } catch (Exception exception) {
-      logger.error("Error in the HomeController in the method getFire :"
-          + exception.getMessage());
-    }
-    if (existingPersonAddress) {
-      try {
+      if (existingPersonAddress) {
         fire = communityService.getPersonListWithStationNumber(address);
         logger.info(
             "response following the Get on the endpoint 'fire' with the given address : {"
                 + address + "}");
-      } catch (Exception exception) {
-        logger.error("Error in the HomeController in the method getFire :"
-            + exception.getMessage());
       }
-      return fire;
-    } else {
-      throw new NonexistentException(
-          "The person address" + address + " doesn't exist.");
+    } catch (Exception exception) {
+      logger.error("Error in the HomeController in the method getFire :"
+          + exception.getMessage());
     }
-
+    if (!existingPersonAddress) {
+      throw new NonexistentException(
+          "The person address " + address + " doesn't exist.");
+    }
+    return fire;
   }
 
   /**
@@ -70,17 +65,26 @@ public class HomeController {
    */
   @GetMapping("/childAlert")
   public Home getHome(@RequestParam String address) {
+    boolean existingPersonAddress = false;
+    Home home = null;
     try {
       logger.info(
           "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
-      Home home = communityService.getChildrenListAndAdultListFromAddress(address);
-      logger.info("response following the Get on the endpoint 'childAlert' with the given address : {" + address + "}");
-      return home;
+      existingPersonAddress = personService.personAddressExist(address);
+      if (existingPersonAddress) {
+        home = communityService.getChildrenListAndAdultListFromAddress(address);
+        logger
+            .info("response following the Get on the endpoint 'childAlert' with the given address : {" + address + "}");
+      }
     } catch (Exception exception) {
       logger.error("Error in the HomeController in the method getHome :"
           + exception.getMessage());
-      return null;
     }
+    if (!existingPersonAddress) {
+      throw new NonexistentException(
+          "The person address " + address + " doesn't exist.");
+    }
+    return home;
   }
 
 }

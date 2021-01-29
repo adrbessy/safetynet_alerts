@@ -5,6 +5,16 @@ import java.util.List;
 
 public interface MedicalRecordService {
 
+
+  /**
+   * Check if all the fire station number exists in the database.
+   * 
+   * @param firestation id
+   * @return - A boolean
+   */
+  public boolean medicalRecordIdExist(Long id);
+
+
   /**
    * Delete a MedicalRecord
    * 

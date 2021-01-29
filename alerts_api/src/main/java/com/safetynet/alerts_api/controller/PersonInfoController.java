@@ -64,23 +64,27 @@ public class PersonInfoController {
    */
   @Transactional
   @DeleteMapping("/person")
-  public void deletePerson(@RequestParam String firstName, @RequestParam String lastName) {
-    boolean existingPerson = false;
+  public boolean deletePerson(@RequestParam String firstName, @RequestParam String lastName) {
+    boolean deletedPerson = false;
     try {
       logger.info("Delete request with the endpoint 'person' received with parameters firstName :" + firstName
           + " and lastName : " + lastName);
-      existingPerson = personService.deletePerson(firstName, lastName);
+      System.out.println("existingPersonFirstNameLastName");
+      deletedPerson = personService.deletePerson(firstName, lastName);
       logger.info(
           "response following the Delete on the endpoint 'person' with the given firstName : {"
               + firstName + "and the given lastName : {" + lastName + "}");
-    } catch (Exception exception) {
+    } catch (
+
+    Exception exception) {
       logger.error("Error in the PersonInfoController in the method deletePerson :"
           + exception.getMessage());
     }
-    if (!existingPerson) {
+    if (!deletedPerson) {
       throw new NonexistentException(
           "The person with the first name " + firstName + " and last name " + lastName + " doesn't exist.");
     }
+    return deletedPerson;
   }
 
 
@@ -101,12 +105,7 @@ public class PersonInfoController {
       logger.info(
           "response following the Put on the endpoint 'person' with the given id : {"
               + id.toString() + "}");
-    } catch (Exception exception) {
-      logger.error("Error in the PersonInfoController in the method updatePerson :"
-          + exception.getMessage());
-    }
-    if (persToUpdate != null) {
-      try {
+      if (persToUpdate != null) {
         String address = person.getAddress();
         if (address != null) {
           persToUpdate.setAddress(address);
@@ -130,15 +129,16 @@ public class PersonInfoController {
           persToUpdate.setEmail(email);
         }
         personService.savePerson(persToUpdate);
-      } catch (Exception exception) {
-        logger.error("Error in the PersonInfoController in the method updatePerson :"
-            + exception.getMessage());
       }
-      return persToUpdate;
-    } else {
+    } catch (Exception exception) {
+      logger.error("Error in the PersonInfoController in the method updatePerson :"
+          + exception.getMessage());
+    }
+    if (persToUpdate == null) {
       throw new NonexistentException(
           "The person with the id " + id + " doesn't exist.");
     }
+    return persToUpdate;
   }
 
 
@@ -180,7 +180,7 @@ public class PersonInfoController {
 
 
   /**
-   * Read - Get the list of all email of persons living in a given city.
+   * Get the list of all email of persons living in a given city.
    * 
    * @param a city
    * @return - A List of email
@@ -193,23 +193,19 @@ public class PersonInfoController {
       logger.info(
           "Get request of the endpoint 'communityEmail' with the city : {" + city + "}");
       cityExist = personService.cityExist(city);
+      if (cityExist) {
+        emailList = emailService.getPersonEmailFromCity(city);
+        logger.info("response following the Get on the endpoint 'communityEmail' with the given city : {" + city + "}");
+      }
     } catch (Exception exception) {
       logger.error("Error in the PersonInfoController in the method getCommunityEmail :"
           + exception.getMessage());
     }
-    if (cityExist) {
-      try {
-        emailList = emailService.getPersonEmailFromCity(city);
-        logger.info("response following the Get on the endpoint 'communityEmail' with the given city : {" + city + "}");
-      } catch (Exception exception) {
-        logger.error("Error in the PersonInfoController in the method getCommunityEmail :"
-            + exception.getMessage());
-      }
-      return emailList;
-    } else {
+    if (!cityExist) {
       throw new NonexistentException(
           "The city : " + city + " doesn't exist.");
     }
+    return emailList;
   }
 
 }

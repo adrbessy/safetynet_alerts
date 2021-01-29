@@ -20,6 +20,13 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
 
   @Override
+  public boolean medicalRecordIdExist(Long id) {
+    boolean existingFireStationId = medicalRecordRepository.existsById(id);
+    return existingFireStationId;
+  }
+
+
+  @Override
   public boolean deleteMedicalRecord(final String firstname, final String lastname) {
     List<MedicalRecord> existingMedicalRecordList = medicalRecordRepository
         .findByFirstNameAndLastNameAllIgnoreCase(firstname, lastname);

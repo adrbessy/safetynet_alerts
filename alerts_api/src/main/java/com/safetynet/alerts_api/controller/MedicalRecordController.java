@@ -28,16 +28,22 @@ public class MedicalRecordController {
   @Transactional
   @DeleteMapping("/medicalRecord")
   public void deleteMedicalRecord(@RequestParam String firstName, @RequestParam String lastName) {
-    logger.info("Delete request with the endpoint 'medicalRecord' received with parameters firstName :" + firstName
-        + " and the given lastName : " + lastName);
-    boolean existingMedicalRecord = medicalRecordService.deleteMedicalRecord(firstName, lastName);
+    boolean existingMedicalRecord = false;
+    try {
+      logger.info("Delete request with the endpoint 'medicalRecord' received with parameters firstName :" + firstName
+          + " and the given lastName : " + lastName);
+      existingMedicalRecord = medicalRecordService.deleteMedicalRecord(firstName, lastName);
+      logger.info(
+          "response following the Delete on the endpoint 'medicalRecord' with the given firstName : {"
+              + firstName + "and the given lastName : {" + lastName + "}");
+    } catch (Exception exception) {
+      logger.error("Error in the MedicalRecordController in the method deleteMedicalRecord :"
+          + exception.getMessage());
+    }
     if (!existingMedicalRecord) {
       throw new NonexistentException(
           "The medicalRecord with the first name " + firstName + " and last name " + lastName + " doesn't exist.");
     }
-    logger.info(
-        "response following the Delete on the endpoint 'medicalRecord' with the given firstName : {"
-            + firstName + "and the given lastName : {" + lastName + "}");
   }
 
 
@@ -49,19 +55,19 @@ public class MedicalRecordController {
    */
   @PostMapping("/medicalRecord")
   public MedicalRecord createMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
+    MedicalRecord savedMedicalRecord = null;
     try {
       logger.info("Post request with the endpoint 'medicalRecord' received with the medicalRecord :"
           + medicalRecord.toString());
-      MedicalRecord savedMedicalRecord = medicalRecordService.saveMedicalRecord(medicalRecord);
+      savedMedicalRecord = medicalRecordService.saveMedicalRecord(medicalRecord);
       logger.info(
           "response following the Post on the endpoint 'medicalRecord' with the given fireStation : {"
               + medicalRecord.toString() + "}");
-      return savedMedicalRecord;
     } catch (Exception exception) {
       logger.error("Error in the MedicalRecordController in the method createMedicalRecord :"
           + exception.getMessage());
-      return null;
     }
+    return savedMedicalRecord;
   }
 
 
@@ -75,31 +81,42 @@ public class MedicalRecordController {
   @PutMapping("/medicalRecord/{id}")
   public MedicalRecord updateMedicalRecord(@PathVariable("id") final Long id,
       @RequestBody MedicalRecord medicalRecord) {
-    logger.info("Put request with the endpoint 'medicalRecord' received with the medicalRecord Id:"
-        + id.toString());
-    MedicalRecord medicalRecordToUpdate = medicalRecordService.getMedicalRecord(id);
-    logger.info(
-        "response following the Put on the endpoint 'medicalRecord' with the given id : {"
-            + id.toString() + "}");
-    if (medicalRecordToUpdate != null) {
-      String birthdate = medicalRecord.getBirthdate();
-      if (birthdate != null) {
-        medicalRecordToUpdate.setBirthdate(birthdate);
+    boolean existingMedicalRecordId = false;
+    MedicalRecord medicalRecordToUpdate = null;
+    try {
+      logger.info("Put request with the endpoint 'medicalRecord' received with the medicalRecord Id:"
+          + id.toString());
+      existingMedicalRecordId = medicalRecordService.medicalRecordIdExist(id);
+      if (existingMedicalRecordId) {
+        medicalRecordToUpdate = medicalRecordService.getMedicalRecord(id);
+        logger.info(
+            "response following the Put on the endpoint 'medicalRecord' with the given id : {"
+                + id.toString() + "}");
+        if (medicalRecordToUpdate != null) {
+          String birthdate = medicalRecord.getBirthdate();
+          if (birthdate != null) {
+            medicalRecordToUpdate.setBirthdate(birthdate);
+          }
+          List<String> medications = medicalRecord.getMedications();
+          if (medications != null) {
+            medicalRecordToUpdate.setMedications(medications);
+          }
+          List<String> allergies = medicalRecord.getAllergies();
+          if (allergies != null) {
+            medicalRecordToUpdate.setAllergies(allergies);
+          }
+          medicalRecordService.saveMedicalRecord(medicalRecordToUpdate);
+        }
       }
-      List<String> medications = medicalRecord.getMedications();
-      if (medications != null) {
-        medicalRecordToUpdate.setMedications(medications);
-      }
-      List<String> allergies = medicalRecord.getAllergies();
-      if (allergies != null) {
-        medicalRecordToUpdate.setAllergies(allergies);
-      }
-      medicalRecordService.saveMedicalRecord(medicalRecordToUpdate);
-      return medicalRecordToUpdate;
-    } else {
+    } catch (Exception exception) {
+      logger.error("Error in the MedicalRecordController in the method updateMedicalRecord :"
+          + exception.getMessage());
+    }
+    if (!existingMedicalRecordId) {
       throw new NonexistentException(
           "The medical record with the id " + id.toString() + " doesn't exist.");
     }
+    return medicalRecordToUpdate;
   }
 
 
