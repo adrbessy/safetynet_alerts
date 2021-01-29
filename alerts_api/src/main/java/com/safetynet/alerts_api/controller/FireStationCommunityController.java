@@ -45,26 +45,22 @@ public class FireStationCommunityController {
       logger.info(
           "Get request of the endpoint 'fireStation' with the stationNumber : {" + stationNumber.toString() + "}");
       existingFireStationNumber = fireStationService.fireStationNumberExist(stationNumber);
-    } catch (Exception exception) {
-      logger.error("Error in the FireStationCommunityController in the method getFireStationCommunity :"
-          + exception.getMessage());
-    }
-    if (existingFireStationNumber) {
-      try {
+      if (existingFireStationNumber) {
         personNumberInfo = communityService
             .getPersonNumberInfoListFromStationNumber(stationNumber);
         logger.info(
             "response following the Get on the endpoint 'firestation' with the given stationNumber : {"
                 + stationNumber.toString() + "}");
-      } catch (Exception exception) {
-        logger.error("Error in the FireStationCommunityController in the method getFireStationCommunity :"
-            + exception.getMessage());
       }
-      return personNumberInfo;
-    } else {
+    } catch (Exception exception) {
+      logger.error("Error in the FireStationCommunityController in the method getFireStationCommunity :"
+          + exception.getMessage());
+    }
+    if (!existingFireStationNumber) {
       throw new NonexistentException(
           "The station number " + stationNumber.toString() + " doesn't exist.");
     }
+    return personNumberInfo;
   }
 
 
@@ -83,24 +79,20 @@ public class FireStationCommunityController {
       logger.info(
           "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + firestation.toString() + "}");
       existingFireStationNumber = fireStationService.fireStationNumberExist(firestation);
-    } catch (Exception exception) {
-      logger.error("Error in the FireStationCommunityController in the method getPhoneNumberCoveredByThisStation :"
-          + exception.getMessage());
-    }
-    if (existingFireStationNumber) {
-      try {
+      if (existingFireStationNumber) {
         phoneList = phoneService.getPhoneNumberList(firestation);
         logger.info("response following the Get on the endpoint 'phoneAlert' with the given firestation number : {"
             + firestation.toString() + "}");
-      } catch (Exception exception) {
-        logger.error("Error in the FireStationCommunityController in the method getFireStationCommunity :"
-            + exception.getMessage());
       }
-      return phoneList;
-    } else {
+    } catch (Exception exception) {
+      logger.error("Error in the FireStationCommunityController in the method getFireStationCommunity :"
+          + exception.getMessage());
+    }
+    if (!existingFireStationNumber) {
       throw new NonexistentException(
           "The station number " + firestation.toString() + " doesn't exist.");
     }
+    return phoneList;
   }
 
 
@@ -113,31 +105,27 @@ public class FireStationCommunityController {
    */
   @GetMapping("/flood")
   public List<FireDTOByAddress> getHomesCoveredByTheseStation(@RequestParam List<Integer> stations) {
-    List<Integer> FireStationNumberNotFound = new ArrayList<>();
+    List<Integer> fireStationNumberNotFound = new ArrayList<>();
     List<FireDTOByAddress> personInfoByaddressList = null;
     try {
       logger.info(
           "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + stations.toString() + "}");
-      FireStationNumberNotFound = fireStationService.fireStationNumberListExist(stations);
-    } catch (Exception exception) {
-      logger.error("Error in the FireStationCommunityController in the method getHomesCoveredByTheseStation :"
-          + exception.getMessage());
-    }
-    if (FireStationNumberNotFound.isEmpty()) {
-      try {
+      fireStationNumberNotFound = fireStationService.fireStationNumberListExist(stations);
+      if (fireStationNumberNotFound.isEmpty()) {
         personInfoByaddressList = communityService.getPersonInfoByAddressList(stations);
         logger.info(
             "response following the Get on the endpoint 'flood' with the given stationNumber List : {"
                 + stations.toString() + "}");
-      } catch (Exception exception) {
-        logger.error("Error in the FireStationCommunityController in the method getHomesCoveredByTheseStation :"
-            + exception.getMessage());
       }
-      return personInfoByaddressList;
-    } else {
-      throw new NonexistentException(
-          "The list of station number that doesn't exist : " + FireStationNumberNotFound.toString());
+    } catch (Exception exception) {
+      logger.error("Error in the FireStationCommunityController in the method getHomesCoveredByTheseStation :"
+          + exception.getMessage());
     }
+    if (!fireStationNumberNotFound.isEmpty()) {
+      throw new NonexistentException(
+          "The list of station number that doesn't exist : " + fireStationNumberNotFound.toString());
+    }
+    return personInfoByaddressList;
 
   }
 

@@ -57,4 +57,12 @@ public interface PersonService {
    * @return - A boolean
    */
   public boolean personIdExist(Long id);
+
+  /**
+   * Check if the person exists in the person table.
+   * 
+   * @param a String first name and String last name
+   * @return - A boolean
+   */
+  public boolean personFistNameLastNameExist(String firstName, String lastName);
 }

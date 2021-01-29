@@ -132,7 +132,7 @@ public class PersonInfoController {
         }
       }
     } catch (Exception exception) {
-      logger.error("Error in the PersonInfoController in the method updatePerson :"
+      logger.error("Error in the PersonInfoController in the method ccccccc :"
           + exception.getMessage());
     }
     if (!existingPersonId) {
@@ -154,29 +154,32 @@ public class PersonInfoController {
   public List<PersonInfoDTO> getPersonInfo(@RequestParam String firstName,
       @RequestParam String lastName) {
     List<PersonInfoDTO> personInfoByaddressList = null;
+    boolean existingPersonFistNameLastName = false;
     try {
       logger.info(
           "Get request of the endpoint 'personInfo' with the first name : {" + firstName + "} and the last name : "
               + lastName);
-      personInfoByaddressList = communityService
-          .getPersonListByFirstNameAndLastNameThenOnlyLastName(
-              firstName,
-              lastName);
-      logger.info(
-          "response following the Get on the endpoint 'personInfo' with the given address :{" + firstName
-              + "} and the last name :{"
-              + lastName + "}");
+      existingPersonFistNameLastName = personService.personFistNameLastNameExist(firstName, lastName);
+      if (existingPersonFistNameLastName) {
+        personInfoByaddressList = communityService
+            .getPersonListByFirstNameAndLastNameThenOnlyLastName(
+                firstName,
+                lastName);
+        logger.info(
+            "response following the Get on the endpoint 'personInfo' with the given address :{" + firstName
+                + "} and the last name :{"
+                + lastName + "}");
+      }
     } catch (Exception exception) {
       logger.error("Error in the PersonInfoController in the method getPersonInfo :"
           + exception.getMessage());
     }
-    if (!personInfoByaddressList.isEmpty()) {
-      return personInfoByaddressList;
-    } else {
+    if (!existingPersonFistNameLastName) {
       throw new NonexistentException(
           "The person with the the first name : " + firstName + " and the last name : " + lastName
               + " doesn't exist.");
     }
+    return personInfoByaddressList;
   }
 
 

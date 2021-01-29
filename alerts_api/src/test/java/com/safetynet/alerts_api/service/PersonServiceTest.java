@@ -7,6 +7,8 @@ import static org.mockito.Mockito.when;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.PersonRepository;
 import com.safetynet.alerts_api.service.person.PersonService;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -59,6 +61,10 @@ class PersonServiceTest {
    */
   @Test
   public void testDeletePerson() {
+    Person person = new Person();
+    List<Person> personList = new ArrayList<>();
+    personList.add(person);
+    when(personRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy")).thenReturn(personList);
     doNothing().when(personRepositoryMock).deletePersonByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy");
     personService.deletePerson("Adrien", "Bessy");
     verify(personRepositoryMock,

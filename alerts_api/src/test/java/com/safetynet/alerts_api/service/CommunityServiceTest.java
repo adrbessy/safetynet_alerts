@@ -133,8 +133,9 @@ public class CommunityServiceTest {
     List<Person> childrenListTest = new ArrayList<>();
     childrenListTest.add(person);
 
-    doNothing().when(personMock).setAge_Medications_Allergies(medicalRecord1,
+    doNothing().when(personMock).setAge(medicalRecord1,
         LocalDate.of(2021, 1, 11));
+    doNothing().when(personMock).setMedicationsAndAllergies(medicalRecord1);
     communityService.addPersonToListFromFireStationList(person,
         medicalRecordList, childrenList, adultList,
         LocalDate.of(2021, 1, 11));
@@ -363,9 +364,9 @@ public class CommunityServiceTest {
         .thenReturn(medicalRecordList);
     when(medicalRecordMock.getBirthdate())
         .thenReturn("16/06/2019");
-    doNothing().when(personMock).setAge_Medications_Allergies(medicalRecord1,
+    doNothing().when(personMock).setAge(medicalRecord1,
         LocalDate.of(2021, 1, 11));
-
+    doNothing().when(personMock).setMedicationsAndAllergies(medicalRecord1);
     Person person = new Person();
     person.setId((long) 5);
     person.setFirstName("Adrien");
@@ -407,8 +408,9 @@ public class CommunityServiceTest {
         .thenReturn(medicalRecordList);
     when(medicalRecordMock.getBirthdate())
         .thenReturn("16/06/2019");
-    doNothing().when(personMock).setAge_Medications_Allergies(medicalRecord1,
+    doNothing().when(personMock).setAge(medicalRecord1,
         LocalDate.of(2021, 1, 11));
+    doNothing().when(personMock).setMedicationsAndAllergies(medicalRecord1);
 
     List<Person> personList2 = communityService.getPersonListByAddress(address);
     verify(personRepositoryMock,
@@ -445,8 +447,9 @@ public class CommunityServiceTest {
     when(medicalRecordRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase(
         "Adrien", "Bessy")).thenReturn(medicalRecordList);
     when(medicalRecordMock.getBirthdate()).thenReturn("16/06/2019");
-    doNothing().when(personMock).setAge_Medications_Allergies(medicalRecord1,
+    doNothing().when(personMock).setAge(medicalRecord1,
         LocalDate.of(2021, 1, 11));
+    doNothing().when(personMock).setMedicationsAndAllergies(medicalRecord1);
 
     FireStation fireStation = new FireStation();
     List<FireStation> filteredFireStationList = new ArrayList<>();
@@ -498,8 +501,9 @@ public class CommunityServiceTest {
         .thenReturn(medicalRecordList);
     when(medicalRecordMock.getBirthdate())
         .thenReturn("16/06/2019");
-    doNothing().when(personMock).setAge_Medications_Allergies(medicalRecord1,
+    doNothing().when(personMock).setAge(medicalRecord1,
         LocalDate.of(2021, 1, 11));
+    doNothing().when(personMock).setMedicationsAndAllergies(medicalRecord1);
 
     List<Person> personList2 = communityService.getPersonListByFirstNameAndLastName("Adrien", "Bessy");
     assertThat(personList2).isNotEqualTo(null);
@@ -529,8 +533,9 @@ public class CommunityServiceTest {
         .thenReturn(medicalRecordList);
     when(medicalRecordMock.getBirthdate())
         .thenReturn("16/06/2019");
-    doNothing().when(personMock).setAge_Medications_Allergies(medicalRecord1,
+    doNothing().when(personMock).setAge(medicalRecord1,
         LocalDate.of(2021, 1, 11));
+    doNothing().when(personMock).setMedicationsAndAllergies(medicalRecord1);
 
     List<Person> personList2 = communityService.getPersonListByLastName("Bessy");
     assertThat(personList2).isNotEqualTo(null);
@@ -560,8 +565,9 @@ public class CommunityServiceTest {
         .thenReturn(medicalRecordList);
     when(medicalRecordMock.getBirthdate())
         .thenReturn("16/06/2019");
-    doNothing().when(personMock).setAge_Medications_Allergies(medicalRecord1,
+    doNothing().when(personMock).setAge(medicalRecord1,
         LocalDate.of(2021, 1, 11));
+    doNothing().when(personMock).setMedicationsAndAllergies(medicalRecord1);
 
     when(personRepositoryMock.findByLastNameAllIgnoreCase("Bessy")).thenReturn(personList);
 
@@ -616,8 +622,9 @@ public class CommunityServiceTest {
         .thenReturn(medicalRecordList);
     when(medicalRecordMock.getBirthdate())
         .thenReturn("16/06/2019");
-    doNothing().when(personMock).setAge_Medications_Allergies(medicalRecord1,
+    doNothing().when(personMock).setAge(medicalRecord1,
         LocalDate.of(2021, 1, 11));
+    doNothing().when(personMock).setMedicationsAndAllergies(medicalRecord1);
 
     FireDTO fireDTO = new FireDTO("Bessy", 45, "0065468", new ArrayList<>(), new ArrayList<>());
     List<FireDTO> fireDTOList = new ArrayList<>();

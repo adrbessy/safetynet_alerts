@@ -127,7 +127,8 @@ public class CommunityServiceImpl implements CommunityService {
     try {
       medicalRecordList.forEach(medicalRecordIterator -> {
         if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
-          personIterator.setAge_Medications_Allergies(medicalRecordIterator, currentDate);
+          personIterator.setAge(medicalRecordIterator, currentDate);
+          personIterator.setMedicationsAndAllergies(medicalRecordIterator);
           if (personIterator.getAge() <= 18) {
             childrenList.add(personIterator);
           } else {
@@ -148,7 +149,8 @@ public class CommunityServiceImpl implements CommunityService {
         medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
             personIterator.getFirstName(), personIterator.getLastName()).forEach(medicalRecordIterator -> {
               if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
-                personIterator.setAge_Medications_Allergies(medicalRecordIterator, LocalDate.now());
+                personIterator.setAge(medicalRecordIterator, LocalDate.now());
+                personIterator.setMedicationsAndAllergies(medicalRecordIterator);
               }
             });
       });

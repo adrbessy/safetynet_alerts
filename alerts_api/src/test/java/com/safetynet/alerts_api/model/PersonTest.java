@@ -91,7 +91,15 @@ class PersonTest {
   }
 
   @Test
-  public void testSetAge_Medications_Allergies() throws Exception {
+  public void testSetAge() throws Exception {
+    MedicalRecord medicalRecord = new MedicalRecord();
+    medicalRecord.setBirthdate("16/06/1988");
+    person.setAge(medicalRecord, LocalDate.of(2021, 1, 11));
+    assertThat(person.getAge()).isEqualTo(32);
+  }
+
+  @Test
+  public void testSetMedicationsAndAllergies() throws Exception {
     MedicalRecord medicalRecord = new MedicalRecord();
     List<String> aller = new ArrayList<>();
     aller.add("cacahuete");
@@ -100,17 +108,15 @@ class PersonTest {
     medic.add("dolipran:30mg");
     medic.add("aznol:200mg");
     medicalRecord.setMedications(medic);
-    medicalRecord.setBirthdate("16/06/1988");
-    person.setAge_Medications_Allergies(medicalRecord, LocalDate.of(2021, 1, 11));
+    person.setMedicationsAndAllergies(medicalRecord);
     assertThat(person.getAllergies()).isEqualTo(aller);
     assertThat(person.getMedications()).isEqualTo(medic);
-    assertThat(person.getAge()).isEqualTo(32);
   }
+
 
   @Test
   public void simpleEqualsPerson() {
     EqualsVerifier.forClass(Person.class).suppress(Warning.ALL_FIELDS_SHOULD_BE_USED).verify();
   }
-
 
 }

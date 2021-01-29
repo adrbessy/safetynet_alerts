@@ -53,7 +53,7 @@ public class Person {
   private List<String> allergies;
 
 
-  public void setAge_Medications_Allergies(MedicalRecord medicalRecord, LocalDate currentDate) {
+  public void setAge(MedicalRecord medicalRecord, LocalDate currentDate) {
     String birthdate = medicalRecord.getBirthdate();
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     Date d;
@@ -67,10 +67,17 @@ public class Person {
       LocalDate l1 = LocalDate.of(year, month, date);
       Period diff1 = Period.between(l1, currentDate);
       this.setAge(diff1.getYears());
+    } catch (ParseException e) {
+      logger.error("setAge error : " + e);
+    }
+  }
+
+  public void setMedicationsAndAllergies(MedicalRecord medicalRecord) {
+    try {
       this.setMedications(medicalRecord.getMedications());
       this.setAllergies(medicalRecord.getAllergies());
-    } catch (ParseException e) {
-      logger.error("setAge_Medications_Allergies error : " + e);
+    } catch (Exception e) {
+      logger.error("setMedications error : " + e);
     }
   }
 
