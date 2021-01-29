@@ -28,21 +28,27 @@ public class FireStationController {
    * 
    * @param id - The id of the fire station to delete
    */
+
   @Transactional
   @DeleteMapping("/firestation/{address}")
   public void deleteFireStation(@PathVariable("address") final String address) {
     boolean existingFireStation = false;
+    boolean fireStationAddressExist = false;
     try {
       logger.info(
-          "Delete request of the endpoint 'firestation' with the firestation address : {" + address + "}");
-      existingFireStation = fireStationService.deleteFireStation(address);
+          "Delete request of the endpoint 'firestation' with the firestation address : {"
+              + address + "}");
+      fireStationAddressExist = fireStationService.fireStationAddressExist(address);
+      if (!existingFireStation) {
+        fireStationService.deleteFireStation(address);
+      }
     } catch (Exception exception) {
       logger.error("Error in the FireStationController in the method deleteFireStation :"
           + exception.getMessage());
     }
-    if (!existingFireStation) {
-      throw new NonexistentException(
-          "The firestation with the address " + address + " doesn't exist.");
+    if (!fireStationAddressExist) {
+      throw new NonexistentException("The firestation with the address " + address +
+          " doesn't exist.");
     }
     logger.info(
         "response following the Delete on the endpoint 'firestation' with the given address : {"

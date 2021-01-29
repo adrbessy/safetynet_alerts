@@ -12,7 +12,7 @@ public interface FireStationService {
    * @param FireStation to delete
    * @return boolean
    */
-  public boolean deleteFireStation(String address);
+  public void deleteFireStation(String address);
 
 
   /**
@@ -75,5 +75,12 @@ public interface FireStationService {
    * @return - A boolean
    */
   public boolean fireStationAddressExist(String address);
+
+
+  public void deleteFireStation(Long id);
+
+  /*
+   * public void deleteFireStationByAddress(String address);
+   */
 
 }

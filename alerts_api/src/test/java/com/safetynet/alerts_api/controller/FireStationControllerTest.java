@@ -53,6 +53,7 @@ public class FireStationControllerTest {
   @Test
   public void testUpdateFireStation() throws Exception {
     String address = "12 rue des ecoles";
+    when(fireStationService.fireStationAddressExist(address)).thenReturn(true);
     when(fireStationService.getFireStation(address)).thenReturn(fireStation);
     MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put("/firestation/" + address)
         .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
@@ -64,6 +65,7 @@ public class FireStationControllerTest {
   @Test
   public void testUpdateFireStationIfFirestationToUpdateIsNull() throws Exception {
     String address = "12 rue des ecoles";
+    when(fireStationService.fireStationAddressExist(address)).thenReturn(true);
     when(fireStationService.getFireStation(address)).thenReturn(null);
     MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put("/firestation/" + address)
         .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
@@ -73,9 +75,15 @@ public class FireStationControllerTest {
 
 
   @Test
-  public void testDeleteFireStation() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.delete("/firestation/4"))
-        .andExpect(status().isOk());
+  public void testDeleteFireStationByAddress() throws Exception {
+    String address = "1509 Culver St";
+    when(fireStationService.fireStationAddressExist(address))
+        .thenReturn(true);
+    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.delete("/firestation/" + address)
+        .contentType(MediaType.APPLICATION_JSON);
+
+    mockMvc.perform(builder).andExpect(status().isOk());
   }
+
 
 }
