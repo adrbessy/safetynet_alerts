@@ -19,6 +19,13 @@ public class PersonServiceImpl implements PersonService {
 
 
   @Override
+  public boolean personIdExist(Long id) {
+    boolean existingPersonId = personRepository.existsById(id);
+    return existingPersonId;
+  }
+
+
+  @Override
   public boolean personAddressExist(String address) {
     boolean existingPersonAddress = personRepository.existsByAddress(address);
     return existingPersonAddress;

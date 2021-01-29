@@ -69,14 +69,11 @@ public class PersonInfoController {
     try {
       logger.info("Delete request with the endpoint 'person' received with parameters firstName :" + firstName
           + " and lastName : " + lastName);
-      System.out.println("existingPersonFirstNameLastName");
       deletedPerson = personService.deletePerson(firstName, lastName);
       logger.info(
           "response following the Delete on the endpoint 'person' with the given firstName : {"
               + firstName + "and the given lastName : {" + lastName + "}");
-    } catch (
-
-    Exception exception) {
+    } catch (Exception exception) {
       logger.error("Error in the PersonInfoController in the method deletePerson :"
           + exception.getMessage());
     }
@@ -98,43 +95,47 @@ public class PersonInfoController {
   @PutMapping("/person/{id}")
   public Person updatePerson(@PathVariable("id") final Long id, @RequestBody Person person) {
     Person persToUpdate = null;
+    boolean existingPersonId = false;
     try {
       logger.info(
           "Put request of the endpoint 'person' with the id : {" + id + "}");
-      persToUpdate = personService.getPerson(id);
-      logger.info(
-          "response following the Put on the endpoint 'person' with the given id : {"
-              + id.toString() + "}");
-      if (persToUpdate != null) {
-        String address = person.getAddress();
-        if (address != null) {
-          persToUpdate.setAddress(address);
+      existingPersonId = personService.personIdExist(id);
+      if (existingPersonId) {
+        persToUpdate = personService.getPerson(id);
+        logger.info(
+            "response following the Put on the endpoint 'person' with the given id : {"
+                + id.toString() + "}");
+        if (persToUpdate != null) {
+          String address = person.getAddress();
+          if (address != null) {
+            persToUpdate.setAddress(address);
+          }
+          String city = person.getCity();
+          if (city != null) {
+            persToUpdate.setCity(city);
+            ;
+          }
+          String zip = person.getZip();
+          if (zip != null) {
+            persToUpdate.setZip(zip);
+          }
+          String phone = person.getPhone();
+          if (phone != null) {
+            persToUpdate.setPhone(phone);
+            ;
+          }
+          String email = person.getEmail();
+          if (email != null) {
+            persToUpdate.setEmail(email);
+          }
+          personService.savePerson(persToUpdate);
         }
-        String city = person.getCity();
-        if (city != null) {
-          persToUpdate.setCity(city);
-          ;
-        }
-        String zip = person.getZip();
-        if (zip != null) {
-          persToUpdate.setZip(zip);
-        }
-        String phone = person.getPhone();
-        if (phone != null) {
-          persToUpdate.setPhone(phone);
-          ;
-        }
-        String email = person.getEmail();
-        if (email != null) {
-          persToUpdate.setEmail(email);
-        }
-        personService.savePerson(persToUpdate);
       }
     } catch (Exception exception) {
       logger.error("Error in the PersonInfoController in the method updatePerson :"
           + exception.getMessage());
     }
-    if (persToUpdate == null) {
+    if (!existingPersonId) {
       throw new NonexistentException(
           "The person with the id " + id + " doesn't exist.");
     }
