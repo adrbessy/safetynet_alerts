@@ -29,9 +29,6 @@ public class JsonReaderRepository {
 
   private ObjectMapper objectMapper;
 
-  // @Value("${data.jsonFilePath}")
-  // private String filePath;
-
   private static final Logger logger = LogManager.getLogger(JsonReaderRepository.class);
 
   @Autowired

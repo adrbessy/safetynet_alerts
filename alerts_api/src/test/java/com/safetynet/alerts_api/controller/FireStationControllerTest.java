@@ -63,14 +63,14 @@ public class FireStationControllerTest {
 
 
   @Test
-  public void testUpdateFireStationIfFirestationToUpdateIsNull() throws Exception {
+  public void testUpdateFireStationIfAddressDoesntExist() throws Exception {
     String address = "12 rue des ecoles";
-    when(fireStationService.fireStationAddressExist(address)).thenReturn(true);
+    when(fireStationService.fireStationAddressExist(address)).thenReturn(false);
     when(fireStationService.getFireStation(address)).thenReturn(null);
     MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put("/firestation/" + address)
         .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
         .content(new ObjectMapper().writeValueAsString(fireStation));
-    this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
+    this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isNotFound());
   }
 
 

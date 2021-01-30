@@ -55,10 +55,17 @@ class PersonInfoControllerTest {
   }
 
   @Test
-  public void testGetEmailListFromCity() throws Exception {
+  public void testGetCommunityEmail() throws Exception {
     when(personService.cityExist("culver")).thenReturn(true);
     mockMvc.perform(get("/communityEmail?city=culver"))
         .andExpect(status().isOk());
+  }
+
+  @Test
+  public void testGetCommunityEmailIfCityDoesntExist() throws Exception {
+    when(personService.cityExist("culver")).thenReturn(false);
+    mockMvc.perform(get("/communityEmail?city=culver"))
+        .andExpect(status().isNotFound());
   }
 
   @Test

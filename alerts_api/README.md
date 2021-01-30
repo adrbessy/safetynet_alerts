@@ -27,7 +27,13 @@ https://maven.apache.org/install.html
 
 ### Running App
 
-Finally, you will be ready to import the code into an IDE of your choice and run the AlertsApiApplication.java to launch the application.
+You can run the application in two different ways:
+
+1/ import the code into an IDE of your choice and run the AlertsApiApplication.java to launch the application.
+
+2/ Or import the code, unzip it, open the console, go to the folder that contains the pom.xml file, then execute the below command to launch the application.
+
+mvn spring-boot:run 
 
 ### API calls (URI, parameters)
 GET
@@ -73,3 +79,11 @@ http://localhost:9002/person?firstName=Jacob&lastName=Boyd
 http://localhost:9002/medicalRecord?firstName=Jacob&lastName=Boyd
 
 http://localhost:9002/firestation/1509%20Culver%20St
+
+
+### Testing
+The app has unit tests written.
+
+To run the tests from maven, go to the folder that contains the pom.xml file and execute the below command.
+
+mvn test
