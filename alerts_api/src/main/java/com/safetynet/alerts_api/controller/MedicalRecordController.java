@@ -32,10 +32,13 @@ public class MedicalRecordController {
     try {
       logger.info("Delete request with the endpoint 'medicalRecord' received with parameters firstName :" + firstName
           + " and the given lastName : " + lastName);
-      existingMedicalRecord = medicalRecordService.deleteMedicalRecord(firstName, lastName);
-      logger.info(
-          "response following the Delete on the endpoint 'medicalRecord' with the given firstName : {"
-              + firstName + "and the given lastName : {" + lastName + "}");
+      existingMedicalRecord = medicalRecordService.medicalRecordFirstNameLastNameExist(firstName, lastName);
+      if (existingMedicalRecord) {
+        medicalRecordService.deleteMedicalRecord(firstName, lastName);
+        logger.info(
+            "response following the Delete on the endpoint 'medicalRecord' with the given firstName : {"
+                + firstName + "and the given lastName : {" + lastName + "}");
+      }
     } catch (Exception exception) {
       logger.error("Error in the MedicalRecordController in the method deleteMedicalRecord :"
           + exception.getMessage());

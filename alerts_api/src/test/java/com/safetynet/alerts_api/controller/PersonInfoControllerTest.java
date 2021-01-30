@@ -42,6 +42,7 @@ class PersonInfoControllerTest {
 
   @Test
   public void testDeletePerson() throws Exception {
+    when(personService.personFirstNameLastNameExist("Jacob", "Boyd")).thenReturn(true);
     mockMvc.perform(MockMvcRequestBuilders.delete("/person?firstName=Jacob&lastName=Boyd"))
         .andExpect(status().isOk());
   }

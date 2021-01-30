@@ -2,7 +2,6 @@ package com.safetynet.alerts_api.service.person;
 
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.PersonRepository;
-import java.util.List;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,7 +18,7 @@ public class PersonServiceImpl implements PersonService {
 
 
   @Override
-  public boolean personFistNameLastNameExist(String firstName, String lastName) {
+  public boolean personFirstNameLastNameExist(String firstName, String lastName) {
     boolean existingPersonId = personRepository.existsByfirstNameAndLastNameAllIgnoreCase(firstName, lastName);
     return existingPersonId;
   }
@@ -47,15 +46,8 @@ public class PersonServiceImpl implements PersonService {
 
 
   @Override
-  public boolean deletePerson(String firstName, String lastName) {
-    List<Person> existingPersonList = personRepository
-        .findByFirstNameAndLastNameAllIgnoreCase(firstName, lastName);
-    if (existingPersonList.isEmpty()) {
-      return false;
-    } else {
-      personRepository.deletePersonByFirstNameAndLastNameAllIgnoreCase(firstName, lastName);
-      return true;
-    }
+  public void deletePerson(String firstName, String lastName) {
+    personRepository.deletePersonByFirstNameAndLastNameAllIgnoreCase(firstName, lastName);
   }
 
   @Override

@@ -55,6 +55,9 @@ public class MedicalRecordControllerTest {
 
   @Test
   public void testDeleteMedicalRecord() throws Exception {
+    String firstName = "Jacob";
+    String lastName = "Boyd";
+    when(medicalRecordService.medicalRecordFirstNameLastNameExist(firstName, lastName)).thenReturn(true);
     mockMvc.perform(MockMvcRequestBuilders.delete("/medicalRecord?firstName=Jacob&lastName=Boyd"))
         .andExpect(status().isOk());
   }
@@ -73,18 +76,8 @@ public class MedicalRecordControllerTest {
   @Test
   public void testUpdateMedicalRecord() throws Exception {
     long id = 1;
+    when(medicalRecordService.medicalRecordIdExist(id)).thenReturn(true);
     when(medicalRecordService.getMedicalRecord(id)).thenReturn(medicalRecord);
-    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put("/medicalRecord/" + id)
-        .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
-        .content(new ObjectMapper().writeValueAsString(medicalRecord));
-
-    this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
-  }
-
-  @Test
-  public void testUpdateMedicalRecordIfMedToUpdateIsNull() throws Exception {
-    long id = 1;
-    when(medicalRecordService.getMedicalRecord(id)).thenReturn(null);
     MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put("/medicalRecord/" + id)
         .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
         .content(new ObjectMapper().writeValueAsString(medicalRecord));

@@ -14,4 +14,6 @@ public interface MedicalRecordRepository extends CrudRepository<MedicalRecord, L
 
   List<MedicalRecord> getMedicalRecordByFirstNameAndLastName(String firstname, String lastname);
 
+  boolean existsByfirstNameAndLastNameAllIgnoreCase(String firstName, String lastName);
+
 }

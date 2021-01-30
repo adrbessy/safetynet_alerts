@@ -64,24 +64,26 @@ public class PersonInfoController {
    */
   @Transactional
   @DeleteMapping("/person")
-  public boolean deletePerson(@RequestParam String firstName, @RequestParam String lastName) {
-    boolean deletedPerson = false;
+  public void deletePerson(@RequestParam String firstName, @RequestParam String lastName) {
+    boolean existingPersonFirstNameLastName = false;
     try {
       logger.info("Delete request with the endpoint 'person' received with parameters firstName :" + firstName
           + " and lastName : " + lastName);
-      deletedPerson = personService.deletePerson(firstName, lastName);
-      logger.info(
-          "response following the Delete on the endpoint 'person' with the given firstName : {"
-              + firstName + "and the given lastName : {" + lastName + "}");
+      existingPersonFirstNameLastName = personService.personFirstNameLastNameExist(firstName, lastName);
+      if (existingPersonFirstNameLastName) {
+        personService.deletePerson(firstName, lastName);
+        logger.info(
+            "response following the Delete on the endpoint 'person' with the given firstName : {"
+                + firstName + "and the given lastName : {" + lastName + "}");
+      }
     } catch (Exception exception) {
       logger.error("Error in the PersonInfoController in the method deletePerson :"
           + exception.getMessage());
     }
-    if (!deletedPerson) {
+    if (!existingPersonFirstNameLastName) {
       throw new NonexistentException(
           "The person with the first name " + firstName + " and last name " + lastName + " doesn't exist.");
     }
-    return deletedPerson;
   }
 
 
@@ -159,7 +161,7 @@ public class PersonInfoController {
       logger.info(
           "Get request of the endpoint 'personInfo' with the first name : {" + firstName + "} and the last name : "
               + lastName);
-      existingPersonFistNameLastName = personService.personFistNameLastNameExist(firstName, lastName);
+      existingPersonFistNameLastName = personService.personFirstNameLastNameExist(firstName, lastName);
       if (existingPersonFistNameLastName) {
         personInfoByaddressList = communityService
             .getPersonListByFirstNameAndLastNameThenOnlyLastName(

@@ -5,9 +5,17 @@ import java.util.List;
 
 public interface MedicalRecordService {
 
+  /**
+   * Check if the first name and the last name exists in the medicalrecord table.
+   * 
+   * @param firestation id
+   * @return - A boolean
+   */
+  public boolean medicalRecordFirstNameLastNameExist(String firstName, String lastName);
+
 
   /**
-   * Check if all the fire station number exists in the database.
+   * Check if all the fire station number exists in the medicalrecord table.
    * 
    * @param firestation id
    * @return - A boolean
@@ -22,7 +30,7 @@ public interface MedicalRecordService {
    * @return boolean
    * 
    */
-  public boolean deleteMedicalRecord(final String firstname, final String lastname);
+  public void deleteMedicalRecord(final String firstname, final String lastname);
 
 
   /**

@@ -11,7 +11,7 @@ public interface PersonService {
    * @param a first name and a last name
    * @return boolean
    */
-  public boolean deletePerson(String firstName, String lastName);
+  public void deletePerson(String firstName, String lastName);
 
 
   /**
@@ -64,5 +64,5 @@ public interface PersonService {
    * @param a String first name and String last name
    * @return - A boolean
    */
-  public boolean personFistNameLastNameExist(String firstName, String lastName);
+  public boolean personFirstNameLastNameExist(String firstName, String lastName);
 }

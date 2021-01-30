@@ -20,6 +20,15 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
 
   @Override
+  public boolean medicalRecordFirstNameLastNameExist(String firstName, String lastName) {
+    boolean existingMedicalRecordFirstNameLastName = medicalRecordRepository.existsByfirstNameAndLastNameAllIgnoreCase(
+        firstName,
+        lastName);
+    return existingMedicalRecordFirstNameLastName;
+  }
+
+
+  @Override
   public boolean medicalRecordIdExist(Long id) {
     boolean existingFireStationId = medicalRecordRepository.existsById(id);
     return existingFireStationId;
@@ -27,15 +36,8 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
 
   @Override
-  public boolean deleteMedicalRecord(final String firstname, final String lastname) {
-    List<MedicalRecord> existingMedicalRecordList = medicalRecordRepository
-        .findByFirstNameAndLastNameAllIgnoreCase(firstname, lastname);
-    if (existingMedicalRecordList.isEmpty()) {
-      return false;
-    } else {
-      medicalRecordRepository.deletePersonByFirstNameAndLastNameAllIgnoreCase(firstname, lastname);
-      return true;
-    }
+  public void deleteMedicalRecord(final String firstname, final String lastname) {
+    medicalRecordRepository.deletePersonByFirstNameAndLastNameAllIgnoreCase(firstname, lastname);
   }
 
 
