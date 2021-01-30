@@ -34,11 +34,19 @@ public class FireStationCommunityControllerTest {
   private JsonReaderRepository jsonReaderRepository;
 
   @Test
-  public void testGetPersonListCoveredByThisStation() throws Exception {
+  public void testGetFireStationCommunity() throws Exception {
     when(fireStationServiceMock.fireStationNumberExist(1))
         .thenReturn(true);
     mockMvc.perform(get("/firestation?stationNumber=1"))
         .andExpect(status().isOk());
+  }
+
+  @Test
+  public void testGetFireStationCommunityIfTheStationNumberDoesntExist() throws Exception {
+    when(fireStationServiceMock.fireStationNumberExist(454))
+        .thenReturn(false);
+    mockMvc.perform(get("/firestation?stationNumber=454"))
+        .andExpect(status().isNotFound());
   }
 
   @Test
