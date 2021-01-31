@@ -202,6 +202,19 @@ public class CommunityServiceTest {
     assertThat(fireStationCommunity2).isEqualTo(fireStationCommunity);
   }
 
+
+  /**
+   * test to get a list of PersonNumberInfo from a fireStation number.
+   * 
+   */
+  @Test
+  public void testGetPersonNumberInfoListFromStationNumberIfStationNumberIsNull() {
+
+    FireStationCommunity fireStationCommunity = communityService.getPersonNumberInfoListFromStationNumber(null);
+    assertThat(fireStationCommunity).isEqualTo(null);
+  }
+
+
   /**
    * test to full a children list and an adult list from a list of persons.
    * 

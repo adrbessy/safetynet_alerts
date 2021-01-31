@@ -85,5 +85,16 @@ public class FireStationControllerTest {
     mockMvc.perform(builder).andExpect(status().isOk());
   }
 
+  @Test
+  public void testDeleteFireStationByAddressIfAddressDoesntExist() throws Exception {
+    String address = "1509 Culver S";
+    when(fireStationService.fireStationAddressExist(address))
+        .thenReturn(false);
+    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.delete("/firestation/" + address)
+        .contentType(MediaType.APPLICATION_JSON);
+
+    mockMvc.perform(builder).andExpect(status().isNotFound());
+  }
+
 
 }

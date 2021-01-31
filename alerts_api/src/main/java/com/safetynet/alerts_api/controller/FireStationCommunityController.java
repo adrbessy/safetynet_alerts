@@ -111,6 +111,7 @@ public class FireStationCommunityController {
       logger.info(
           "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + stations.toString() + "}");
       fireStationNumberNotFound = fireStationService.fireStationNumberListExist(stations);
+      System.out.println("fireStationNumberNotFound : " + fireStationNumberNotFound);
       if (fireStationNumberNotFound.isEmpty()) {
         personInfoByaddressList = communityService.getPersonInfoByAddressList(stations);
         logger.info(

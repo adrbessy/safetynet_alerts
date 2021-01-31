@@ -36,11 +36,27 @@ public class HomeControllerTest {
   }
 
   @Test
+  public void testGetFireIfAddressDoesntExist() throws Exception {
+    String address = "1509 Culver S";
+    when(personService.personAddressExist(address)).thenReturn(false);
+    mockMvc.perform(get("/fire?address=" + address))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
   public void testGetHome() throws Exception {
     String address = "1509 Culver St";
     when(personService.personAddressExist(address)).thenReturn(true);
     mockMvc.perform(get("/childAlert?address=" + address))
         .andExpect(status().isOk());
+  }
+
+  @Test
+  public void testGetHomeIfAddressDoesntExist() throws Exception {
+    String address = "1509 Culver S";
+    when(personService.personAddressExist(address)).thenReturn(false);
+    mockMvc.perform(get("/childAlert?address=" + address))
+        .andExpect(status().isNotFound());
   }
 
 }

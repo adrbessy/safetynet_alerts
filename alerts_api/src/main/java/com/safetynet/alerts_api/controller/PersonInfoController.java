@@ -134,7 +134,7 @@ public class PersonInfoController {
         }
       }
     } catch (Exception exception) {
-      logger.error("Error in the PersonInfoController in the method ccccccc :"
+      logger.error("Error in the PersonInfoController in the method updatePerson :"
           + exception.getMessage());
     }
     if (!existingPersonId) {

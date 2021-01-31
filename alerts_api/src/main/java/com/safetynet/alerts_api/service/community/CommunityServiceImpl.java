@@ -50,6 +50,7 @@ public class CommunityServiceImpl implements CommunityService {
 
   @Override
   public List<Person> getPersonListFromStationNumber(Integer stationNumber) {
+    List<Person> filteredPersonList = null;
     try {
       // we retrieve the list of stations corresponding to the stationNumber
       List<FireStation> fireStationList = firestationRepository.findDistinctByStation(stationNumber);
@@ -58,14 +59,13 @@ public class CommunityServiceImpl implements CommunityService {
       List<String> addressList = addressService.getAddressListFromFireStationList(fireStationList);
 
       // we retrieve the person list corresponding to the address list
-      List<Person> filteredPersonList = personRepository.findAllByAddressInOrderByAddress(addressList);
-      return filteredPersonList;
+      filteredPersonList = personRepository.findAllByAddressInOrderByAddress(addressList);
     } catch (Exception exception) {
       logger
           .error("Error when retrieving the list of persons linked to a fire station number :"
               + exception.getMessage());
-      return null;
     }
+    return filteredPersonList;
   }
 
 
@@ -162,8 +162,8 @@ public class CommunityServiceImpl implements CommunityService {
 
   @Override
   public Home getChildrenListAndAdultListFromAddress(String address) {
+    Home home = null;
     try {
-
       // we retrieve the list of persons corresponding to the address
       List<Person> filteredPersonList = personRepository.findDistinctByAddress(address);
 
@@ -177,15 +177,14 @@ public class CommunityServiceImpl implements CommunityService {
       List<ChildAlertDTO> adultDTOList = mapService.convertToChildAlertDTOList(adultList);
 
       // We create an object including the list of children and the list of adults
-      Home home = new Home(childrenDTOList, adultDTOList);
+      home = new Home(childrenDTOList, adultDTOList);
       if (childrenList.isEmpty()) {
         return new Home(new ArrayList<>(), new ArrayList<>());
       }
-      return home;
     } catch (Exception exception) {
       logger.error("Error when we try to get ChildrenList And AdultList From an address :" + exception.getMessage());
-      return null;
     }
+    return home;
   }
 
 
@@ -193,10 +192,10 @@ public class CommunityServiceImpl implements CommunityService {
   public List<FireDTOByAddress> getPersonInfoByAddressList(List<Integer> stationNumberList) {
     // We create an object including the list of persons and the list of fireStation
     // number deserving the address.
+    List<FireDTOByAddress> personInfoByAddressList = new ArrayList<>();
     try {
       List<String> addressList = addressService.getAddressListFromStationNumberList(stationNumberList);
 
-      List<FireDTOByAddress> personInfoByAddressList = new ArrayList<>();
       if (addressList != null) {
         addressList.forEach(addressIterator -> {
           List<Person> personList = getPersonListByAddress(addressIterator);
@@ -207,46 +206,44 @@ public class CommunityServiceImpl implements CommunityService {
           personInfoByAddressList.add(personInfoByAddress);
         });
       }
-      return personInfoByAddressList;
-    } catch (
-
-    Exception exception) {
+    } catch (Exception exception) {
       logger.error("Error when we try to get PersonInfoByAddressList :" + exception.getMessage());
-      return null;
     }
+    return personInfoByAddressList;
   }
 
 
   @Override
   public List<Person> getPersonListByFirstNameAndLastName(String firstName, String lastName) {
+    List<Person> filteredPersonList = null;
     try {
       // we retrieve the list of persons corresponding to the address
-      List<Person> filteredPersonList = personRepository.findByFirstNameAndLastNameAllIgnoreCase(firstName, lastName);
+      filteredPersonList = personRepository.findByFirstNameAndLastNameAllIgnoreCase(firstName, lastName);
       setAgeAndMedicationsAndAllergiesFromPersonList(filteredPersonList);
-      return filteredPersonList;
     } catch (Exception exception) {
       logger.error("Error when we try to get PersonList By FirstName And LastName :" + exception.getMessage());
-      return null;
     }
+    return filteredPersonList;
   }
 
 
   @Override
   public List<Person> getPersonListByLastName(String lastName) {
+    List<Person> filteredPersonList = null;
     try {
       // we retrieve the list of persons corresponding to the address
-      List<Person> filteredPersonList = personRepository.findByLastNameAllIgnoreCase(lastName);
+      filteredPersonList = personRepository.findByLastNameAllIgnoreCase(lastName);
       setAgeAndMedicationsAndAllergiesFromPersonList(filteredPersonList);
-      return filteredPersonList;
     } catch (Exception exception) {
       logger.error("Error when we try to get PersonList By LastName :" + exception.getMessage());
-      return null;
     }
+    return filteredPersonList;
   }
 
 
   @Override
   public List<PersonInfoDTO> getPersonListByFirstNameAndLastNameThenOnlyLastName(String firstName, String lastName) {
+    List<PersonInfoDTO> PersonInfoDTOList = null;
     try {
       List<Person> personInfoByFirstNameAndLastName = getPersonListByFirstNameAndLastName(firstName, lastName);
       List<Person> personInfoByLastName = getPersonListByLastName(lastName);
@@ -255,33 +252,33 @@ public class CommunityServiceImpl implements CommunityService {
           personInfoByFirstNameAndLastName.add(personIterator);
       });
 
-      List<PersonInfoDTO> PersonInfoDTOList = mapService.convertToPersonInfoDTOList(personInfoByFirstNameAndLastName);
-      return PersonInfoDTOList;
+      PersonInfoDTOList = mapService.convertToPersonInfoDTOList(personInfoByFirstNameAndLastName);
     } catch (Exception exception) {
       logger.error("Error when we try to get PersonList By FirstName And LastName Then Only LastName :"
           + exception.getMessage());
-      return null;
     }
+    return PersonInfoDTOList;
   }
 
 
   @Override
   public List<Person> getPersonListByAddress(String address) {
+    List<Person> filteredPersonList = null;
     try {
       // we retrieve the list of persons corresponding to the address
-      List<Person> filteredPersonList = personRepository.findDistinctByAddress(address);
+      filteredPersonList = personRepository.findDistinctByAddress(address);
       setAgeAndMedicationsAndAllergiesFromPersonList(filteredPersonList);
-      return filteredPersonList;
     } catch (Exception exception) {
       logger.error("Error when we try to get PersonList By address :"
           + exception.getMessage());
-      return null;
     }
+    return filteredPersonList;
   }
 
 
   @Override
   public Fire getPersonListWithStationNumber(String address) {
+    Fire fire = null;
     try {
       List<Person> filteredPersonList = getPersonListByAddress(address);
 
@@ -294,13 +291,12 @@ public class CommunityServiceImpl implements CommunityService {
 
       // We create an object including the list of persons and the list of fireStation
       // number deserving the address.
-      Fire fire = new Fire(fireDTOList, fireStationNumberList);
-      return fire;
+      fire = new Fire(fireDTOList, fireStationNumberList);
     } catch (Exception exception) {
       logger.error("Error when we try to get PersonList with a station number :"
           + exception.getMessage());
-      return null;
     }
+    return fire;
   }
 
 

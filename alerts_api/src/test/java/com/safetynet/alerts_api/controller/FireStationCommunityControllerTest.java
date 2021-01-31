@@ -58,6 +58,14 @@ public class FireStationCommunityControllerTest {
   }
 
   @Test
+  public void testGetPhoneNumberCoveredByThisStationIfStationNumberDoesntExist() throws Exception {
+    when(fireStationServiceMock.fireStationNumberExist(78))
+        .thenReturn(false);
+    mockMvc.perform(get("/phoneAlert?firestation=3"))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
   public void testGetHomesCoveredByTheseStation() throws Exception {
     List<Integer> fireStationNumberList = new ArrayList<>();
     fireStationNumberList.add(1);
@@ -68,5 +76,16 @@ public class FireStationCommunityControllerTest {
     mockMvc.perform(get("/flood?stations=1,2"))
         .andExpect(status().isOk());
   }
+
+  /*
+   * @Test public void testGetHomesCoveredByTheseStationIfStationNumberNotFound()
+   * throws Exception { List<Integer> fireStationNumberList = new ArrayList<>();
+   * fireStationNumberList.add(1); fireStationNumberList.add(2); List<Integer>
+   * fireStationNumberList2 = new ArrayList<>(); fireStationNumberList2.add(1);
+   * when(fireStationServiceMock.fireStationNumberListExist(fireStationNumberList)
+   * ).thenReturn(fireStationNumberList2);
+   * mockMvc.perform(get("/flood?stations=1,9"))
+   * .andExpect(status().isNotFound()); }
+   */
 
 }
