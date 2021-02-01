@@ -7,7 +7,7 @@ import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.FireStationRepository;
 import com.safetynet.alerts_api.repository.PersonRepository;
 import com.safetynet.alerts_api.service.address.AddressServiceImpl;
-import com.safetynet.alerts_api.service.childrenAdults.ChildrenAdultsService;
+import com.safetynet.alerts_api.service.childrenAdults.ChildrenAdultsServiceImpl;
 import com.safetynet.alerts_api.service.map.MapService;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class FireStationCommunityServiceImpl implements FireStationCommunityServ
   private AddressServiceImpl addressService;
 
   @Autowired
-  private ChildrenAdultsService childrenAdultsService;
+  private ChildrenAdultsServiceImpl childrenAdultsService;
 
   @Autowired
   private PersonRepository personRepository;

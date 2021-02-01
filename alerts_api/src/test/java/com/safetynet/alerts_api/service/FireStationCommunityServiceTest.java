@@ -12,7 +12,7 @@ import com.safetynet.alerts_api.repository.FireStationRepository;
 import com.safetynet.alerts_api.repository.MedicalRecordRepository;
 import com.safetynet.alerts_api.repository.PersonRepository;
 import com.safetynet.alerts_api.service.address.AddressServiceImpl;
-import com.safetynet.alerts_api.service.childrenAdults.ChildrenAdultsService;
+import com.safetynet.alerts_api.service.childrenAdults.ChildrenAdultsServiceImpl;
 import com.safetynet.alerts_api.service.fireStationCommunity.FireStationCommunityService;
 import com.safetynet.alerts_api.service.map.MapService;
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class FireStationCommunityServiceTest {
   private AddressServiceImpl addressServiceMock;
 
   @MockBean
-  private ChildrenAdultsService ChildrenAdultsServiceMock;
+  private ChildrenAdultsServiceImpl ChildrenAdultsServiceMock;
 
   @MockBean
   private PersonRepository personRepositoryMock;
@@ -87,6 +87,7 @@ public class FireStationCommunityServiceTest {
     Map<String, List<Person>> map = new HashMap<String, List<Person>>();
     map.put("childrenList", childrenList);
     map.put("adultList", adultList);
+    List<Person> childrenList1 = new ArrayList<>();
 
     when(firestationRepository.findDistinctByStation(org.mockito.ArgumentMatchers
         .anyInt())).thenReturn(fireStationList);
@@ -98,10 +99,8 @@ public class FireStationCommunityServiceTest {
     List<MedicalRecord> medicalRecordList = new ArrayList<>();
     medicalRecordList.add(medicalRecord1);
 
-    // when(medicalRecordRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien",
-    // "Bessy")).thenReturn(medicalRecordList);
     when(ChildrenAdultsServiceMock.fullChildrenListAndAdultListFromPersonList(personList,
-        childrenList, adultList)).thenReturn(map);
+        childrenList1, adultList)).thenReturn(map);
 
     FireStationCommunityDTO fireStationCommunityDTO = new FireStationCommunityDTO("Adrien", "Bessy", "", "", "",
         "");
