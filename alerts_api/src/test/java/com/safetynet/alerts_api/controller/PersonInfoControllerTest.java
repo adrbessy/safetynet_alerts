@@ -6,9 +6,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.JsonReaderRepository;
-import com.safetynet.alerts_api.service.community.CommunityService;
 import com.safetynet.alerts_api.service.email.EmailService;
 import com.safetynet.alerts_api.service.person.PersonService;
+import com.safetynet.alerts_api.service.personInfo.PersonInfoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,58 +26,58 @@ class PersonInfoControllerTest {
   private MockMvc mockMvc;
 
   @MockBean
-  private PersonService personService;
+  private PersonService personServiceMock;
 
   @MockBean
-  private CommunityService communityService;
+  private PersonInfoService personInfoServiceMock;
 
   @MockBean
-  private EmailService emailService;
+  private EmailService emailServiceMock;
 
   @MockBean
-  private JsonReaderRepository jsonReaderRepository;
+  private JsonReaderRepository jsonReaderRepositoryMock;
 
   private Person person;
 
 
   @Test
   public void testDeletePerson() throws Exception {
-    when(personService.personFirstNameLastNameExist("Jacob", "Boyd")).thenReturn(true);
+    when(personServiceMock.personFirstNameLastNameExist("Jacob", "Boyd")).thenReturn(true);
     mockMvc.perform(MockMvcRequestBuilders.delete("/person?firstName=Jacob&lastName=Boyd"))
         .andExpect(status().isOk());
   }
 
   @Test
   public void testDeletePersonIfThePersonDoesntExist() throws Exception {
-    when(personService.personFirstNameLastNameExist("Jacob", "Boy")).thenReturn(false);
+    when(personServiceMock.personFirstNameLastNameExist("Jacob", "Boy")).thenReturn(false);
     mockMvc.perform(MockMvcRequestBuilders.delete("/person?firstName=Jacob&lastName=Boy"))
         .andExpect(status().isNotFound());
   }
 
   @Test
   public void testGetCommunityEmail() throws Exception {
-    when(personService.cityExist("culver")).thenReturn(true);
+    when(personServiceMock.cityExist("culver")).thenReturn(true);
     mockMvc.perform(get("/communityEmail?city=culver"))
         .andExpect(status().isOk());
   }
 
   @Test
   public void testGetCommunityEmailIfCityDoesntExist() throws Exception {
-    when(personService.cityExist("culver")).thenReturn(false);
+    when(personServiceMock.cityExist("culver")).thenReturn(false);
     mockMvc.perform(get("/communityEmail?city=culver"))
         .andExpect(status().isNotFound());
   }
 
   @Test
   public void testGetPersonInfo() throws Exception {
-    when(personService.personFirstNameLastNameExist("Jacob", "Boyd")).thenReturn(true);
+    when(personServiceMock.personFirstNameLastNameExist("Jacob", "Boyd")).thenReturn(true);
     mockMvc.perform(get("/personInfo?firstName=Jacob&lastName=Boyd"))
         .andExpect(status().isOk());
   }
 
   @Test
   public void testGetPersonInfoIfCityDoesntExist() throws Exception {
-    when(personService.personFirstNameLastNameExist("Jaco", "Boyd")).thenReturn(false);
+    when(personServiceMock.personFirstNameLastNameExist("Jaco", "Boyd")).thenReturn(false);
     mockMvc.perform(get("/personInfo?firstName=Jaco&lastName=Boyd"))
         .andExpect(status().isNotFound());
   }
@@ -94,7 +94,7 @@ class PersonInfoControllerTest {
     person.setPhone("04815644");
     person.setEmail("uttoxuballo-8128@yopmail.com");
 
-    when(personService.savePerson(person)).thenReturn(person);
+    when(personServiceMock.savePerson(person)).thenReturn(person);
 
     MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/person")
         .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
@@ -116,8 +116,8 @@ class PersonInfoControllerTest {
     person.setEmail("uttoxuballo-8128@yopmail.com");
 
     long id = 2;
-    when(personService.personIdExist(id)).thenReturn(true);
-    when(personService.getPerson(id)).thenReturn(person);
+    when(personServiceMock.personIdExist(id)).thenReturn(true);
+    when(personServiceMock.getPerson(id)).thenReturn(person);
     MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put("/person/" + id)
         .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
         .content(new ObjectMapper().writeValueAsString(person));
@@ -136,8 +136,8 @@ class PersonInfoControllerTest {
     person.setEmail("uttoxuballo-8128@yopmail.com");
 
     long id = 454;
-    when(personService.personIdExist(id)).thenReturn(false);
-    when(personService.getPerson(id)).thenReturn(person);
+    when(personServiceMock.personIdExist(id)).thenReturn(false);
+    when(personServiceMock.getPerson(id)).thenReturn(person);
     MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put("/person/" + id)
         .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
         .content(new ObjectMapper().writeValueAsString(person));

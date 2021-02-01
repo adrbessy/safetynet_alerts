@@ -4,7 +4,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.safetynet.alerts_api.repository.JsonReaderRepository;
-import com.safetynet.alerts_api.service.community.CommunityService;
+import com.safetynet.alerts_api.service.childAlert.ChildAlertService;
+import com.safetynet.alerts_api.service.fire.FireService;
 import com.safetynet.alerts_api.service.person.PersonService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,13 @@ public class HomeControllerTest {
   private MockMvc mockMvc;
 
   @MockBean
-  private CommunityService communityService;
+  private PersonService personServiceMock;
 
   @MockBean
-  private PersonService personService;
+  private FireService fireServiceMock;
+
+  @MockBean
+  private ChildAlertService childAlertServiceMock;
 
   @MockBean
   private JsonReaderRepository jsonReaderRepository;
@@ -30,7 +34,7 @@ public class HomeControllerTest {
   @Test
   public void testGetFire() throws Exception {
     String address = "1509 Culver St";
-    when(personService.personAddressExist(address)).thenReturn(true);
+    when(personServiceMock.personAddressExist(address)).thenReturn(true);
     mockMvc.perform(get("/fire?address=" + address))
         .andExpect(status().isOk());
   }
@@ -38,7 +42,7 @@ public class HomeControllerTest {
   @Test
   public void testGetFireIfAddressDoesntExist() throws Exception {
     String address = "1509 Culver S";
-    when(personService.personAddressExist(address)).thenReturn(false);
+    when(personServiceMock.personAddressExist(address)).thenReturn(false);
     mockMvc.perform(get("/fire?address=" + address))
         .andExpect(status().isNotFound());
   }
@@ -46,7 +50,7 @@ public class HomeControllerTest {
   @Test
   public void testGetHome() throws Exception {
     String address = "1509 Culver St";
-    when(personService.personAddressExist(address)).thenReturn(true);
+    when(personServiceMock.personAddressExist(address)).thenReturn(true);
     mockMvc.perform(get("/childAlert?address=" + address))
         .andExpect(status().isOk());
   }
@@ -54,7 +58,7 @@ public class HomeControllerTest {
   @Test
   public void testGetHomeIfAddressDoesntExist() throws Exception {
     String address = "1509 Culver S";
-    when(personService.personAddressExist(address)).thenReturn(false);
+    when(personServiceMock.personAddressExist(address)).thenReturn(false);
     mockMvc.perform(get("/childAlert?address=" + address))
         .andExpect(status().isNotFound());
   }

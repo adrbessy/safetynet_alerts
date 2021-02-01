@@ -3,7 +3,8 @@ package com.safetynet.alerts_api.controller;
 import com.safetynet.alerts_api.exceptions.NonexistentException;
 import com.safetynet.alerts_api.model.Fire;
 import com.safetynet.alerts_api.model.Home;
-import com.safetynet.alerts_api.service.community.CommunityService;
+import com.safetynet.alerts_api.service.childAlert.ChildAlertService;
+import com.safetynet.alerts_api.service.fire.FireService;
 import com.safetynet.alerts_api.service.person.PersonService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +19,10 @@ public class HomeController {
   private static final Logger logger = LogManager.getLogger(HomeController.class);
 
   @Autowired
-  private CommunityService communityService;
+  private ChildAlertService childAlertService;
+
+  @Autowired
+  private FireService fireService;
 
   @Autowired
   private PersonService personService;
@@ -39,7 +43,7 @@ public class HomeController {
           "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
       existingPersonAddress = personService.personAddressExist(address);
       if (existingPersonAddress) {
-        fire = communityService.getPersonListWithStationNumber(address);
+        fire = fireService.getPersonListWithStationNumber(address);
         logger.info(
             "response following the Get on the endpoint 'fire' with the given address : {"
                 + address + "}");
@@ -72,7 +76,7 @@ public class HomeController {
           "Get request of the endpoint 'childAlert' with the address : {" + address + "}");
       existingPersonAddress = personService.personAddressExist(address);
       if (existingPersonAddress) {
-        home = communityService.getChildrenListAndAdultListFromAddress(address);
+        home = childAlertService.getChildrenListAndAdultListFromAddress(address);
         logger
             .info("response following the Get on the endpoint 'childAlert' with the given address : {" + address + "}");
       }

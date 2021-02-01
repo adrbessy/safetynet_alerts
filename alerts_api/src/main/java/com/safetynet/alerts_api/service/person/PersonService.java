@@ -1,6 +1,7 @@
 package com.safetynet.alerts_api.service.person;
 
 import com.safetynet.alerts_api.model.Person;
+import java.util.List;
 
 public interface PersonService {
 
@@ -65,4 +66,13 @@ public interface PersonService {
    * @return - A boolean
    */
   public boolean personFirstNameLastNameExist(String firstName, String lastName);
+
+  /**
+   * Save the person list
+   * 
+   * @param personList Person List to save
+   * @return true if everything goes right, otherwise returns false
+   * 
+   */
+  public boolean saveAllPersons(List<Person> personList);
 }

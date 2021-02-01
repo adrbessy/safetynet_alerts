@@ -2,6 +2,7 @@ package com.safetynet.alerts_api.service.person;
 
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.PersonRepository;
+import java.util.List;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -75,6 +76,20 @@ public class PersonServiceImpl implements PersonService {
       logger.error("Error when we try to save a person :" + exception.getMessage());
       return null;
     }
+  }
+
+
+  @Override
+  public boolean saveAllPersons(List<Person> personList) {
+    if (personList != null) {
+      try {
+        personRepository.saveAll(personList);
+        return true;
+      } catch (Exception exception) {
+        logger.error("Erreur lors de l'enregistrement de la liste des personnes " + exception.getMessage());
+      }
+    }
+    return false;
   }
 
 }

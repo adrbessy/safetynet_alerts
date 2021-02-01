@@ -3,9 +3,9 @@ package com.safetynet.alerts_api.controller;
 import com.safetynet.alerts_api.exceptions.NonexistentException;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.model.PersonInfoDTO;
-import com.safetynet.alerts_api.service.community.CommunityService;
 import com.safetynet.alerts_api.service.email.EmailService;
 import com.safetynet.alerts_api.service.person.PersonService;
+import com.safetynet.alerts_api.service.personInfo.PersonInfoService;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +29,7 @@ public class PersonInfoController {
   private PersonService personService;
 
   @Autowired
-  private CommunityService communityService;
+  private PersonInfoService personInfoService;
 
   @Autowired
   private EmailService emailService;
@@ -163,7 +163,7 @@ public class PersonInfoController {
               + lastName);
       existingPersonFistNameLastName = personService.personFirstNameLastNameExist(firstName, lastName);
       if (existingPersonFistNameLastName) {
-        personInfoByaddressList = communityService
+        personInfoByaddressList = personInfoService
             .getPersonListByFirstNameAndLastNameThenOnlyLastName(
                 firstName,
                 lastName);

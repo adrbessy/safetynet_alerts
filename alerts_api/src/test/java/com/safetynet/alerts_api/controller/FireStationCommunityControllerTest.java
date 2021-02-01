@@ -4,8 +4,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.safetynet.alerts_api.repository.JsonReaderRepository;
-import com.safetynet.alerts_api.service.community.CommunityService;
 import com.safetynet.alerts_api.service.fireStation.FireStationService;
+import com.safetynet.alerts_api.service.fireStationCommunity.FireStationCommunityService;
+import com.safetynet.alerts_api.service.flood.FloodService;
 import com.safetynet.alerts_api.service.phone.PhoneService;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +23,13 @@ public class FireStationCommunityControllerTest {
   private MockMvc mockMvc;
 
   @MockBean
-  private CommunityService communityService;
+  private PhoneService phoneService;
 
   @MockBean
-  private PhoneService phoneService;
+  private FireStationCommunityService fireStationCommunityServiceMock;
+
+  @MockBean
+  private FloodService floodServiceMock;
 
   @MockBean
   private FireStationService fireStationServiceMock;
