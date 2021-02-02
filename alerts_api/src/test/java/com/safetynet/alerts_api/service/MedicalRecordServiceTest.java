@@ -1,23 +1,28 @@
 package com.safetynet.alerts_api.service;
 
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 import com.safetynet.alerts_api.repository.MedicalRecordRepository;
-import com.safetynet.alerts_api.service.medicalRecord.MedicalRecordServiceImpl;
+import com.safetynet.alerts_api.service.medicalRecord.MedicalRecordService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest()
 public class MedicalRecordServiceTest {
 
-  private MedicalRecordServiceImpl medicalRecordService;
+  @Autowired
+  private MedicalRecordService medicalRecordService;
 
-  @Mock
+  @MockBean
   private MedicalRecordRepository medicalRecordRepositoryMock;
 
   @BeforeEach
   private void setUp() {
-    medicalRecordService = new MedicalRecordServiceImpl();
+
   }
 
   /**
@@ -26,14 +31,10 @@ public class MedicalRecordServiceTest {
    */
   @Test
   public void testDeleteMedicalRecord() {
-    /*
-     * Mockito.doThrow(new Exception()).when(medicalRecordRepositoryMock).
-     * deletePersonByFirstNameAndLastNameAllIgnoreCase( any(String.class),
-     * any(String.class)); medicalRecordService.deleteMedicalRecord("Adrien",
-     * "Bessy"); verify(medicalRecordRepositoryMock,
-     * Mockito.times(1)).deletePersonByFirstNameAndLastNameAllIgnoreCase(
-     * any(String.class), any(String.class));
-     */
+    doNothing().when(medicalRecordRepositoryMock).deletePersonByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy");
+    medicalRecordService.deleteMedicalRecord("Adrien", "Bessy");
+    verify(medicalRecordRepositoryMock, Mockito.times(1)).deletePersonByFirstNameAndLastNameAllIgnoreCase("Adrien",
+        "Bessy");
   }
 
 }

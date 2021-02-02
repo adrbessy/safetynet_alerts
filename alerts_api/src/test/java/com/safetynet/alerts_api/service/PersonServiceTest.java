@@ -10,6 +10,7 @@ import com.safetynet.alerts_api.service.person.PersonService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,13 @@ class PersonServiceTest {
   @MockBean
   private PersonRepository personRepositoryMock;
 
+  private Person person;
+
+  @BeforeEach
+  private void setUp() {
+    person = new Person();
+  }
+
 
   /**
    * test to get a person.
@@ -33,10 +41,11 @@ class PersonServiceTest {
   @Test
   public void testGetPerson() {
     long id = 54;
-    Person person = new Person();
     person.setId(id);
     Optional<Person> optionalPerson = Optional.of(person);
+
     when(personRepositoryMock.findById(id)).thenReturn(optionalPerson);
+
     Person person2 = personService.getPerson(id);
     assertThat(person2).isEqualTo(person);
   }
@@ -48,8 +57,8 @@ class PersonServiceTest {
    */
   @Test
   public void testSavePerson() {
-    Person person = new Person();
     when(personRepositoryMock.save(person)).thenReturn(person);
+
     Person person2 = personService.savePerson(person);
     assertThat(person2).isEqualTo(person);
   }
@@ -61,11 +70,12 @@ class PersonServiceTest {
    */
   @Test
   public void testDeletePerson() {
-    Person person = new Person();
     List<Person> personList = new ArrayList<>();
     personList.add(person);
+
     when(personRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy")).thenReturn(personList);
     doNothing().when(personRepositoryMock).deletePersonByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy");
+
     personService.deletePerson("Adrien", "Bessy");
     verify(personRepositoryMock,
         Mockito.times(1)).deletePersonByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy");

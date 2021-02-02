@@ -104,19 +104,19 @@ public class FireStationController {
    */
   @PostMapping("/firestation")
   public FireStation createFireStation(@RequestBody FireStation fireStation) {
+    FireStation savedFireStation = null;
     try {
       logger.info(
           "Post request of the endpoint 'firestation' with the firestation : {" + fireStation.toString() + "}");
-      FireStation savedFireStation = fireStationService.saveFireStation(fireStation);
+      savedFireStation = fireStationService.saveFireStation(fireStation);
       logger.info(
           "response following the Post on the endpoint 'firestation' with the given fireStation : {"
               + fireStation.toString() + "}");
-      return savedFireStation;
     } catch (Exception exception) {
       logger.error("Error in the fireStationController in the method createFireStation :"
           + exception.getMessage());
-      return null;
     }
+    return savedFireStation;
   }
 
 }

@@ -160,7 +160,6 @@ public class FireStationCommunityServiceTest {
     assertThat(result).isEqualTo(personList);
     verify(personRepositoryMock,
         Mockito.times(1)).findAllByAddressInOrderByAddress(addressList);
-
   }
 
 }

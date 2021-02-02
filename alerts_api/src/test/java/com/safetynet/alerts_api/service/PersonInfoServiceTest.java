@@ -16,6 +16,7 @@ import com.safetynet.alerts_api.service.personInfo.PersonInfoService;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -51,9 +52,23 @@ public class PersonInfoServiceTest {
   @MockBean
   private MedicalRecord medicalRecordMock;
 
-  /*
-   * @BeforeEach private void setUp() { personService = new PersonServiceImpl(); }
-   */
+  private MedicalRecord medicalRecord1;
+  private List<MedicalRecord> medicalRecordList;
+  private Person person;
+  private List<Person> personList;
+
+  @BeforeEach
+  private void setUp() {
+    medicalRecord1 = new MedicalRecord();
+    medicalRecord1.setBirthdate("16/06/2019");
+    medicalRecordList = new ArrayList<>();
+    medicalRecordList.add(medicalRecord1);
+    person = new Person();
+    person.setEmail("ballapolorra-7977@yopmail.com");
+    person.setAddress("82 Alexander Road");
+    personList = new ArrayList<>();
+    personList.add(person);
+  }
 
 
   /**
@@ -62,10 +77,8 @@ public class PersonInfoServiceTest {
    */
   @Test
   public void testSetAgeAndMedicationsAndAllergiesFromPersonList() {
-    MedicalRecord medicalRecord1 = new MedicalRecord();
-    medicalRecord1.setBirthdate("16/06/2019");
-    List<MedicalRecord> medicalRecordList = new ArrayList<>();
-    medicalRecordList.add(medicalRecord1);
+    person.setFirstName("Adrien");
+    person.setLastName("Bessy");
 
     when(medicalRecordRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy"))
         .thenReturn(medicalRecordList);
@@ -74,14 +87,6 @@ public class PersonInfoServiceTest {
     doNothing().when(personMock).setAge(medicalRecord1,
         LocalDate.of(2021, 1, 11));
     doNothing().when(personMock).setMedicationsAndAllergies(medicalRecord1);
-    Person person = new Person();
-    person.setId((long) 5);
-    person.setFirstName("Adrien");
-    person.setLastName("Bessy");
-    person.setEmail("ballapolorra-7977@yopmail.com");
-    person.setAddress("82 Alexander Road");
-    List<Person> personList = new ArrayList<>();
-    personList.add(person);
 
     personInfoService.setAgeAndMedicationsAndAllergiesFromPersonList(personList);
     assertThat(person.getAge()).isEqualTo(1);
@@ -94,18 +99,7 @@ public class PersonInfoServiceTest {
    */
   @Test
   public void testGetPersonListByFirstNameAndLastName() {
-    Person person = new Person();
-    person.setEmail("ballapolorra-7977@yopmail.com");
-    person.setAddress("82 Alexander Road");
-    List<Person> personList = new ArrayList<>();
-    personList.add(person);
     when(personRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy")).thenReturn(personList);
-
-    MedicalRecord medicalRecord1 = new MedicalRecord();
-    medicalRecord1.setBirthdate("16/06/2019");
-    List<MedicalRecord> medicalRecordList = new ArrayList<>();
-    medicalRecordList.add(medicalRecord1);
-
     when(medicalRecordRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy"))
         .thenReturn(medicalRecordList);
     when(medicalRecordMock.getBirthdate())
@@ -126,18 +120,7 @@ public class PersonInfoServiceTest {
    */
   @Test
   public void testGetPersonListByLastName() {
-    Person person = new Person();
-    person.setEmail("ballapolorra-7977@yopmail.com");
-    person.setAddress("82 Alexander Road");
-    List<Person> personList = new ArrayList<>();
-    personList.add(person);
     when(personRepositoryMock.findByLastNameAllIgnoreCase("Bessy")).thenReturn(personList);
-
-    MedicalRecord medicalRecord1 = new MedicalRecord();
-    medicalRecord1.setBirthdate("16/06/2019");
-    List<MedicalRecord> medicalRecordList = new ArrayList<>();
-    medicalRecordList.add(medicalRecord1);
-
     when(medicalRecordRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy"))
         .thenReturn(medicalRecordList);
     when(medicalRecordMock.getBirthdate())
@@ -158,18 +141,13 @@ public class PersonInfoServiceTest {
    */
   @Test
   public void testGetPersonListByFirstNameAndLastNameThenOnlyLastName() {
-    Person person = new Person();
-    person.setEmail("ballapolorra-7977@yopmail.com");
-    person.setAddress("82 Alexander Road");
-    List<Person> personList = new ArrayList<>();
-    personList.add(person);
+    PersonInfoDTO personInfoDTO = new PersonInfoDTO("Bessy", 45,
+        "1 rue antonio vivaldi", "Paris", "75000", "dgsdfgf@gmail.com",
+        new ArrayList<>(), new ArrayList<>());
+    List<PersonInfoDTO> personInfoDTOList = new ArrayList<>();
+    personInfoDTOList.add(personInfoDTO);
+
     when(personRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy")).thenReturn(personList);
-
-    MedicalRecord medicalRecord1 = new MedicalRecord();
-    medicalRecord1.setBirthdate("16/06/2019");
-    List<MedicalRecord> medicalRecordList = new ArrayList<>();
-    medicalRecordList.add(medicalRecord1);
-
     when(medicalRecordRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy"))
         .thenReturn(medicalRecordList);
     when(medicalRecordMock.getBirthdate())
@@ -177,21 +155,13 @@ public class PersonInfoServiceTest {
     doNothing().when(personMock).setAge(medicalRecord1,
         LocalDate.of(2021, 1, 11));
     doNothing().when(personMock).setMedicationsAndAllergies(medicalRecord1);
-
     when(personRepositoryMock.findByLastNameAllIgnoreCase("Bessy")).thenReturn(personList);
-
-    PersonInfoDTO personInfoDTO = new PersonInfoDTO("Bessy", 45,
-        "1 rue antonio vivaldi", "Paris", "75000", "dgsdfgf@gmail.com",
-        new ArrayList<>(), new ArrayList<>());
-    List<PersonInfoDTO> personInfoDTOList = new ArrayList<>();
-    personInfoDTOList.add(personInfoDTO);
     when(mapServiceMock.convertToPersonInfoDTOList(personList))
         .thenReturn(personInfoDTOList);
 
     List<PersonInfoDTO> personInfoDTOList2 = personInfoService.getPersonListByFirstNameAndLastNameThenOnlyLastName(
         "Adrien",
         "Bessy");
-
     assertThat(personInfoDTOList2).isEqualTo(personInfoDTOList);
 
   }

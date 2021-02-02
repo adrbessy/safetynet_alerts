@@ -36,7 +36,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
 
   @Override
-  public void deleteMedicalRecord(final String firstname, final String lastname) {
+  public void deleteMedicalRecord(String firstname, String lastname) {
     medicalRecordRepository.deletePersonByFirstNameAndLastNameAllIgnoreCase(firstname, lastname);
   }
 

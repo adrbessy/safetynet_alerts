@@ -5,7 +5,6 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import com.safetynet.alerts_api.model.FireDTO;
 import com.safetynet.alerts_api.model.FireDTOByAddress;
-import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.MedicalRecordRepository;
 import com.safetynet.alerts_api.repository.PersonRepository;
@@ -39,12 +38,6 @@ public class FloodServiceTest {
   private MedicalRecordRepository medicalRecordRepositoryMock;
 
   @MockBean
-  private MedicalRecord medicalRecordMock;
-
-  @MockBean
-  private Person personMock;
-
-  @MockBean
   private MapService mapServiceMock;
 
   /**
@@ -58,8 +51,6 @@ public class FloodServiceTest {
     stationNumberList.add(5);
     List<String> addressList = new ArrayList<>();
     addressList.add("1 rue antonio vivaldi");
-    when(addressServiceMock.getAddressListFromStationNumberList(stationNumberList)).thenReturn(addressList);
-
     Person person = new Person();
     person.setId((long) 5);
     person.setFirstName("Adrien");
@@ -69,24 +60,21 @@ public class FloodServiceTest {
     List<Person> personList = new ArrayList<>();
     personList.add(person);
     String address = "1 rue antonio vivaldi";
-
-    when(personRepositoryMock.findDistinctByAddress(address)).thenReturn(personList);
-    doNothing().when(personInfoServiceMock).setAgeAndMedicationsAndAllergiesFromPersonList(personList);
-
     FireDTO fireDTO = new FireDTO("Bessy", 45, "0065468", new ArrayList<>(), new ArrayList<>());
     List<FireDTO> fireDTOList = new ArrayList<>();
     fireDTOList.add(fireDTO);
-
-    when(mapServiceMock.convertToFireDTOList(personList))
-        .thenReturn(fireDTOList);
-
     FireDTOByAddress personInfoByAddress = new FireDTOByAddress("1 rue antonio vivaldi",
         fireDTOList);
     List<FireDTOByAddress> personInfoByAddressList = new ArrayList<>();
     personInfoByAddressList.add(personInfoByAddress);
 
-    List<FireDTOByAddress> personInfoByAddressList2 = floodService.getPersonInfoByAddressList(stationNumberList);
+    when(addressServiceMock.getAddressListFromStationNumberList(stationNumberList)).thenReturn(addressList);
+    when(personRepositoryMock.findDistinctByAddress(address)).thenReturn(personList);
+    doNothing().when(personInfoServiceMock).setAgeAndMedicationsAndAllergiesFromPersonList(personList);
+    when(mapServiceMock.convertToFireDTOList(personList))
+        .thenReturn(fireDTOList);
 
+    List<FireDTOByAddress> personInfoByAddressList2 = floodService.getPersonInfoByAddressList(stationNumberList);
     assertThat(personInfoByAddressList2).isEqualTo(personInfoByAddressList);
   }
 

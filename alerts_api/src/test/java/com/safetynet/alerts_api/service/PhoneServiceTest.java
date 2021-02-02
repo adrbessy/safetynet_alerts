@@ -40,6 +40,7 @@ class PhoneServiceTest {
     phoneList.add("355-96-61");
     phoneList.add("653-47-37");
     phoneList.add("896-86-29");
+
     List<String> result = phoneService.getPhoneListFromPersonList(personList);
     assertThat(result).isEqualTo(phoneList);
   }
