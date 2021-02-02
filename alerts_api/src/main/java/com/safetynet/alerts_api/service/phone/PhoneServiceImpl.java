@@ -8,11 +8,15 @@ import com.safetynet.alerts_api.service.address.AddressServiceImpl;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PhoneServiceImpl implements PhoneService {
+
+  private static final Logger logger = LogManager.getLogger(PhoneServiceImpl.class);
 
   @Autowired
   private PersonRepository personRepository;
@@ -25,6 +29,8 @@ public class PhoneServiceImpl implements PhoneService {
 
   @Override
   public List<String> getPhoneListFromPersonList(List<Person> personList) {
+    logger
+        .debug("in the method getPhoneListFromPersonList in the class PhoneServiceImpl");
     List<String> phoneList = new ArrayList<>();
     if (personList != null) {
       personList.forEach(personIterator -> {
@@ -38,6 +44,8 @@ public class PhoneServiceImpl implements PhoneService {
 
   @Override
   public List<String> getPhoneNumberList(Integer firestation) {
+    logger
+        .debug("in the method getPhoneNumberList in the class PhoneServiceImpl");
     // we retrieve the list of stations corresponding to the stationNumber
     List<FireStation> fireStationList = firestationRepository.findDistinctByStation(firestation);
 
@@ -49,12 +57,8 @@ public class PhoneServiceImpl implements PhoneService {
 
     // we retrieve the address list corresponding to the filteredPerson list
     List<String> phoneList = getPhoneListFromPersonList(filteredPersonList);
-    System.out.println("phoneList before delete duplicates : " + phoneList);
-    // List<String> phoneListNoDuplicates =
-    // phoneList.stream().distinct().collect(Collectors.toList());
     LinkedHashSet<String> hashSet = new LinkedHashSet<>(phoneList);
     List<String> listWithoutDuplicates = new ArrayList<>(hashSet);
-    System.out.println("phoneList after delete duplicates : " + listWithoutDuplicates);
 
     return listWithoutDuplicates;
   }

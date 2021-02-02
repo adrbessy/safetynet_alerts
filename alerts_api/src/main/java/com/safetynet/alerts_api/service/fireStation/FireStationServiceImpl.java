@@ -21,6 +21,7 @@ public class FireStationServiceImpl implements FireStationService {
 
   @Override
   public boolean fireStationAddressExist(String address) {
+    logger.debug("in the method fireStationAddressExist in the class FireStationServiceImpl");
     boolean existingFireStationAddress = fireStationRepository.existsByAddress(address);
     return existingFireStationAddress;
   }
@@ -28,12 +29,14 @@ public class FireStationServiceImpl implements FireStationService {
 
   @Override
   public boolean fireStationNumberExist(Integer stationNumber) {
+    logger.debug("in the method fireStationNumberExist in the class FireStationServiceImpl");
     boolean existingFireStationNumber = fireStationRepository.existsByStation(stationNumber);
     return existingFireStationNumber;
   }
 
   @Override
   public List<Integer> fireStationNumberListExist(List<Integer> stationNumberList) {
+    logger.debug("in the method fireStationNumberListExist in the class FireStationServiceImpl");
     List<Integer> FireStationNumberNotFound = new ArrayList<>();
     stationNumberList.forEach(stationIterator -> {
       if (!fireStationRepository.existsByStation(stationIterator)) {
@@ -46,17 +49,20 @@ public class FireStationServiceImpl implements FireStationService {
 
   @Override
   public void deleteFireStation(final Long id) {
+    logger.debug("in the method deleteFireStation in the class FireStationServiceImpl");
     fireStationRepository.deleteById(id);
   }
 
   @Override
   public void deleteFireStation(String address) {
+    logger.debug("in the method deleteFireStation in the class FireStationServiceImpl");
     fireStationRepository.deleteByAddress(address);
   }
 
 
   @Override
   public FireStation getFireStation(final String address) {
+    logger.debug("in the method getFireStation in the class FireStationServiceImpl");
     Optional<FireStation> fireStation = fireStationRepository.findByAddress(address);
     if (fireStation.isPresent()) {
       FireStation fireStationToUpdate = fireStation.get();
@@ -69,6 +75,7 @@ public class FireStationServiceImpl implements FireStationService {
 
   @Override
   public FireStation saveFireStation(FireStation fireStation) {
+    logger.debug("in the method saveFireStation in the class FireStationServiceImpl");
     FireStation savedFireStation = fireStationRepository.save(fireStation);
     return savedFireStation;
   }
@@ -76,6 +83,7 @@ public class FireStationServiceImpl implements FireStationService {
 
   @Override
   public List<Integer> getStationNumberListFromFireStationList(List<FireStation> fireStationList) {
+    logger.debug("in the method getStationNumberListFromFireStationList in the class FireStationServiceImpl");
     List<Integer> fireStationNumberList = new ArrayList<>();
     if (fireStationList != null) {
       fireStationList.forEach(fireStationIterator -> {
@@ -90,6 +98,7 @@ public class FireStationServiceImpl implements FireStationService {
 
   @Override
   public boolean saveAllFireStations(List<FireStation> fireStationsList) {
+    logger.debug("in the method saveAllFireStations in the class FireStationServiceImpl");
     if (fireStationsList != null && !fireStationsList.isEmpty()) {
       try {
         fireStationRepository.saveAll(fireStationsList);
@@ -100,6 +109,5 @@ public class FireStationServiceImpl implements FireStationService {
     }
     return false;
   }
-
 }
 

@@ -7,12 +7,17 @@ import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.model.PersonInfoDTO;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MapService {
 
+  private static final Logger logger = LogManager.getLogger(MapService.class);
+
   public List<FireStationCommunityDTO> convertToFireStationCommunityDTOList(List<Person> personList) {
+    logger.debug("in the method convertToFireStationCommunityDTOList in the class MapService");
     List<FireStationCommunityDTO> fireStationCommunityDTOList = new ArrayList<>();
     personList.forEach(personIterator -> {
       FireStationCommunityDTO fireStationCommunityDTO = new FireStationCommunityDTO(personIterator.getFirstName(),
@@ -26,6 +31,7 @@ public class MapService {
   }
 
   public List<ChildAlertDTO> convertToChildAlertDTOList(List<Person> personList) {
+    logger.debug("in the method convertToChildAlertDTOList in the class MapService");
     List<ChildAlertDTO> childAlertDTOList = new ArrayList<>();
     personList.forEach(personIterator -> {
       ChildAlertDTO childAlertDTO = new ChildAlertDTO(personIterator.getLastName(),
@@ -37,6 +43,7 @@ public class MapService {
   }
 
   public List<FireDTO> convertToFireDTOList(List<Person> personList) {
+    logger.debug("in the method convertToFireDTOList in the class MapService");
     List<FireDTO> fireDTOList = new ArrayList<>();
     personList.forEach(personIterator -> {
       FireDTO fireDTO = new FireDTO(personIterator.getLastName(), personIterator.getAge(),
@@ -47,6 +54,7 @@ public class MapService {
   }
 
   public List<PersonInfoDTO> convertToPersonInfoDTOList(List<Person> personList) {
+    logger.debug("in the method convertToPersonInfoDTOList in the class MapService");
     List<PersonInfoDTO> personInfoDTOList = new ArrayList<>();
     personList.forEach(personIterator -> {
       PersonInfoDTO personInfoDTO = new PersonInfoDTO(personIterator.getLastName(), personIterator.getAge(),

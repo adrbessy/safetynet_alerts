@@ -22,6 +22,7 @@ public class HomeServiceImpl implements HomeService {
 
   @Override
   public List<Person> getPersonListByAddress(String address) {
+    logger.debug("in the method getPersonListByAddress in the class HomeServiceImpl");
     List<Person> filteredPersonList = null;
     try {
       // we retrieve the list of persons corresponding to the address

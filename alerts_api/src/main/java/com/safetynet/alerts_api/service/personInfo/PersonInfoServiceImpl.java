@@ -29,6 +29,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
   @Override
   public List<PersonInfoDTO> getPersonListByFirstNameAndLastNameThenOnlyLastName(String firstName, String lastName) {
+    logger
+        .debug("in the method getPersonListByFirstNameAndLastNameThenOnlyLastName in the class PersonInfoServiceImpl");
     List<PersonInfoDTO> PersonInfoDTOList = null;
     try {
       List<Person> personInfoByFirstNameAndLastName = getPersonListByFirstNameAndLastName(firstName, lastName);
@@ -49,6 +51,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
   @Override
   public List<Person> getPersonListByFirstNameAndLastName(String firstName, String lastName) {
+    logger
+        .debug("in the method getPersonListByFirstNameAndLastName in the class PersonInfoServiceImpl");
     List<Person> filteredPersonList = null;
     try {
       // we retrieve the list of persons corresponding to the address
@@ -63,6 +67,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
   @Override
   public List<Person> getPersonListByLastName(String lastName) {
+    logger
+        .debug("in the method getPersonListByLastName in the class PersonInfoServiceImpl");
     List<Person> filteredPersonList = null;
     try {
       // we retrieve the list of persons corresponding to the address
@@ -77,6 +83,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
   @Override
   public void setAgeAndMedicationsAndAllergiesFromPersonList(List<Person> personList) {
+    logger
+        .debug("in the method setAgeAndMedicationsAndAllergiesFromPersonList in the class PersonInfoServiceImpl");
     try {
       personList.forEach(personIterator -> {
         medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(

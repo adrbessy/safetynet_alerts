@@ -33,6 +33,7 @@ public class FireServiceImpl implements FireService {
 
   @Override
   public Fire getPersonListWithStationNumber(String address) {
+    logger.debug("in the method getPersonListWithStationNumber in the class FireServiceImpl");
     Fire fire = null;
     try {
       List<Person> filteredPersonList = homeService.getPersonListByAddress(address);

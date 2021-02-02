@@ -23,6 +23,7 @@ public class ChildrenAdultsServiceImpl implements ChildrenAdultsService {
   public Map<String, List<Person>> fullChildrenListAndAdultListFromPersonList(List<Person> personList,
       List<Person> childrenList,
       List<Person> adultList) {
+    logger.debug("in the method fullChildrenListAndAdultListFromPersonList in the class ChildrenAdultsServiceImpl");
     try {
       personList.forEach(personIterator -> {
         medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(

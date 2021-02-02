@@ -21,6 +21,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
   @Override
   public boolean medicalRecordFirstNameLastNameExist(String firstName, String lastName) {
+    logger.debug("in the method medicalRecordFirstNameLastNameExist in the class FireStationServiceImpl");
     boolean existingMedicalRecordFirstNameLastName = medicalRecordRepository.existsByfirstNameAndLastNameAllIgnoreCase(
         firstName,
         lastName);
@@ -30,6 +31,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
   @Override
   public boolean medicalRecordIdExist(Long id) {
+    logger.debug("in the method medicalRecordIdExist in the class FireStationServiceImpl");
     boolean existingFireStationId = medicalRecordRepository.existsById(id);
     return existingFireStationId;
   }
@@ -37,12 +39,14 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
   @Override
   public void deleteMedicalRecord(String firstname, String lastname) {
+    logger.debug("in the method deleteMedicalRecord in the class FireStationServiceImpl");
     medicalRecordRepository.deletePersonByFirstNameAndLastNameAllIgnoreCase(firstname, lastname);
   }
 
 
   @Override
   public MedicalRecord getMedicalRecord(final Long id) {
+    logger.debug("in the method getMedicalRecord in the class FireStationServiceImpl");
     Optional<MedicalRecord> medRec = medicalRecordRepository.findById(id);
     if (medRec.isPresent()) {
       MedicalRecord medicalRecordToUpdate = medRec.get();
@@ -55,6 +59,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
   @Override
   public MedicalRecord saveMedicalRecord(MedicalRecord medicalRecord) {
+    logger.debug("in the method saveMedicalRecord in the class FireStationServiceImpl");
     MedicalRecord savedMedicalRecord = medicalRecordRepository.save(medicalRecord);
     return savedMedicalRecord;
   }
@@ -62,6 +67,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
   @Override
   public boolean saveAllMedicalRecords(List<MedicalRecord> medicalRecordList) {
+    logger.debug("in the method saveAllMedicalRecords in the class FireStationServiceImpl");
     if (medicalRecordList != null && !medicalRecordList.isEmpty()) {
       try {
         medicalRecordRepository.saveAll(medicalRecordList);

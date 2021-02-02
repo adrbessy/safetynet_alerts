@@ -29,6 +29,7 @@ public class FloodServiceImpl implements FloodService {
 
   @Override
   public List<FireDTOByAddress> getPersonInfoByAddressList(List<Integer> stationNumberList) {
+    logger.debug("in the method getPersonInfoByAddressList in the class FloodServiceImpl");
     // We create an object including the list of persons and the list of fireStation
     // number deserving the address.
     List<FireDTOByAddress> personInfoByAddressList = new ArrayList<>();

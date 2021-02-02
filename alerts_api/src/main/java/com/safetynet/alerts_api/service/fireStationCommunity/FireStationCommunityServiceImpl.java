@@ -39,10 +39,11 @@ public class FireStationCommunityServiceImpl implements FireStationCommunityServ
 
   @Override
   public FireStationCommunity getPersonNumberInfoListFromStationNumber(Integer stationNumber) {
+    logger.debug("in the method getPersonNumberInfoListFromStationNumber in the class FireStationCommunityServiceImpl");
+    FireStationCommunity fireStationCommunity = null;
     if (stationNumber != null) {
       try {
         List<Person> filteredPersonList = getPersonListFromStationNumber(stationNumber);
-
         // we retrieve the children List and adult List from the filteredPersonList
         List<Person> childrenList = new ArrayList<>();
         List<Person> adultList = new ArrayList<>();
@@ -56,26 +57,25 @@ public class FireStationCommunityServiceImpl implements FireStationCommunityServ
 
         // We create an object including the list of persons and the number of adults
         // and children
-
         List<FireStationCommunityDTO> fireStationCommunityDTOList = mapService.convertToFireStationCommunityDTOList(
             filteredPersonList);
-        FireStationCommunity fireStationCommunity = new FireStationCommunity(fireStationCommunityDTOList,
+        fireStationCommunity = new FireStationCommunity(fireStationCommunityDTOList,
             child, adult);
-        return fireStationCommunity;
       } catch (Exception exception) {
         logger
             .error("Error when retrieving the list of information about the persons linked to a fire station number :"
                 + exception.getMessage());
-        return null;
       }
     } else {
       return null;
     }
+    return fireStationCommunity;
   }
 
 
   @Override
   public List<Person> getPersonListFromStationNumber(Integer stationNumber) {
+    logger.debug("in the method getPersonListFromStationNumber in the class FireStationCommunityServiceImpl");
     List<Person> filteredPersonList = null;
     try {
       // we retrieve the list of stations corresponding to the stationNumber

@@ -20,6 +20,7 @@ public class PersonServiceImpl implements PersonService {
 
   @Override
   public boolean personFirstNameLastNameExist(String firstName, String lastName) {
+    logger.debug("in the method personFirstNameLastNameExist in the class PersonServiceImpl");
     boolean existingPersonId = personRepository.existsByfirstNameAndLastNameAllIgnoreCase(firstName, lastName);
     return existingPersonId;
   }
@@ -27,6 +28,7 @@ public class PersonServiceImpl implements PersonService {
 
   @Override
   public boolean personIdExist(Long id) {
+    logger.debug("in the method personIdExist in the class PersonServiceImpl");
     boolean existingPersonId = personRepository.existsById(id);
     return existingPersonId;
   }
@@ -34,6 +36,7 @@ public class PersonServiceImpl implements PersonService {
 
   @Override
   public boolean personAddressExist(String address) {
+    logger.debug("in the method personAddressExist in the class PersonServiceImpl");
     boolean existingPersonAddress = personRepository.existsByAddress(address);
     return existingPersonAddress;
   }
@@ -41,6 +44,7 @@ public class PersonServiceImpl implements PersonService {
 
   @Override
   public boolean cityExist(String city) {
+    logger.debug("in the method cityExist in the class PersonServiceImpl");
     boolean existingCity = personRepository.existsByCityIgnoreCase(city);
     return existingCity;
   }
@@ -48,39 +52,44 @@ public class PersonServiceImpl implements PersonService {
 
   @Override
   public void deletePerson(String firstName, String lastName) {
+    logger.debug("in the method deletePerson in the class PersonServiceImpl");
     personRepository.deletePersonByFirstNameAndLastNameAllIgnoreCase(firstName, lastName);
   }
 
+
   @Override
   public Person getPerson(final Long id) {
+    logger.debug("in the method getPerson in the class PersonServiceImpl");
+    Person personToUpdate = null;
     try {
       Optional<Person> pers = personRepository.findById(id);
       if (pers.isPresent()) {
-        Person personToUpdate = pers.get();
-        return personToUpdate;
+        personToUpdate = pers.get();
       } else {
         return null;
       }
     } catch (Exception exception) {
       logger.error("Error when we try to get a person :" + exception.getMessage());
-      return null;
     }
+    return personToUpdate;
   }
 
   @Override
   public Person savePerson(Person person) {
+    logger.debug("in the method savePerson in the class PersonServiceImpl");
+    Person savedPerson = null;
     try {
-      Person savedPerson = personRepository.save(person);
-      return savedPerson;
+      savedPerson = personRepository.save(person);
     } catch (Exception exception) {
       logger.error("Error when we try to save a person :" + exception.getMessage());
-      return null;
     }
+    return savedPerson;
   }
 
 
   @Override
   public boolean saveAllPersons(List<Person> personList) {
+    logger.debug("in the method saveAllPersons in the class PersonServiceImpl");
     if (personList != null) {
       try {
         personRepository.saveAll(personList);

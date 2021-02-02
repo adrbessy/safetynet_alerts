@@ -30,6 +30,7 @@ public class ChildAlertServiceImpl implements ChildAlertService {
 
   @Override
   public Home getChildrenListAndAdultListFromAddress(String address) {
+    logger.debug("in the method getChildrenListAndAdultListFromAddress in the class ChildAlertServiceImpl");
     Home home = null;
     try {
       // we retrieve the list of persons corresponding to the address
