@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,13 +50,13 @@ public class FireStationCommunityServiceTest {
   @MockBean
   private MapService mapServiceMock;
 
-  /**
-   * test to get a list of PersonNumberInfo from a fireStation number.
-   * 
-   */
-  @Test
-  public void testGetPersonNumberInfoListFromStationNumber() {
+  private Person person;
+  private List<FireStation> fireStationList;
+  private List<String> addressList;
+  private List<Person> personList;
 
+  @BeforeEach
+  private void setUp() {
     FireStation fireStation1 = new FireStation();
     fireStation1.setId((long) 5);
     fireStation1.setAddress("82 Alexander Road");
@@ -64,8 +65,7 @@ public class FireStationCommunityServiceTest {
     fireStation2.setId((long) 2);
     fireStation2.setAddress("1 rue Antonio Vivaldi");
     fireStation2.setStation(2);
-
-    List<FireStation> fireStationList = new ArrayList<>();
+    fireStationList = new ArrayList<>();
     fireStationList.add(fireStation1);
     fireStationList.add(fireStation2);
 
@@ -73,14 +73,23 @@ public class FireStationCommunityServiceTest {
     addressList.add("82 Alexander Road");
     addressList.add("1 rue Antonio Vivaldi");
 
-    Person person = new Person();
+    person = new Person();
     person.setId((long) 5);
     person.setFirstName("Adrien");
     person.setLastName("Bessy");
     person.setEmail("ballapolorra-7977@yopmail.com");
     person.setAddress("82 Alexander Road");
-    List<Person> personList = new ArrayList<>();
+    personList = new ArrayList<>();
     personList.add(person);
+  }
+
+  /**
+   * test to get a list of PersonNumberInfo from a fireStation number.
+   * 
+   */
+  @Test
+  public void testGetPersonNumberInfoListFromStationNumber() {
+    // GIVEN
     List<Person> childrenList = new ArrayList<>();
     childrenList.add(person);
     List<Person> adultList = new ArrayList<>();
@@ -88,30 +97,27 @@ public class FireStationCommunityServiceTest {
     map.put("childrenList", childrenList);
     map.put("adultList", adultList);
     List<Person> childrenList1 = new ArrayList<>();
+    MedicalRecord medicalRecord1 = new MedicalRecord();
+    medicalRecord1.setBirthdate("16/06/2020");
+    List<MedicalRecord> medicalRecordList = new ArrayList<>();
+    medicalRecordList.add(medicalRecord1);
+    FireStationCommunityDTO fireStationCommunityDTO = new FireStationCommunityDTO("Adrien", "Bessy", "", "", "",
+        "");
+    List<FireStationCommunityDTO> fireStationCommunityDTOList = new ArrayList<>();
+    fireStationCommunityDTOList.add(fireStationCommunityDTO);
+    FireStationCommunity fireStationCommunity = new FireStationCommunity(fireStationCommunityDTOList,
+        1, 0);
 
     when(firestationRepository.findDistinctByStation(org.mockito.ArgumentMatchers
         .anyInt())).thenReturn(fireStationList);
     when(addressServiceMock.getAddressListFromFireStationList(fireStationList)).thenReturn(addressList);
     when(personRepositoryMock.findAllByAddressInOrderByAddress(addressList)).thenReturn(personList);
-
-    MedicalRecord medicalRecord1 = new MedicalRecord();
-    medicalRecord1.setBirthdate("16/06/2020");
-    List<MedicalRecord> medicalRecordList = new ArrayList<>();
-    medicalRecordList.add(medicalRecord1);
-
     when(ChildrenAdultsServiceMock.fullChildrenListAndAdultListFromPersonList(personList,
         childrenList1, adultList)).thenReturn(map);
-
-    FireStationCommunityDTO fireStationCommunityDTO = new FireStationCommunityDTO("Adrien", "Bessy", "", "", "",
-        "");
-    List<FireStationCommunityDTO> fireStationCommunityDTOList = new ArrayList<>();
-    fireStationCommunityDTOList.add(fireStationCommunityDTO);
     when(mapServiceMock.convertToFireStationCommunityDTOList(personList))
         .thenReturn(fireStationCommunityDTOList);
 
-    FireStationCommunity fireStationCommunity = new FireStationCommunity(fireStationCommunityDTOList,
-        1, 0);
-
+    // THEN
     FireStationCommunity fireStationCommunity2 = fireStationCommunityService
         .getPersonNumberInfoListFromStationNumber(1);
     assertThat(fireStationCommunity2).isEqualTo(fireStationCommunity);
@@ -123,7 +129,6 @@ public class FireStationCommunityServiceTest {
    */
   @Test
   public void testGetPersonNumberInfoListFromStationNumberIfStationNumberIsNull() {
-
     FireStationCommunity fireStationCommunity = fireStationCommunityService
         .getPersonNumberInfoListFromStationNumber(null);
     assertThat(fireStationCommunity).isEqualTo(null);
@@ -136,27 +141,6 @@ public class FireStationCommunityServiceTest {
   @Test
   public void testGetPersonListFromStationNumber() {
     // GIVEN
-    FireStation fireStation1 = new FireStation();
-    fireStation1.setId((long) 5);
-    fireStation1.setAddress("82 Alexander Road");
-    fireStation1.setStation(6);
-    FireStation fireStation2 = new FireStation();
-    fireStation2.setId((long) 2);
-    fireStation2.setAddress("1 rue Antonio Vivaldi");
-    fireStation2.setStation(2);
-    List<FireStation> fireStationList = new ArrayList<>();
-    fireStationList.add(fireStation1);
-    fireStationList.add(fireStation2);
-
-    List<String> addressList = new ArrayList<>();
-    addressList.add("82 Alexander Road");
-    addressList.add("1 rue Antonio Vivaldi");
-
-    Person person = new Person();
-    person.setEmail("ballapolorra-7977@yopmail.com");
-    person.setAddress("82 Alexander Road");
-    List<Person> personList = new ArrayList<>();
-    personList.add(person);
     Person person2 = new Person();
     person2.setEmail("unoddicab-5625@yopmail.com");
     person2.setAddress("12 rue des ecoles");

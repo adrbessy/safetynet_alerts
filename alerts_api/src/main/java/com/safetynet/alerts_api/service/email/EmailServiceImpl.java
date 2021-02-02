@@ -3,8 +3,8 @@ package com.safetynet.alerts_api.service.email;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.PersonRepository;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +24,9 @@ public class EmailServiceImpl implements EmailService {
         }
       });
     }
-
-    List<String> emailListNoDuplicates = emailList.stream().distinct().collect(Collectors.toList());
-    return emailListNoDuplicates;
+    LinkedHashSet<String> hashSet = new LinkedHashSet<>(emailList);
+    List<String> listWithoutDuplicates = new ArrayList<>(hashSet);
+    return listWithoutDuplicates;
   }
 
 

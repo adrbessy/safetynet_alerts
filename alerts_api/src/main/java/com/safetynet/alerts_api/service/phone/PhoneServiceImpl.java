@@ -6,8 +6,8 @@ import com.safetynet.alerts_api.repository.FireStationRepository;
 import com.safetynet.alerts_api.repository.PersonRepository;
 import com.safetynet.alerts_api.service.address.AddressServiceImpl;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,9 +49,14 @@ public class PhoneServiceImpl implements PhoneService {
 
     // we retrieve the address list corresponding to the filteredPerson list
     List<String> phoneList = getPhoneListFromPersonList(filteredPersonList);
-    List<String> phoneListNoDuplicates = phoneList.stream().distinct().collect(Collectors.toList());
+    System.out.println("phoneList before delete duplicates : " + phoneList);
+    // List<String> phoneListNoDuplicates =
+    // phoneList.stream().distinct().collect(Collectors.toList());
+    LinkedHashSet<String> hashSet = new LinkedHashSet<>(phoneList);
+    List<String> listWithoutDuplicates = new ArrayList<>(hashSet);
+    System.out.println("phoneList after delete duplicates : " + listWithoutDuplicates);
 
-    return phoneListNoDuplicates;
+    return listWithoutDuplicates;
   }
 
 

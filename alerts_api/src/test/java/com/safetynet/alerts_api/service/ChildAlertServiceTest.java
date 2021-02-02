@@ -47,65 +47,26 @@ public class ChildAlertServiceTest {
     List<Person> personList = new ArrayList<>();
     personList.add(person);
     String address = "1 rue antonio vivaldi";
-
-    when(personRepositoryMock.findDistinctByAddress(address)).thenReturn(personList);
-
     MedicalRecord medicalRecord1 = new MedicalRecord();
     medicalRecord1.setBirthdate("16/06/2020");
     List<MedicalRecord> medicalRecordList = new ArrayList<>();
     medicalRecordList.add(medicalRecord1);
-
-    when(medicalRecordRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy"))
-        .thenReturn(medicalRecordList);
-
     ChildAlertDTO childAlertDTO = new ChildAlertDTO("Bessy", "Adrien", 10);
     List<ChildAlertDTO> childAlertDTOList = new ArrayList<>();
     childAlertDTOList.add(childAlertDTO);
     List<ChildAlertDTO> childAlertDTOList2 = new ArrayList<>();
-
-    when(mapServiceMock.convertToChildAlertDTOList(personList))
-        .thenReturn(childAlertDTOList);
-    when(mapServiceMock.convertToChildAlertDTOList(personList))
-        .thenReturn(childAlertDTOList);
-
     Home home = new Home(childAlertDTOList, childAlertDTOList2);
+
+    when(personRepositoryMock.findDistinctByAddress(address)).thenReturn(personList);
+    when(medicalRecordRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy"))
+        .thenReturn(medicalRecordList);
+    when(mapServiceMock.convertToChildAlertDTOList(personList))
+        .thenReturn(childAlertDTOList);
+    when(mapServiceMock.convertToChildAlertDTOList(personList))
+        .thenReturn(childAlertDTOList);
 
     Home home2 = childAlertService.getChildrenListAndAdultListFromAddress(address);
     assertThat(home2).isEqualTo(home);
-  }
-
-  /**
-   * test to full a children list and an adult list from a list of persons.
-   * 
-   */
-  @Test
-  public void testFullChildrenListAndAdultListFromPersonList() {
-    Person person = new Person();
-    person.setId((long) 5);
-    person.setFirstName("Adrien");
-    person.setLastName("Bessy");
-    person.setEmail("ballapolorra-7977@yopmail.com");
-    person.setAddress("82 Alexander Road");
-    List<Person> personList = new ArrayList<>();
-    personList.add(person);
-
-    List<Person> childrenList = new ArrayList<>();
-    List<Person> adultList = new ArrayList<>();
-
-    List<Person> childrenList2 = new ArrayList<>();
-    childrenList2.add(person);
-
-    MedicalRecord medicalRecord1 = new MedicalRecord();
-    medicalRecord1.setBirthdate("16/06/2020");
-    List<MedicalRecord> medicalRecordList = new ArrayList<>();
-    medicalRecordList.add(medicalRecord1);
-
-    when(medicalRecordRepositoryMock.findByFirstNameAndLastNameAllIgnoreCase("Adrien", "Bessy"))
-        .thenReturn(medicalRecordList);
-
-    childAlertService.fullChildrenListAndAdultListFromPersonList(personList, childrenList, adultList);
-
-    assertThat(childrenList).isEqualTo(childrenList2);
   }
 
 }

@@ -12,8 +12,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -81,9 +81,10 @@ public class JsonReaderRepository {
         logger.error("Error while parsing input json file - persons : " + exception.getMessage());
       }
     }
-    List<Person> personListNoDuplicates = personList.stream().distinct().collect(Collectors.toList());
+    LinkedHashSet<Person> hashSet = new LinkedHashSet<>(personList);
+    List<Person> listWithoutDuplicates = new ArrayList<>(hashSet);
 
-    return personListNoDuplicates;
+    return listWithoutDuplicates;
   }
 
   private List<FireStation> readListFireStationFromJsonObject(JSONObject jsonObject) {
@@ -100,10 +101,10 @@ public class JsonReaderRepository {
         logger.error("Error while parsing input json file - firestations : " + exception.getMessage());
       }
     }
-    ;
-    List<FireStation> fireStationListNoDuplicates = fireStationList.stream().distinct().collect(Collectors.toList());
+    LinkedHashSet<FireStation> hashSet = new LinkedHashSet<>(fireStationList);
+    List<FireStation> listWithoutDuplicates = new ArrayList<>(hashSet);
 
-    return fireStationListNoDuplicates;
+    return listWithoutDuplicates;
   }
 
   private List<MedicalRecord> readListMedicalRecordFromJsonObject(JSONObject jsonObject) {
@@ -119,13 +120,10 @@ public class JsonReaderRepository {
         logger.error("Error while parsing input json file - medicalRecords : " + exception.getMessage());
       }
     }
-    ;
-    List<MedicalRecord> medicalRecordListNoDuplicates = medicalRecordList.stream().distinct()
-        .collect(Collectors.toList());
+    LinkedHashSet<MedicalRecord> hashSet = new LinkedHashSet<>(medicalRecordList);
+    List<MedicalRecord> listWithoutDuplicates = new ArrayList<>(hashSet);
 
-    return medicalRecordListNoDuplicates;
-
-
+    return listWithoutDuplicates;
   }
 
 }

@@ -36,13 +36,10 @@ public class ChildrenAdultsServiceTest {
     person.setAddress("82 Alexander Road");
     List<Person> personList = new ArrayList<>();
     personList.add(person);
-
     List<Person> childrenList = new ArrayList<>();
     List<Person> adultList = new ArrayList<>();
-
     List<Person> childrenList2 = new ArrayList<>();
     childrenList2.add(person);
-
     MedicalRecord medicalRecord1 = new MedicalRecord();
     medicalRecord1.setBirthdate("16/06/2020");
     List<MedicalRecord> medicalRecordList = new ArrayList<>();
@@ -52,9 +49,7 @@ public class ChildrenAdultsServiceTest {
         .thenReturn(medicalRecordList);
 
     ChildrenAdultsService.fullChildrenListAndAdultListFromPersonList(personList, childrenList, adultList);
-
     assertThat(childrenList).isEqualTo(childrenList2);
   }
-
 
 }

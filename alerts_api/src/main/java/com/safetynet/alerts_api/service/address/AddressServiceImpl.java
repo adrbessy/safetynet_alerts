@@ -3,8 +3,8 @@ package com.safetynet.alerts_api.service.address;
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.repository.FireStationRepository;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +23,9 @@ public class AddressServiceImpl implements AddressService {
         addAddressToListFromFireStationList(firestationRepository.findDistinctByStation(stationIterator), addressList);
       });
     }
-    List<String> addressListNoDuplicates = addressList.stream().distinct().collect(Collectors.toList());
-    return addressListNoDuplicates;
+    LinkedHashSet<String> hashSet = new LinkedHashSet<>(addressList);
+    List<String> listWithoutDuplicates = new ArrayList<>(hashSet);
+    return listWithoutDuplicates;
   }
 
   @Override
