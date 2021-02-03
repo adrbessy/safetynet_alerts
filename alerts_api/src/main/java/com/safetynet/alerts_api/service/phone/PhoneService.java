@@ -8,7 +8,7 @@ public interface PhoneService {
   /**
    * Get the List of phone number from a List of Person.
    * 
-   * @param personList
+   * @param personList The given person list
    * @return A List of phone number
    */
   List<String> getPhoneListFromPersonList(List<Person> personList);

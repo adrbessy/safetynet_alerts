@@ -10,7 +10,6 @@ public interface FireStationService {
    * Delete a fireStation corresponding to a given address
    * 
    * @param address An address corresponding to the fireStation to delete
-   * @return True if the firestation had been deleted, False if not
    */
   public void deleteFireStation(String address);
 
@@ -19,7 +18,6 @@ public interface FireStationService {
    * Delete a fireStation corresponding to a given id
    * 
    * @param id An id corresponding to the fireStation to delete
-   * @return True if the firestation had been deleted, False if not
    */
   public void deleteFireStation(Long id);
 
@@ -75,7 +73,7 @@ public interface FireStationService {
    * @param stationNumberList A list of firestation number
    * @return the list of firestation numbers that has not been found
    */
-  public List<Integer> fireStationNumberListExist(List<Integer> stationNumber);
+  public List<Integer> fireStationNumberListExist(List<Integer> stationNumberList);
 
 
   /**

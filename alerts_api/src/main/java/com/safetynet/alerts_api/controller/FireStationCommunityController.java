@@ -37,7 +37,7 @@ public class FireStationCommunityController {
    * Get a person list covered by a given fire station with the number of
    * occurrences of children and adults.
    * 
-   * @param a fire station number
+   * @param stationNumber A fire station number
    * @return A List of persons covered by a FireStation and the number of children
    *         and adults
    */
@@ -69,11 +69,10 @@ public class FireStationCommunityController {
 
 
   /**
-   * Read - Get the list of all phone numbers of persons covered by a given fire
-   * station.
+   * Get the list of all phone numbers of persons covered by a given fire station.
    * 
-   * @param a fire station number
-   * @return - A List of phone number
+   * @param firestation A fire station number
+   * @return A List of phone number
    */
   @GetMapping("/phoneAlert")
   public List<String> getPhoneNumberCoveredByThisStation(@RequestParam Integer firestation) {
@@ -101,11 +100,11 @@ public class FireStationCommunityController {
 
 
   /**
-   * Read - Get a person list grouped by address and grouped by the number of the
-   * fire station deserving it.
+   * Get a person list sorted by address and sorted by the number of the fire
+   * station deserving it.
    * 
-   * @param a List of number of fire station
-   * @return - A List of PersonInfoByAddress
+   * @param stations A List of numbers of fire station
+   * @return A List of PersonInfoByAddress object
    */
   @GetMapping("/flood")
   public List<FireDTOByAddress> getHomesCoveredByTheseStation(@RequestParam List<Integer> stations) {
@@ -130,9 +129,6 @@ public class FireStationCommunityController {
           "The list of station number that doesn't exist : " + fireStationNumberNotFound.toString());
     }
     return personInfoByaddressList;
-
   }
-
-
 
 }

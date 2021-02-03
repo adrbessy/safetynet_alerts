@@ -9,9 +9,8 @@ public interface PersonService {
   /**
    * Delete a person.
    * 
-   * @param firstName
-   * @param lastName
-   * @return true if it had been deleted, otherwise returns false
+   * @param firstName The first name of the person
+   * @param lastName  The last name of the person
    */
   public void deletePerson(String firstName, String lastName);
 
@@ -19,7 +18,7 @@ public interface PersonService {
   /**
    * Get a Person from an id
    * 
-   * @param id
+   * @param id The id of the person in the Persons table
    * @return The person
    */
   public Person getPerson(final Long id);
@@ -37,7 +36,7 @@ public interface PersonService {
   /**
    * Check if a given city exists in the person table.
    * 
-   * @param city
+   * @param city The given city
    * @return true if it exists, otherwise returns false
    */
   public boolean cityExist(String city);
@@ -46,7 +45,7 @@ public interface PersonService {
   /**
    * Check if the address exists in the person table.
    * 
-   * @param address
+   * @param address The given address
    * @return true if it exists, otherwise returns false
    */
   public boolean personAddressExist(String address);
@@ -55,7 +54,7 @@ public interface PersonService {
   /**
    * Check if the id exists in the person table.
    * 
-   * @param id
+   * @param id The id of the person in the Persons table
    * @return true if it exists, otherwise returns false
    */
   public boolean personIdExist(Long id);
@@ -64,8 +63,8 @@ public interface PersonService {
   /**
    * Check if the person exists in the person table.
    * 
-   * @param firstName
-   * @param lastName
+   * @param firstName The first name of the person
+   * @param lastName  The last name of the person
    * @return true if it exists, otherwise returns false
    */
   public boolean personFirstNameLastNameExist(String firstName, String lastName);

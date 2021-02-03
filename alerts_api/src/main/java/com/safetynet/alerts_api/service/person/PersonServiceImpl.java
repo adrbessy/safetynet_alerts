@@ -19,10 +19,10 @@ public class PersonServiceImpl implements PersonService {
 
 
   /**
-   * Check if the person exists in the person table.
+   * Check if the person exists in the persons table.
    * 
-   * @param firstName
-   * @param lastName
+   * @param firstName The first name of the person
+   * @param lastName  The last name of the person
    * @return true if it exists, otherwise returns false
    */
   @Override
@@ -34,9 +34,9 @@ public class PersonServiceImpl implements PersonService {
 
 
   /**
-   * Check if the id exists in the person table.
+   * Check if the id exists in the persons table.
    * 
-   * @param id
+   * @param id The id of the person in the Persons table
    * @return true if it exists, otherwise returns false
    */
   @Override
@@ -48,9 +48,9 @@ public class PersonServiceImpl implements PersonService {
 
 
   /**
-   * Check if the address exists in the person table.
+   * Check if the address exists in the persons table.
    * 
-   * @param address
+   * @param address The given address
    * @return true if it exists, otherwise returns false
    */
   @Override
@@ -62,9 +62,9 @@ public class PersonServiceImpl implements PersonService {
 
 
   /**
-   * Check if a given city exists in the person table.
+   * Check if a given city exists in the persons table.
    * 
-   * @param city
+   * @param city The given city
    * @return true if it exists, otherwise returns false
    */
   @Override
@@ -78,9 +78,8 @@ public class PersonServiceImpl implements PersonService {
   /**
    * Delete a person.
    * 
-   * @param firstName
-   * @param lastName
-   * @return true if it had been deleted, otherwise returns false
+   * @param firstName The first name of the person
+   * @param lastName  The last name of the person
    */
   @Override
   public void deletePerson(String firstName, String lastName) {
@@ -92,7 +91,7 @@ public class PersonServiceImpl implements PersonService {
   /**
    * Get a Person from an id
    * 
-   * @param id
+   * @param id The id of the person in the Persons table
    * @return The person
    */
   @Override

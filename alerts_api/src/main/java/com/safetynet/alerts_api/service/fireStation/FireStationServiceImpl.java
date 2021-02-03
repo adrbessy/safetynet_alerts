@@ -70,7 +70,6 @@ public class FireStationServiceImpl implements FireStationService {
    * Delete a fireStation corresponding to a given id
    * 
    * @param id An id corresponding to the fireStation to delete
-   * @return True if the firestation had been deleted, False if not
    */
   @Override
   public void deleteFireStation(final Long id) {
@@ -82,7 +81,6 @@ public class FireStationServiceImpl implements FireStationService {
    * Delete a fireStation corresponding to a given address
    * 
    * @param address An address corresponding to the fireStation to delete
-   * @return True if the firestation had been deleted, False if not
    */
   @Override
   public void deleteFireStation(String address) {

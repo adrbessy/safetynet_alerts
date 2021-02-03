@@ -24,11 +24,10 @@ public class FireStationController {
 
 
   /**
-   * Delete - Delete a fire station
+   * Delete a fire station from a given address
    * 
-   * @param id - The id of the fire station to delete
+   * @param address The address of the fire station to delete
    */
-
   @Transactional
   @DeleteMapping("/firestation/{address}")
   public void deleteFireStation(@PathVariable("address") final String address) {
@@ -57,10 +56,11 @@ public class FireStationController {
 
 
   /**
-   * Update - Update an existing fire station
+   * Update an existing fire station
    * 
-   * @param address - The address of the firestation to update
-   * @return firestation - The fire station object updated
+   * @param address     The address of the firestation to update
+   * @param fireStation The updated fireStation
+   * @return The updated firestation object
    */
   @PutMapping("/firestation/{address}")
   public FireStation updateFireStation(@PathVariable("address") final String address,
@@ -99,8 +99,8 @@ public class FireStationController {
   /**
    * Create a new fire station
    * 
-   * @param fire station An object fire station
-   * @return The fire station object saved
+   * @param fireStation The new firestation
+   * @return The saved fire station object
    */
   @PostMapping("/firestation")
   public FireStation createFireStation(@RequestBody FireStation fireStation) {

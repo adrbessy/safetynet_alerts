@@ -30,8 +30,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
    * Get the a list of persons with a given first name and a given last name, then
    * only with the given last name
    * 
-   * @param firstName
-   * @param lastName
+   * @param firstName The first name of the person
+   * @param lastName  The last name of the person
    * @return A List of Person
    */
   @Override
@@ -59,8 +59,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
   /**
    * Get the a list of persons with a given first name and a given last name
    * 
-   * @param firstName
-   * @param lastName
+   * @param firstName The first name of the person
+   * @param lastName  The last name of the person
    * @return A List of Person
    */
   @Override
@@ -82,7 +82,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
   /**
    * Get the Person List from a given last name.
    * 
-   * @param lastName
+   * @param lastName The last name of the person
    * @return A List of Person
    */
   @Override
@@ -104,7 +104,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
   /**
    * Set the age, the medications and the allergies to persons from a PersonList.
    * 
-   * @param personList
+   * @param personList The given person list
    */
   @Override
   public void setAgeAndMedicationsAndAllergiesFromPersonList(List<Person> personList) {

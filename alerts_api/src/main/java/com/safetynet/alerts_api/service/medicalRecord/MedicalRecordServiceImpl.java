@@ -22,8 +22,8 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
   /**
    * Check if the first name and the last name exists in the medicalrecord table.
    * 
-   * @param firstName
-   * @param lastName
+   * @param firstName The first name of the person
+   * @param lastName  The last name of the person
    * @return true if they exist, otherwise returns false
    */
   @Override
@@ -39,7 +39,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
   /**
    * Check if the medical record id exists in the medicalrecord table.
    * 
-   * @param id
+   * @param id The id of the medical record in the MedicalRecords table
    * @return true if it exists, otherwise returns false
    */
   @Override
@@ -53,8 +53,8 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
   /**
    * Delete a MedicalRecord
    * 
-   * @param firstName
-   * @param lastName
+   * @param firstname The first name of the person
+   * @param lastname  The last name of the person
    */
   @Override
   public void deleteMedicalRecord(String firstname, String lastname) {
@@ -66,7 +66,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
   /**
    * Get a MedicalRecord with a given id
    * 
-   * @param id
+   * @param id The id of the medical record in the MedicalRecords table
    * @return the medicalRecord if it exists, otherwise returns null
    */
   @Override
@@ -99,7 +99,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
   /**
    * Save the medical record list
    * 
-   * @param MedicalRecordList A list of medical records to save
+   * @param medicalRecordList A list of medical records to save
    * @return true if everything goes right, otherwise returns false
    */
   @Override

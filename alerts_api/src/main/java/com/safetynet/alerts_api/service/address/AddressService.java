@@ -11,7 +11,7 @@ public interface AddressService {
    * @param stationNumberList A list of fire station numbers
    * @return A List of address without duplicates
    */
-  public List<String> getAddressListFromStationNumberList(List<Integer> stationsList);
+  public List<String> getAddressListFromStationNumberList(List<Integer> stationNumberList);
 
   /**
    * Get the List of address of persons covered by a fire station list.
@@ -22,7 +22,7 @@ public interface AddressService {
   public List<String> getAddressListFromFireStationList(List<FireStation> fireStationList);
 
   /**
-   * Add the address of persons to a list<String> from FireStation list.
+   * Add the address of persons to a list from FireStation list.
    * 
    * @param fireStationList A List of FireStation
    * @param addressList     A (probably empty) List of address

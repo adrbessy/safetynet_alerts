@@ -12,6 +12,6 @@ public interface FloodService {
    * @return A List of PersonInfoByAddress includind a list of persons sorted by
    *         address
    */
-  public List<FireDTOByAddress> getPersonInfoByAddressList(List<Integer> stationsList);
+  public List<FireDTOByAddress> getPersonInfoByAddressList(List<Integer> stationNumberList);
 
 }

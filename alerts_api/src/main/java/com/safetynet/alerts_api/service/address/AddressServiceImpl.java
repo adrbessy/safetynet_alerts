@@ -40,7 +40,7 @@ public class AddressServiceImpl implements AddressService {
   }
 
   /**
-   * Add the address of persons to a list<String> from FireStation list.
+   * Add the address of persons to a list from FireStation list.
    * 
    * @param fireStationList A List of FireStation
    * @param addressList     A (probably empty) List of address

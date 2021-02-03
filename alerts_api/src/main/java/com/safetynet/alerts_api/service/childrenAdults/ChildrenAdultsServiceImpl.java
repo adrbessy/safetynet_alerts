@@ -25,6 +25,7 @@ public class ChildrenAdultsServiceImpl implements ChildrenAdultsService {
    * @param personList   A Person List
    * @param childrenList A Person List (probably empty) to full of children
    * @param adultList    A Person List (probably empty) to full of adults
+   * @return The three lists included in a Map object
    */
   @Override
   public Map<String, List<Person>> fullChildrenListAndAdultListFromPersonList(List<Person> personList,
