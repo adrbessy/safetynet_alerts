@@ -31,6 +31,13 @@ public class FireServiceImpl implements FireService {
   @Autowired
   private MapService mapService;
 
+  /**
+   * Get a Person List with the number of fire station from an address.
+   * 
+   * @param address An address
+   * @return A Fire object including a list of persons with the associated
+   *         firestation number
+   */
   @Override
   public Fire getPersonListWithStationNumber(String address) {
     logger.debug("in the method getPersonListWithStationNumber in the class FireServiceImpl");

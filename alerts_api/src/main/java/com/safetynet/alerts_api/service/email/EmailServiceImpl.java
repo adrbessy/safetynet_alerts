@@ -18,6 +18,12 @@ public class EmailServiceImpl implements EmailService {
   @Autowired
   private PersonRepository personRepository;
 
+  /**
+   * Get the list of email address of persons from a Person List.
+   * 
+   * @param personList A Person List
+   * @return A list of email address
+   */
   @Override
   public List<String> getEmailListFromPersonList(List<Person> personList) {
     logger.debug("in the method getEmailListFromPersonList in the class EmailServiceImpl");
@@ -34,7 +40,12 @@ public class EmailServiceImpl implements EmailService {
     return listWithoutDuplicates;
   }
 
-
+  /**
+   * Read - Get the list of email address of persons living in a given city.
+   * 
+   * @param city A city
+   * @return A list of email address
+   */
   @Override
   public List<String> getPersonEmailFromCity(String city) {
     logger.debug("in the method getPersonEmailFromCity in the class EmailServiceImpl");

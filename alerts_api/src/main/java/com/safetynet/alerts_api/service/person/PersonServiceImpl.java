@@ -18,6 +18,13 @@ public class PersonServiceImpl implements PersonService {
   private PersonRepository personRepository;
 
 
+  /**
+   * Check if the person exists in the person table.
+   * 
+   * @param firstName
+   * @param lastName
+   * @return true if it exists, otherwise returns false
+   */
   @Override
   public boolean personFirstNameLastNameExist(String firstName, String lastName) {
     logger.debug("in the method personFirstNameLastNameExist in the class PersonServiceImpl");
@@ -26,6 +33,12 @@ public class PersonServiceImpl implements PersonService {
   }
 
 
+  /**
+   * Check if the id exists in the person table.
+   * 
+   * @param id
+   * @return true if it exists, otherwise returns false
+   */
   @Override
   public boolean personIdExist(Long id) {
     logger.debug("in the method personIdExist in the class PersonServiceImpl");
@@ -34,6 +47,12 @@ public class PersonServiceImpl implements PersonService {
   }
 
 
+  /**
+   * Check if the address exists in the person table.
+   * 
+   * @param address
+   * @return true if it exists, otherwise returns false
+   */
   @Override
   public boolean personAddressExist(String address) {
     logger.debug("in the method personAddressExist in the class PersonServiceImpl");
@@ -42,6 +61,12 @@ public class PersonServiceImpl implements PersonService {
   }
 
 
+  /**
+   * Check if a given city exists in the person table.
+   * 
+   * @param city
+   * @return true if it exists, otherwise returns false
+   */
   @Override
   public boolean cityExist(String city) {
     logger.debug("in the method cityExist in the class PersonServiceImpl");
@@ -50,6 +75,13 @@ public class PersonServiceImpl implements PersonService {
   }
 
 
+  /**
+   * Delete a person.
+   * 
+   * @param firstName
+   * @param lastName
+   * @return true if it had been deleted, otherwise returns false
+   */
   @Override
   public void deletePerson(String firstName, String lastName) {
     logger.debug("in the method deletePerson in the class PersonServiceImpl");
@@ -57,23 +89,36 @@ public class PersonServiceImpl implements PersonService {
   }
 
 
+  /**
+   * Get a Person from an id
+   * 
+   * @param id
+   * @return The person
+   */
   @Override
   public Person getPerson(final Long id) {
     logger.debug("in the method getPerson in the class PersonServiceImpl");
-    Person personToUpdate = null;
+    Person person = null;
     try {
       Optional<Person> pers = personRepository.findById(id);
       if (pers.isPresent()) {
-        personToUpdate = pers.get();
+        person = pers.get();
       } else {
         return null;
       }
     } catch (Exception exception) {
       logger.error("Error when we try to get a person :" + exception.getMessage());
     }
-    return personToUpdate;
+    return person;
   }
 
+
+  /**
+   * Save a Person
+   * 
+   * @param person A Person to save
+   * @return the saved person
+   */
   @Override
   public Person savePerson(Person person) {
     logger.debug("in the method savePerson in the class PersonServiceImpl");
@@ -87,6 +132,12 @@ public class PersonServiceImpl implements PersonService {
   }
 
 
+  /**
+   * Save the person list
+   * 
+   * @param personList A Person List to save
+   * @return true if everything goes right, otherwise returns false
+   */
   @Override
   public boolean saveAllPersons(List<Person> personList) {
     logger.debug("in the method saveAllPersons in the class PersonServiceImpl");

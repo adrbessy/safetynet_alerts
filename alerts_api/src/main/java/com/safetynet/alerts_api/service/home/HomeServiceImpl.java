@@ -20,6 +20,13 @@ public class HomeServiceImpl implements HomeService {
   @Autowired
   private PersonInfoService personInfoService;
 
+
+  /**
+   * Get a list of persons by address from a given address.
+   * 
+   * @param address An address
+   * @return A List of Person
+   */
   @Override
   public List<Person> getPersonListByAddress(String address) {
     logger.debug("in the method getPersonListByAddress in the class HomeServiceImpl");

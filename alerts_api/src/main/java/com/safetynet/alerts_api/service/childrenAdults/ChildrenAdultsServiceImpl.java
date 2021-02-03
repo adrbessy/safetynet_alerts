@@ -19,6 +19,13 @@ public class ChildrenAdultsServiceImpl implements ChildrenAdultsService {
   @Autowired
   private MedicalRecordRepository medicalRecordRepository;
 
+  /**
+   * full a list of children and a list of adults from a given Person List.
+   * 
+   * @param personList   A Person List
+   * @param childrenList A Person List (probably empty) to full of children
+   * @param adultList    A Person List (probably empty) to full of adults
+   */
   @Override
   public Map<String, List<Person>> fullChildrenListAndAdultListFromPersonList(List<Person> personList,
       List<Person> childrenList,

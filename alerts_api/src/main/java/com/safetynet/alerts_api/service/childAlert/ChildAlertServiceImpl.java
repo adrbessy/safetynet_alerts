@@ -28,6 +28,12 @@ public class ChildAlertServiceImpl implements ChildAlertService {
   @Autowired
   private ChildrenAdultsServiceImpl childrenAdultsService;
 
+  /**
+   * Get the List of children and adults living at a given address.
+   * 
+   * @param address An address
+   * @return A Home object including a list of children and a list of adults
+   */
   @Override
   public Home getChildrenListAndAdultListFromAddress(String address) {
     logger.debug("in the method getChildrenListAndAdultListFromAddress in the class ChildAlertServiceImpl");

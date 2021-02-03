@@ -18,6 +18,12 @@ public class AddressServiceImpl implements AddressService {
   @Autowired
   private FireStationRepository firestationRepository;
 
+  /**
+   * Get the List of address of persons covered by a fire station number list.
+   * 
+   * @param stationNumberList A list of fire station numbers
+   * @return A List of address without duplicates
+   */
   @Override
   public List<String> getAddressListFromStationNumberList(List<Integer> stationNumberList) {
     logger.debug("in the method getAddressListFromStationNumberList in the class AddressServiceImpl");
@@ -33,6 +39,12 @@ public class AddressServiceImpl implements AddressService {
     return listWithoutDuplicates;
   }
 
+  /**
+   * Add the address of persons to a list<String> from FireStation list.
+   * 
+   * @param fireStationList A List of FireStation
+   * @param addressList     A (probably empty) List of address
+   */
   @Override
   public void addAddressToListFromFireStationList(List<FireStation> fireStationList, List<String> addressList) {
     logger.debug("in the method addAddressToListFromFireStationList in the class AddressServiceImpl");
@@ -44,7 +56,12 @@ public class AddressServiceImpl implements AddressService {
     });
   }
 
-
+  /**
+   * Get the List of address of persons covered by a fire station list.
+   * 
+   * @param fireStationList A List of FireStation
+   * @return A List of address
+   */
   @Override
   public List<String> getAddressListFromFireStationList(List<FireStation> fireStationList) {
     logger.debug("in the method getAddressListFromFireStationList in the class AddressServiceImpl");

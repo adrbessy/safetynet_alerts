@@ -5,10 +5,10 @@ import com.safetynet.alerts_api.model.Home;
 public interface ChildAlertService {
 
   /**
-   * Get the List of children and adults living to a given address.
+   * Get the List of children and adults living at a given address.
    * 
-   * @param an address
-   * @return - A List of Home
+   * @param address An address
+   * @return A Home object including a list of children and a list of adults
    */
   public Home getChildrenListAndAdultListFromAddress(String address);
 

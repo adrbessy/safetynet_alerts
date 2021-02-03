@@ -6,19 +6,19 @@ import java.util.List;
 public interface EmailService {
 
   /**
-   * Read - Get the List of email of persons living in a given city.
+   * Read - Get the list of email address of persons living in a given city.
    * 
-   * @param an city
-   * @return - A List of email
+   * @param city A city
+   * @return A list of email address
    */
   public List<String> getPersonEmailFromCity(String city);
 
 
   /**
-   * Get the List of email of persons from a Person List.
+   * Get the list of email address of persons from a Person List.
    * 
-   * @param a Person List
-   * @return - A List of email
+   * @param personList A Person List
+   * @return A list of email address
    */
   public List<String> getEmailListFromPersonList(List<Person> personList);
 

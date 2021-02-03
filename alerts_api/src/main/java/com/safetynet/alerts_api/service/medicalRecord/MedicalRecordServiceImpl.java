@@ -19,6 +19,13 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
   private MedicalRecordRepository medicalRecordRepository;
 
 
+  /**
+   * Check if the first name and the last name exists in the medicalrecord table.
+   * 
+   * @param firstName
+   * @param lastName
+   * @return true if they exist, otherwise returns false
+   */
   @Override
   public boolean medicalRecordFirstNameLastNameExist(String firstName, String lastName) {
     logger.debug("in the method medicalRecordFirstNameLastNameExist in the class FireStationServiceImpl");
@@ -29,6 +36,12 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
   }
 
 
+  /**
+   * Check if the medical record id exists in the medicalrecord table.
+   * 
+   * @param id
+   * @return true if it exists, otherwise returns false
+   */
   @Override
   public boolean medicalRecordIdExist(Long id) {
     logger.debug("in the method medicalRecordIdExist in the class FireStationServiceImpl");
@@ -37,6 +50,12 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
   }
 
 
+  /**
+   * Delete a MedicalRecord
+   * 
+   * @param firstName
+   * @param lastName
+   */
   @Override
   public void deleteMedicalRecord(String firstname, String lastname) {
     logger.debug("in the method deleteMedicalRecord in the class FireStationServiceImpl");
@@ -44,19 +63,31 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
   }
 
 
+  /**
+   * Get a MedicalRecord with a given id
+   * 
+   * @param id
+   * @return the medicalRecord if it exists, otherwise returns null
+   */
   @Override
   public MedicalRecord getMedicalRecord(final Long id) {
     logger.debug("in the method getMedicalRecord in the class FireStationServiceImpl");
     Optional<MedicalRecord> medRec = medicalRecordRepository.findById(id);
     if (medRec.isPresent()) {
-      MedicalRecord medicalRecordToUpdate = medRec.get();
-      return medicalRecordToUpdate;
+      MedicalRecord medicalRecord = medRec.get();
+      return medicalRecord;
     } else {
       return null;
     }
   }
 
 
+  /**
+   * Save a medical record
+   * 
+   * @param medicalRecord A medical record to save
+   * @return The saved medicalRecord
+   */
   @Override
   public MedicalRecord saveMedicalRecord(MedicalRecord medicalRecord) {
     logger.debug("in the method saveMedicalRecord in the class FireStationServiceImpl");
@@ -65,6 +96,12 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
   }
 
 
+  /**
+   * Save the medical record list
+   * 
+   * @param MedicalRecordList A list of medical records to save
+   * @return true if everything goes right, otherwise returns false
+   */
   @Override
   public boolean saveAllMedicalRecords(List<MedicalRecord> medicalRecordList) {
     logger.debug("in the method saveAllMedicalRecords in the class FireStationServiceImpl");

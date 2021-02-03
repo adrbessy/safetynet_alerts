@@ -16,6 +16,14 @@ public class MapService {
 
   private static final Logger logger = LogManager.getLogger(MapService.class);
 
+
+  /**
+   * Get a list of persons with the following attributes: FirstName, LastName,
+   * Address, City, Zip, Phone
+   * 
+   * @param personList A list of persons
+   * @return A List of Person
+   */
   public List<FireStationCommunityDTO> convertToFireStationCommunityDTOList(List<Person> personList) {
     logger.debug("in the method convertToFireStationCommunityDTOList in the class MapService");
     List<FireStationCommunityDTO> fireStationCommunityDTOList = new ArrayList<>();
@@ -30,6 +38,12 @@ public class MapService {
     return fireStationCommunityDTOList;
   }
 
+  /**
+   * Get a list of persons with the following attributes: FirstName, LastName, Age
+   * 
+   * @param personList A list of persons
+   * @return A List of Person
+   */
   public List<ChildAlertDTO> convertToChildAlertDTOList(List<Person> personList) {
     logger.debug("in the method convertToChildAlertDTOList in the class MapService");
     List<ChildAlertDTO> childAlertDTOList = new ArrayList<>();
@@ -42,6 +56,13 @@ public class MapService {
     return childAlertDTOList;
   }
 
+  /**
+   * Get a list of persons with the following attributes: LastName, Age, Phone,
+   * Medications, Allergies
+   * 
+   * @param personList A list of persons
+   * @return A List of Person
+   */
   public List<FireDTO> convertToFireDTOList(List<Person> personList) {
     logger.debug("in the method convertToFireDTOList in the class MapService");
     List<FireDTO> fireDTOList = new ArrayList<>();
@@ -53,6 +74,13 @@ public class MapService {
     return fireDTOList;
   }
 
+  /**
+   * Get a list of persons with the following attributes: LastName, Age, Address,
+   * City, Zip, Email, Medications, Allergies
+   * 
+   * @param personList A list of persons
+   * @return A List of Person
+   */
   public List<PersonInfoDTO> convertToPersonInfoDTOList(List<Person> personList) {
     logger.debug("in the method convertToPersonInfoDTOList in the class MapService");
     List<PersonInfoDTO> personInfoDTOList = new ArrayList<>();

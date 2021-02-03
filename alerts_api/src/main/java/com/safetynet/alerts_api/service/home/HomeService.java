@@ -6,10 +6,10 @@ import java.util.List;
 public interface HomeService {
 
   /**
-   * Get the List of person by address from a given address.
+   * Get a list of persons by address from a given address.
    * 
-   * @param an address
-   * @return - A List of Person
+   * @param address An address
+   * @return A List of Person
    */
   List<Person> getPersonListByAddress(String address);
 

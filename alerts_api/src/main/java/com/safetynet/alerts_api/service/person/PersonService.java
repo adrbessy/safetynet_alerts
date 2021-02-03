@@ -9,18 +9,18 @@ public interface PersonService {
   /**
    * Delete a person.
    * 
-   * @param a first name and a last name
-   * @return boolean
+   * @param firstName
+   * @param lastName
+   * @return true if it had been deleted, otherwise returns false
    */
   public void deletePerson(String firstName, String lastName);
 
 
   /**
-   * Get a Person
+   * Get a Person from an id
    * 
-   * @param Person to get
-   * @return the person
-   * 
+   * @param id
+   * @return The person
    */
   public Person getPerson(final Long id);
 
@@ -28,51 +28,54 @@ public interface PersonService {
   /**
    * Save a Person
    * 
-   * @param Person to save
+   * @param person A Person to save
    * @return the saved person
-   * 
    */
   public Person savePerson(Person person);
 
 
   /**
-   * Check if the city exists in the person table.
+   * Check if a given city exists in the person table.
    * 
-   * @param a String city
-   * @return - A boolean
+   * @param city
+   * @return true if it exists, otherwise returns false
    */
   public boolean cityExist(String city);
+
 
   /**
    * Check if the address exists in the person table.
    * 
-   * @param a String address
-   * @return - A boolean
+   * @param address
+   * @return true if it exists, otherwise returns false
    */
   public boolean personAddressExist(String address);
+
 
   /**
    * Check if the id exists in the person table.
    * 
-   * @param a Long id
-   * @return - A boolean
+   * @param id
+   * @return true if it exists, otherwise returns false
    */
   public boolean personIdExist(Long id);
+
 
   /**
    * Check if the person exists in the person table.
    * 
-   * @param a String first name and String last name
-   * @return - A boolean
+   * @param firstName
+   * @param lastName
+   * @return true if it exists, otherwise returns false
    */
   public boolean personFirstNameLastNameExist(String firstName, String lastName);
+
 
   /**
    * Save the person list
    * 
-   * @param personList Person List to save
+   * @param personList A Person List to save
    * @return true if everything goes right, otherwise returns false
-   * 
    */
   public boolean saveAllPersons(List<Person> personList);
 }

@@ -7,12 +7,13 @@ import java.util.Map;
 public interface ChildrenAdultsService {
 
   /**
-   * full the List of children and adults from a given Person List.
+   * full a list of children and a list of adults from a given Person List.
    * 
-   * @param a Person List, a Person List, a Person List
+   * @param personList   A Person List
+   * @param childrenList A Person List (probably empty) to full of children
+   * @param adultList    A Person List (probably empty) to full of adults
    */
   public Map<String, List<Person>> fullChildrenListAndAdultListFromPersonList(List<Person> personList,
       List<Person> childrenList,
       List<Person> adultList);
-
 }

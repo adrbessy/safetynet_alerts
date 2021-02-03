@@ -5,10 +5,11 @@ import com.safetynet.alerts_api.model.Fire;
 public interface FireService {
 
   /**
-   * Get the Person List with the number of fire station.
+   * Get a Person List with the number of fire station from an address.
    * 
-   * @param an address
-   * @return - A List of PersonInfo
+   * @param address An address
+   * @return A Fire object including a list of persons with the associated
+   *         firestation number
    */
   public Fire getPersonListWithStationNumber(String address);
 

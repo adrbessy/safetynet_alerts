@@ -5,12 +5,12 @@ import java.util.List;
 
 public interface FloodService {
 
-
   /**
    * Get the List of person by address from a given fire station number List.
    * 
-   * @param a List of fire station number
-   * @return - A List of PersonInfoByAddress
+   * @param stationNumberList A List of fire station numbers
+   * @return A List of PersonInfoByAddress includind a list of persons sorted by
+   *         address
    */
   public List<FireDTOByAddress> getPersonInfoByAddressList(List<Integer> stationsList);
 

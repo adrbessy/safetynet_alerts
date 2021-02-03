@@ -5,28 +5,33 @@ import com.safetynet.alerts_api.model.PersonInfoDTO;
 import java.util.List;
 
 public interface PersonInfoService {
+
   /**
-   * Get the Person List from a given first name and a given last name.
+   * Get the a list of persons with a given first name and a given last name
    * 
-   * @param a first name and a last name
-   * @return - A List of Person
+   * @param firstName
+   * @param lastName
+   * @return A List of Person
    */
   public List<Person> getPersonListByFirstNameAndLastName(String firstName, String lastName);
+
 
   /**
    * Get the Person List from a given last name.
    * 
-   * @param a last name
-   * @return - A List of Person
+   * @param lastName
+   * @return A List of Person
    */
   public List<Person> getPersonListByLastName(String lastName);
 
+
   /**
-   * Get the Person List from a given first name and a given last name, then from
-   * only the last name
+   * Get the a list of persons with a given first name and a given last name, then
+   * only with the given last name
    * 
-   * @param a first name and a last name
-   * @return - A List of Person
+   * @param firstName
+   * @param lastName
+   * @return A List of Person
    */
   public List<PersonInfoDTO> getPersonListByFirstNameAndLastNameThenOnlyLastName(String firstName, String lastName);
 

@@ -27,6 +27,14 @@ public class FloodServiceImpl implements FloodService {
   @Autowired
   private MapService mapService;
 
+
+  /**
+   * Get the List of person by address from a given fire station number List.
+   * 
+   * @param stationNumberList A List of fire station numbers
+   * @return A List of PersonInfoByAddress includind a list of persons sorted by
+   *         address
+   */
   @Override
   public List<FireDTOByAddress> getPersonInfoByAddressList(List<Integer> stationNumberList) {
     logger.debug("in the method getPersonInfoByAddressList in the class FloodServiceImpl");

@@ -27,6 +27,13 @@ public class PhoneServiceImpl implements PhoneService {
   @Autowired
   private AddressServiceImpl addressService;
 
+
+  /**
+   * Get the List of phone number from a List of Person.
+   * 
+   * @param personList
+   * @return A List of phone number
+   */
   @Override
   public List<String> getPhoneListFromPersonList(List<Person> personList) {
     logger
@@ -42,6 +49,14 @@ public class PhoneServiceImpl implements PhoneService {
     return phoneList;
   }
 
+
+  /**
+   * Get the List of phone numbers of persons covered by a given fire station
+   * number.
+   * 
+   * @param firestation A fire station number
+   * @return A List of phone numbers
+   */
   @Override
   public List<String> getPhoneNumberList(Integer firestation) {
     logger

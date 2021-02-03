@@ -37,6 +37,14 @@ public class FireStationCommunityServiceImpl implements FireStationCommunityServ
   @Autowired
   private PersonRepository personRepository;
 
+  /**
+   * Get a list of persons covered by a given fire station number with the number
+   * of children and the number of adults
+   * 
+   * @param stationNumber A fire station number
+   * @return A FireStationCommunity object including a list of persons and the
+   *         number of children and the number of adults
+   */
   @Override
   public FireStationCommunity getPersonNumberInfoListFromStationNumber(Integer stationNumber) {
     logger.debug("in the method getPersonNumberInfoListFromStationNumber in the class FireStationCommunityServiceImpl");
@@ -73,6 +81,12 @@ public class FireStationCommunityServiceImpl implements FireStationCommunityServ
   }
 
 
+  /**
+   * Get a list of persons covered by a given fire station number.
+   * 
+   * @param stationNumber A fire station number
+   * @return A List of persons
+   */
   @Override
   public List<Person> getPersonListFromStationNumber(Integer stationNumber) {
     logger.debug("in the method getPersonListFromStationNumber in the class FireStationCommunityServiceImpl");

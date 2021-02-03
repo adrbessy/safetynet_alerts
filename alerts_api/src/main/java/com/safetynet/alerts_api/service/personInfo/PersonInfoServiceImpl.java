@@ -26,7 +26,14 @@ public class PersonInfoServiceImpl implements PersonInfoService {
   @Autowired
   private MapService mapService;
 
-
+  /**
+   * Get the a list of persons with a given first name and a given last name, then
+   * only with the given last name
+   * 
+   * @param firstName
+   * @param lastName
+   * @return A List of Person
+   */
   @Override
   public List<PersonInfoDTO> getPersonListByFirstNameAndLastNameThenOnlyLastName(String firstName, String lastName) {
     logger
@@ -49,6 +56,13 @@ public class PersonInfoServiceImpl implements PersonInfoService {
   }
 
 
+  /**
+   * Get the a list of persons with a given first name and a given last name
+   * 
+   * @param firstName
+   * @param lastName
+   * @return A List of Person
+   */
   @Override
   public List<Person> getPersonListByFirstNameAndLastName(String firstName, String lastName) {
     logger
@@ -65,6 +79,12 @@ public class PersonInfoServiceImpl implements PersonInfoService {
   }
 
 
+  /**
+   * Get the Person List from a given last name.
+   * 
+   * @param lastName
+   * @return A List of Person
+   */
   @Override
   public List<Person> getPersonListByLastName(String lastName) {
     logger
@@ -81,6 +101,11 @@ public class PersonInfoServiceImpl implements PersonInfoService {
   }
 
 
+  /**
+   * Set the age, the medications and the allergies to persons from a PersonList.
+   * 
+   * @param personList
+   */
   @Override
   public void setAgeAndMedicationsAndAllergiesFromPersonList(List<Person> personList) {
     logger
