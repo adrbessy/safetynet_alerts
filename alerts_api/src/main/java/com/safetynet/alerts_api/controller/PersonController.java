@@ -82,6 +82,7 @@ public class PersonController {
           + exception.getMessage());
     }
     if (!existingPersonFirstNameLastName) {
+      logger.error("The person with the first name " + firstName + " and last name " + lastName + " doesn't exist.");
       throw new NonexistentException(
           "The person with the first name " + firstName + " and last name " + lastName + " doesn't exist.");
     }
@@ -139,6 +140,7 @@ public class PersonController {
           + exception.getMessage());
     }
     if (!existingPersonId) {
+      logger.error("The person with the id " + id + " doesn't exist.");
       throw new NonexistentException(
           "The person with the id " + id + " doesn't exist.");
     }
@@ -179,6 +181,8 @@ public class PersonController {
           + exception.getMessage());
     }
     if (!existingPersonFistNameLastName) {
+      logger.error("The person with the the first name : " + firstName + " and the last name : " + lastName
+          + " doesn't exist.");
       throw new NonexistentException(
           "The person with the the first name : " + firstName + " and the last name : " + lastName
               + " doesn't exist.");
@@ -210,6 +214,7 @@ public class PersonController {
           + exception.getMessage());
     }
     if (!cityExist) {
+      logger.error("The city : " + city + " doesn't exist.");
       throw new NonexistentException(
           "The city : " + city + " doesn't exist.");
     }

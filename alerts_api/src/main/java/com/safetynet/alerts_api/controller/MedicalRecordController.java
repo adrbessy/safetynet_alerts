@@ -50,6 +50,8 @@ public class MedicalRecordController {
           + exception.getMessage());
     }
     if (!existingMedicalRecord) {
+      logger.error(
+          "The medicalRecord with the first name " + firstName + " and last name " + lastName + " doesn't exist.");
       throw new NonexistentException(
           "The medicalRecord with the first name " + firstName + " and last name " + lastName + " doesn't exist.");
     }
@@ -122,6 +124,7 @@ public class MedicalRecordController {
           + exception.getMessage());
     }
     if (!existingMedicalRecordId) {
+      logger.error("The medical record with the id " + id.toString() + " doesn't exist.");
       throw new NonexistentException(
           "The medical record with the id " + id.toString() + " doesn't exist.");
     }

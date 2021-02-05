@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.model.FireStationCommunity;
 import com.safetynet.alerts_api.model.FireStationCommunityDTO;
-import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.FireStationRepository;
 import com.safetynet.alerts_api.repository.MedicalRecordRepository;
@@ -69,7 +68,7 @@ public class FireStationCommunityServiceTest {
     fireStationList.add(fireStation1);
     fireStationList.add(fireStation2);
 
-    List<String> addressList = new ArrayList<>();
+    addressList = new ArrayList<>();
     addressList.add("82 Alexander Road");
     addressList.add("1 rue Antonio Vivaldi");
 
@@ -97,10 +96,6 @@ public class FireStationCommunityServiceTest {
     map.put("childrenList", childrenList);
     map.put("adultList", adultList);
     List<Person> childrenList1 = new ArrayList<>();
-    MedicalRecord medicalRecord1 = new MedicalRecord();
-    medicalRecord1.setBirthdate("16/06/2020");
-    List<MedicalRecord> medicalRecordList = new ArrayList<>();
-    medicalRecordList.add(medicalRecord1);
     FireStationCommunityDTO fireStationCommunityDTO = new FireStationCommunityDTO("Adrien", "Bessy", "", "", "",
         "");
     List<FireStationCommunityDTO> fireStationCommunityDTOList = new ArrayList<>();

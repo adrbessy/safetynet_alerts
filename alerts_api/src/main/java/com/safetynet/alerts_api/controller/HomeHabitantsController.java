@@ -54,6 +54,7 @@ public class HomeHabitantsController {
           + exception.getMessage());
     }
     if (!existingPersonAddress) {
+      logger.error("The person address " + address + " doesn't exist.");
       throw new NonexistentException(
           "The person address " + address + " doesn't exist.");
     }
@@ -87,6 +88,7 @@ public class HomeHabitantsController {
           + exception.getMessage());
     }
     if (!existingPersonAddress) {
+      logger.error("The person address " + address + " doesn't exist.");
       throw new NonexistentException(
           "The person address " + address + " doesn't exist.");
     }

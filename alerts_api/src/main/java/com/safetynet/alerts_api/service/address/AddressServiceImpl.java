@@ -26,7 +26,7 @@ public class AddressServiceImpl implements AddressService {
    */
   @Override
   public List<String> getAddressListFromStationNumberList(List<Integer> stationNumberList) {
-    logger.debug("in the method getAddressListFromStationNumberList in the class AddressServiceImpl");
+    logger.debug("execution start of the getAddressListFromStationNumberList method in AddressServiceImpl");
     List<String> addressList = new ArrayList<>();
     if (stationNumberList != null) {
       stationNumberList.forEach(stationIterator -> {

@@ -41,13 +41,11 @@ public class JsonReaderRepository {
   private MedicalRecordServiceImpl medicalRecordService;
 
   public void readDataFromJsonFile() {
-    logger.debug("Démarrage du chargement du fichier data.json");
+    logger.debug("execution start of the readDataFromJsonFile method in JsonReaderRepository");
 
     try {
       InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(FilesPath.ORIGINAL_INPUT_FILE));
-
       JSONParser jsonParser = new JSONParser();
-
       JSONObject jsonObject = (JSONObject) jsonParser.parse(inputStreamReader);
 
       List<Person> lstPerson = readListPersonFromJsonObject(jsonObject);
@@ -60,12 +58,11 @@ public class JsonReaderRepository {
       medicalRecordService.saveAllMedicalRecords(lstMedicalRecords);
 
       inputStreamReader.close();
-
     } catch (IOException | ParseException exception) {
       logger.error("Error while parsing input json file : " + exception.getMessage());
     }
 
-    logger.debug("Chargement du fichier data.json terminé");
+    logger.debug("execution end of the readDataFromJsonFile method in JsonReaderRepository");
   }
 
   private List<Person> readListPersonFromJsonObject(JSONObject jsonObject) {

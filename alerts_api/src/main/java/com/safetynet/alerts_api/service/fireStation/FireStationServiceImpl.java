@@ -155,7 +155,7 @@ public class FireStationServiceImpl implements FireStationService {
         fireStationRepository.saveAll(fireStationsList);
         return true;
       } catch (Exception exception) {
-        logger.error("Erreur lors de l'enregistrement de la liste des personnes " + exception.getMessage());
+        logger.error("Error when we try to save a person list : " + exception.getMessage());
       }
     }
     return false;

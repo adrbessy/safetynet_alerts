@@ -46,6 +46,8 @@ public class FireStationController {
           + exception.getMessage());
     }
     if (!fireStationAddressExist) {
+      logger.error("The firestation with the address " + address +
+          " doesn't exist.");
       throw new NonexistentException("The firestation with the address " + address +
           " doesn't exist.");
     }
@@ -89,6 +91,7 @@ public class FireStationController {
           + exception.getMessage());
     }
     if (!existingFireStationAddress) {
+      logger.error("The station number address" + address + " doesn't exist.");
       throw new NonexistentException(
           "The station number address" + address + " doesn't exist.");
     }

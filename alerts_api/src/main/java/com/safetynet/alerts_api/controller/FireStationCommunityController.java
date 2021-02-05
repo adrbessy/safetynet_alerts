@@ -61,6 +61,7 @@ public class FireStationCommunityController {
           + exception.getMessage());
     }
     if (!existingFireStationNumber) {
+      logger.error("The station number " + stationNumber.toString() + " doesn't exist.");
       throw new NonexistentException(
           "The station number " + stationNumber.toString() + " doesn't exist.");
     }
@@ -92,6 +93,7 @@ public class FireStationCommunityController {
           + exception.getMessage());
     }
     if (!existingFireStationNumber) {
+      logger.error("The station number " + firestation.toString() + " doesn't exist.");
       throw new NonexistentException(
           "The station number " + firestation.toString() + " doesn't exist.");
     }
@@ -125,6 +127,7 @@ public class FireStationCommunityController {
           + exception.getMessage());
     }
     if (!fireStationNumberNotFound.isEmpty()) {
+      logger.error("The list of station number that doesn't exist : " + fireStationNumberNotFound.toString());
       throw new NonexistentException(
           "The list of station number that doesn't exist : " + fireStationNumberNotFound.toString());
     }
