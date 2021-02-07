@@ -468,25 +468,6 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:9002/actuator",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:9002/actuator",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9002",
-					"path": [
-						"actuator"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "http://localhost:9002/actuator/health",
 			"request": {
 				"method": "GET",

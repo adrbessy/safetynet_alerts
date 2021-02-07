@@ -44,13 +44,13 @@ public class FireStationCommunityController {
   @GetMapping("/firestation")
   public FireStationCommunity getFireStationCommunity(@RequestParam Integer stationNumber) {
     boolean existingFireStationNumber = false;
-    FireStationCommunity personNumberInfo = null;
+    FireStationCommunity fireStationCommunity = null;
     try {
       logger.info(
           "Get request of the endpoint 'fireStation' with the stationNumber : {" + stationNumber.toString() + "}");
       existingFireStationNumber = fireStationService.fireStationNumberExist(stationNumber);
       if (existingFireStationNumber) {
-        personNumberInfo = fireStationCommunityService
+        fireStationCommunity = fireStationCommunityService
             .getPersonNumberInfoListFromStationNumber(stationNumber);
         logger.info(
             "response following the Get on the endpoint 'firestation' with the given stationNumber : {"
@@ -65,7 +65,7 @@ public class FireStationCommunityController {
       throw new NonexistentException(
           "The station number " + stationNumber.toString() + " doesn't exist.");
     }
-    return personNumberInfo;
+    return fireStationCommunity;
   }
 
 
@@ -114,7 +114,7 @@ public class FireStationCommunityController {
     List<FireDTOByAddress> personInfoByaddressList = null;
     try {
       logger.info(
-          "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + stations.toString() + "}");
+          "Get request of the endpoint 'flood' with the firestationNumber : {" + stations.toString() + "}");
       fireStationNumberNotFound = fireStationService.fireStationNumberListExist(stations);
       if (fireStationNumberNotFound.isEmpty()) {
         personInfoByaddressList = floodService.getPersonInfoByAddressList(stations);

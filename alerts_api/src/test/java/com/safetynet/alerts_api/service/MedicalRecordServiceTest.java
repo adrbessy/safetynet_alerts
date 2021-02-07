@@ -22,7 +22,6 @@ public class MedicalRecordServiceTest {
 
   @BeforeEach
   private void setUp() {
-
   }
 
   /**

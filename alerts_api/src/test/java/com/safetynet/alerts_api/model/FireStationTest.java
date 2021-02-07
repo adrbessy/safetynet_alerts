@@ -1,11 +1,9 @@
 package com.safetynet.alerts_api.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import com.safetynet.alerts_api.repository.JsonReaderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
@@ -13,9 +11,6 @@ import nl.jqno.equalsverifier.Warning;
 class FireStationTest {
 
   private FireStation fireStation;
-
-  @MockBean
-  private JsonReaderRepository jsonReaderRepository;
 
   @BeforeEach
   private void setUp() {

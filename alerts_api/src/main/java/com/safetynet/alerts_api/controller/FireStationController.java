@@ -93,7 +93,7 @@ public class FireStationController {
     if (!existingFireStationAddress) {
       logger.error("The station number address" + address + " doesn't exist.");
       throw new NonexistentException(
-          "The station number address" + address + " doesn't exist.");
+          "The fire station address " + address + " doesn't exist.");
     }
     return fireStationToUpdate;
   }
