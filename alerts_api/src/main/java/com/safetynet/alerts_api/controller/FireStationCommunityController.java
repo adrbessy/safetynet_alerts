@@ -3,8 +3,9 @@ package com.safetynet.alerts_api.controller;
 import com.safetynet.alerts_api.exceptions.NonexistentException;
 import com.safetynet.alerts_api.model.FireDTOByAddress;
 import com.safetynet.alerts_api.model.FireStationCommunity;
-import com.safetynet.alerts_api.service.community.CommunityService;
 import com.safetynet.alerts_api.service.fireStation.FireStationService;
+import com.safetynet.alerts_api.service.fireStationCommunity.FireStationCommunityService;
+import com.safetynet.alerts_api.service.flood.FloodService;
 import com.safetynet.alerts_api.service.phone.PhoneService;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,10 @@ public class FireStationCommunityController {
   private static final Logger logger = LogManager.getLogger(FireStationCommunityController.class);
 
   @Autowired
-  private CommunityService communityService;
+  private FireStationCommunityService fireStationCommunityService;
+
+  @Autowired
+  private FloodService floodService;
 
   @Autowired
   private PhoneService phoneService;
@@ -33,21 +37,21 @@ public class FireStationCommunityController {
    * Get a person list covered by a given fire station with the number of
    * occurrences of children and adults.
    * 
-   * @param a fire station number
+   * @param stationNumber A fire station number
    * @return A List of persons covered by a FireStation and the number of children
    *         and adults
    */
   @GetMapping("/firestation")
   public FireStationCommunity getFireStationCommunity(@RequestParam Integer stationNumber) {
     boolean existingFireStationNumber = false;
-    FireStationCommunity personNumberInfo = null;
+    FireStationCommunity fireStationCommunity = null;
     try {
       logger.info(
           "Get request of the endpoint 'fireStation' with the stationNumber : {" + stationNumber.toString() + "}");
       existingFireStationNumber = fireStationService.fireStationNumberExist(stationNumber);
       if (existingFireStationNumber) {
-        personNumberInfo = communityService
-            .getPersonNumberInfoListFromStationNumber(stationNumber);
+        fireStationCommunity = fireStationCommunityService
+            .getFireStationCommunityFromStationNumber(stationNumber);
         logger.info(
             "response following the Get on the endpoint 'firestation' with the given stationNumber : {"
                 + stationNumber.toString() + "}");
@@ -57,19 +61,19 @@ public class FireStationCommunityController {
           + exception.getMessage());
     }
     if (!existingFireStationNumber) {
+      logger.error("The station number " + stationNumber.toString() + " doesn't exist.");
       throw new NonexistentException(
           "The station number " + stationNumber.toString() + " doesn't exist.");
     }
-    return personNumberInfo;
+    return fireStationCommunity;
   }
 
 
   /**
-   * Read - Get the list of all phone numbers of persons covered by a given fire
-   * station.
+   * Get the list of all phone numbers of persons covered by a given fire station.
    * 
-   * @param a fire station number
-   * @return - A List of phone number
+   * @param firestation A fire station number
+   * @return A List of phone number
    */
   @GetMapping("/phoneAlert")
   public List<String> getPhoneNumberCoveredByThisStation(@RequestParam Integer firestation) {
@@ -89,6 +93,7 @@ public class FireStationCommunityController {
           + exception.getMessage());
     }
     if (!existingFireStationNumber) {
+      logger.error("The station number " + firestation.toString() + " doesn't exist.");
       throw new NonexistentException(
           "The station number " + firestation.toString() + " doesn't exist.");
     }
@@ -97,11 +102,11 @@ public class FireStationCommunityController {
 
 
   /**
-   * Read - Get a person list grouped by address and grouped by the number of the
-   * fire station deserving it.
+   * Get a person list sorted by address and sorted by the number of the fire
+   * station deserving it.
    * 
-   * @param a List of number of fire station
-   * @return - A List of PersonInfoByAddress
+   * @param stations A List of numbers of fire station
+   * @return A List of PersonInfoByAddress object
    */
   @GetMapping("/flood")
   public List<FireDTOByAddress> getHomesCoveredByTheseStation(@RequestParam List<Integer> stations) {
@@ -109,10 +114,10 @@ public class FireStationCommunityController {
     List<FireDTOByAddress> personInfoByaddressList = null;
     try {
       logger.info(
-          "Get request of the endpoint 'phoneAlert' with the firestationNumber : {" + stations.toString() + "}");
+          "Get request of the endpoint 'flood' with the firestationNumber : {" + stations.toString() + "}");
       fireStationNumberNotFound = fireStationService.fireStationNumberListExist(stations);
       if (fireStationNumberNotFound.isEmpty()) {
-        personInfoByaddressList = communityService.getPersonInfoByAddressList(stations);
+        personInfoByaddressList = floodService.getPersonInfoByAddressList(stations);
         logger.info(
             "response following the Get on the endpoint 'flood' with the given stationNumber List : {"
                 + stations.toString() + "}");
@@ -122,13 +127,11 @@ public class FireStationCommunityController {
           + exception.getMessage());
     }
     if (!fireStationNumberNotFound.isEmpty()) {
+      logger.error("The list of station number that doesn't exist : " + fireStationNumberNotFound.toString());
       throw new NonexistentException(
           "The list of station number that doesn't exist : " + fireStationNumberNotFound.toString());
     }
     return personInfoByaddressList;
-
   }
-
-
 
 }

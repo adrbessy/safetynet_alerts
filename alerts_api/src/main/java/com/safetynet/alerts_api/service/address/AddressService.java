@@ -8,24 +8,24 @@ public interface AddressService {
   /**
    * Get the List of address of persons covered by a fire station number list.
    * 
-   * @param a List of fire station number
-   * @return - A List of address
+   * @param stationNumberList A list of fire station numbers
+   * @return A List of address without duplicates
    */
-  public List<String> getAddressListFromStationNumberList(List<Integer> stationsList);
+  public List<String> getAddressListFromStationNumberList(List<Integer> stationNumberList);
 
   /**
    * Get the List of address of persons covered by a fire station list.
    * 
-   * @param a List of FireStation
-   * @return - A List of address
+   * @param fireStationList A List of FireStation
+   * @return A List of address
    */
   public List<String> getAddressListFromFireStationList(List<FireStation> fireStationList);
 
   /**
-   * Add the List of address of persons to a list<String> from FireStation list.
+   * Add the address of persons to a list from FireStation list.
    * 
-   * @param a List of FireStation
-   * @param a List of address
+   * @param fireStationList A List of FireStation
+   * @param addressList     A (probably empty) List of address
    */
   public void addAddressToListFromFireStationList(List<FireStation> fireStationList, List<String> addressList);
 

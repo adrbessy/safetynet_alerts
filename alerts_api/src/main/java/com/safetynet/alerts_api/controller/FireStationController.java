@@ -24,11 +24,10 @@ public class FireStationController {
 
 
   /**
-   * Delete - Delete a fire station
+   * Delete a fire station from a given address
    * 
-   * @param id - The id of the fire station to delete
+   * @param address The address of the fire station to delete
    */
-
   @Transactional
   @DeleteMapping("/firestation/{address}")
   public void deleteFireStation(@PathVariable("address") final String address) {
@@ -47,6 +46,8 @@ public class FireStationController {
           + exception.getMessage());
     }
     if (!fireStationAddressExist) {
+      logger.error("The firestation with the address " + address +
+          " doesn't exist.");
       throw new NonexistentException("The firestation with the address " + address +
           " doesn't exist.");
     }
@@ -57,10 +58,11 @@ public class FireStationController {
 
 
   /**
-   * Update - Update an existing fire station
+   * Update an existing fire station
    * 
-   * @param address - The address of the firestation to update
-   * @return firestation - The fire station object updated
+   * @param address     The address of the firestation to update
+   * @param fireStation The updated fireStation
+   * @return The updated firestation object
    */
   @PutMapping("/firestation/{address}")
   public FireStation updateFireStation(@PathVariable("address") final String address,
@@ -89,8 +91,9 @@ public class FireStationController {
           + exception.getMessage());
     }
     if (!existingFireStationAddress) {
+      logger.error("The station number address" + address + " doesn't exist.");
       throw new NonexistentException(
-          "The station number address" + address + " doesn't exist.");
+          "The fire station address " + address + " doesn't exist.");
     }
     return fireStationToUpdate;
   }
@@ -99,24 +102,24 @@ public class FireStationController {
   /**
    * Create a new fire station
    * 
-   * @param fire station An object fire station
-   * @return The fire station object saved
+   * @param fireStation The new firestation
+   * @return The saved fire station object
    */
   @PostMapping("/firestation")
   public FireStation createFireStation(@RequestBody FireStation fireStation) {
+    FireStation savedFireStation = null;
     try {
       logger.info(
           "Post request of the endpoint 'firestation' with the firestation : {" + fireStation.toString() + "}");
-      FireStation savedFireStation = fireStationService.saveFireStation(fireStation);
+      savedFireStation = fireStationService.saveFireStation(fireStation);
       logger.info(
           "response following the Post on the endpoint 'firestation' with the given fireStation : {"
               + fireStation.toString() + "}");
-      return savedFireStation;
     } catch (Exception exception) {
       logger.error("Error in the fireStationController in the method createFireStation :"
           + exception.getMessage());
-      return null;
     }
+    return savedFireStation;
   }
 
 }

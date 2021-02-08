@@ -63,6 +63,16 @@ public class MedicalRecordControllerTest {
   }
 
   @Test
+  public void testDeleteMedicalRecordIfPersonDoesntExist() throws Exception {
+    String firstName = "Jacob";
+    String lastName = "Boy";
+    when(medicalRecordService.medicalRecordFirstNameLastNameExist(firstName, lastName)).thenReturn(false);
+    mockMvc.perform(MockMvcRequestBuilders.delete("/medicalRecord?firstName=Jacob&lastName=Boy"))
+        .andExpect(status().isNotFound());
+  }
+
+
+  @Test
   public void testCreateMedicalRecord() throws Exception {
     when(medicalRecordService.saveMedicalRecord(medicalRecord)).thenReturn(medicalRecord);
     MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/medicalRecord")
@@ -83,6 +93,17 @@ public class MedicalRecordControllerTest {
         .content(new ObjectMapper().writeValueAsString(medicalRecord));
 
     this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
+  }
+
+  @Test
+  public void testUpdateMedicalRecordIfIdDoesntExist() throws Exception {
+    long id = 145;
+    when(medicalRecordService.medicalRecordIdExist(id)).thenReturn(false);
+    when(medicalRecordService.getMedicalRecord(id)).thenReturn(medicalRecord);
+    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put("/medicalRecord/" + id)
+        .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
+        .content(new ObjectMapper().writeValueAsString(medicalRecord));
+    this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isNotFound());
   }
 
 }

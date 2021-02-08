@@ -4,8 +4,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.safetynet.alerts_api.repository.JsonReaderRepository;
-import com.safetynet.alerts_api.service.community.CommunityService;
 import com.safetynet.alerts_api.service.fireStation.FireStationService;
+import com.safetynet.alerts_api.service.fireStationCommunity.FireStationCommunityService;
+import com.safetynet.alerts_api.service.flood.FloodService;
 import com.safetynet.alerts_api.service.phone.PhoneService;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +23,13 @@ public class FireStationCommunityControllerTest {
   private MockMvc mockMvc;
 
   @MockBean
-  private CommunityService communityService;
+  private PhoneService phoneService;
 
   @MockBean
-  private PhoneService phoneService;
+  private FireStationCommunityService fireStationCommunityServiceMock;
+
+  @MockBean
+  private FloodService floodServiceMock;
 
   @MockBean
   private FireStationService fireStationServiceMock;
@@ -34,11 +38,19 @@ public class FireStationCommunityControllerTest {
   private JsonReaderRepository jsonReaderRepository;
 
   @Test
-  public void testGetPersonListCoveredByThisStation() throws Exception {
+  public void testGetFireStationCommunity() throws Exception {
     when(fireStationServiceMock.fireStationNumberExist(1))
         .thenReturn(true);
     mockMvc.perform(get("/firestation?stationNumber=1"))
         .andExpect(status().isOk());
+  }
+
+  @Test
+  public void testGetFireStationCommunityIfTheStationNumberDoesntExist() throws Exception {
+    when(fireStationServiceMock.fireStationNumberExist(454))
+        .thenReturn(false);
+    mockMvc.perform(get("/firestation?stationNumber=454"))
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -47,6 +59,14 @@ public class FireStationCommunityControllerTest {
         .thenReturn(true);
     mockMvc.perform(get("/phoneAlert?firestation=3"))
         .andExpect(status().isOk());
+  }
+
+  @Test
+  public void testGetPhoneNumberCoveredByThisStationIfStationNumberDoesntExist() throws Exception {
+    when(fireStationServiceMock.fireStationNumberExist(78))
+        .thenReturn(false);
+    mockMvc.perform(get("/phoneAlert?firestation=3"))
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -60,5 +80,16 @@ public class FireStationCommunityControllerTest {
     mockMvc.perform(get("/flood?stations=1,2"))
         .andExpect(status().isOk());
   }
+
+  /*
+   * @Test public void testGetHomesCoveredByTheseStationIfStationNumberNotFound()
+   * throws Exception { List<Integer> fireStationNumberList = new ArrayList<>();
+   * fireStationNumberList.add(1); fireStationNumberList.add(2); List<Integer>
+   * fireStationNumberList2 = new ArrayList<>(); fireStationNumberList2.add(1);
+   * when(fireStationServiceMock.fireStationNumberListExist(fireStationNumberList)
+   * ).thenReturn(fireStationNumberList2);
+   * mockMvc.perform(get("/flood?stations=1,9"))
+   * .andExpect(status().isNotFound()); }
+   */
 
 }

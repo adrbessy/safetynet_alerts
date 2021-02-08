@@ -25,6 +25,12 @@ public class MedicalRecordController {
   private MedicalRecordService medicalRecordService;
 
 
+  /**
+   * Delete a medical record from a given first name and a given last name
+   * 
+   * @param firstName The given first name
+   * @param lastName  The given last name
+   */
   @Transactional
   @DeleteMapping("/medicalRecord")
   public void deleteMedicalRecord(@RequestParam String firstName, @RequestParam String lastName) {
@@ -44,6 +50,8 @@ public class MedicalRecordController {
           + exception.getMessage());
     }
     if (!existingMedicalRecord) {
+      logger.error(
+          "The medicalRecord with the first name " + firstName + " and last name " + lastName + " doesn't exist.");
       throw new NonexistentException(
           "The medicalRecord with the first name " + firstName + " and last name " + lastName + " doesn't exist.");
     }
@@ -51,10 +59,10 @@ public class MedicalRecordController {
 
 
   /**
-   * Create - Add a new medical record
+   * Add a new medical record
    * 
-   * @param medical record An object medical record
-   * @return The medical record object saved
+   * @param medicalRecord An new object medical record
+   * @return The saved medical record object
    */
   @PostMapping("/medicalRecord")
   public MedicalRecord createMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
@@ -77,9 +85,9 @@ public class MedicalRecordController {
   /**
    * Update - Update an existing medical record
    * 
-   * @param id     - The id of the medical record to update
-   * @param person - The medical record object updated
-   * @return MedicalRecord updated
+   * @param id            The id of the medical record to update
+   * @param medicalRecord The updated medical record object
+   * @return The updated MedicalRecord
    */
   @PutMapping("/medicalRecord/{id}")
   public MedicalRecord updateMedicalRecord(@PathVariable("id") final Long id,
@@ -116,6 +124,7 @@ public class MedicalRecordController {
           + exception.getMessage());
     }
     if (!existingMedicalRecordId) {
+      logger.error("The medical record with the id " + id.toString() + " doesn't exist.");
       throw new NonexistentException(
           "The medical record with the id " + id.toString() + " doesn't exist.");
     }

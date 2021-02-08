@@ -67,7 +67,7 @@ class MedicalRecordTest {
   }
 
   @Test
-  public void simpleEqualsPerson() {
+  public void simpleEqualsMedicalRecord() {
     EqualsVerifier.forClass(MedicalRecord.class).suppress(Warning.ALL_FIELDS_SHOULD_BE_USED).verify();
   }
 

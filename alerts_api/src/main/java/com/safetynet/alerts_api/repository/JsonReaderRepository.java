@@ -5,15 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts_api.model.FireStation;
 import com.safetynet.alerts_api.model.MedicalRecord;
 import com.safetynet.alerts_api.model.Person;
-import com.safetynet.alerts_api.service.community.CommunityService;
 import com.safetynet.alerts_api.service.fireStation.FireStationServiceImpl;
 import com.safetynet.alerts_api.service.medicalRecord.MedicalRecordServiceImpl;
+import com.safetynet.alerts_api.service.person.PersonService;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -29,13 +29,10 @@ public class JsonReaderRepository {
 
   private ObjectMapper objectMapper;
 
-  // @Value("${data.jsonFilePath}")
-  // private String filePath;
-
   private static final Logger logger = LogManager.getLogger(JsonReaderRepository.class);
 
   @Autowired
-  private CommunityService communityService;
+  private PersonService personService;
 
   @Autowired
   private FireStationServiceImpl fireStationService;
@@ -44,17 +41,15 @@ public class JsonReaderRepository {
   private MedicalRecordServiceImpl medicalRecordService;
 
   public void readDataFromJsonFile() {
-    logger.debug("Démarrage du chargement du fichier data.json");
+    logger.debug("execution start of the readDataFromJsonFile method in JsonReaderRepository");
 
     try {
       InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(FilesPath.ORIGINAL_INPUT_FILE));
-
       JSONParser jsonParser = new JSONParser();
-
       JSONObject jsonObject = (JSONObject) jsonParser.parse(inputStreamReader);
 
       List<Person> lstPerson = readListPersonFromJsonObject(jsonObject);
-      communityService.saveAllPersons(lstPerson);
+      personService.saveAllPersons(lstPerson);
 
       List<FireStation> lstFireStation = readListFireStationFromJsonObject(jsonObject);
       fireStationService.saveAllFireStations(lstFireStation);
@@ -63,12 +58,11 @@ public class JsonReaderRepository {
       medicalRecordService.saveAllMedicalRecords(lstMedicalRecords);
 
       inputStreamReader.close();
-
     } catch (IOException | ParseException exception) {
       logger.error("Error while parsing input json file : " + exception.getMessage());
     }
 
-    logger.debug("Chargement du fichier data.json terminé");
+    logger.debug("execution end of the readDataFromJsonFile method in JsonReaderRepository");
   }
 
   private List<Person> readListPersonFromJsonObject(JSONObject jsonObject) {
@@ -84,9 +78,10 @@ public class JsonReaderRepository {
         logger.error("Error while parsing input json file - persons : " + exception.getMessage());
       }
     }
-    List<Person> personListNoDuplicates = personList.stream().distinct().collect(Collectors.toList());
+    LinkedHashSet<Person> hashSet = new LinkedHashSet<>(personList);
+    List<Person> listWithoutDuplicates = new ArrayList<>(hashSet);
 
-    return personListNoDuplicates;
+    return listWithoutDuplicates;
   }
 
   private List<FireStation> readListFireStationFromJsonObject(JSONObject jsonObject) {
@@ -103,10 +98,10 @@ public class JsonReaderRepository {
         logger.error("Error while parsing input json file - firestations : " + exception.getMessage());
       }
     }
-    ;
-    List<FireStation> fireStationListNoDuplicates = fireStationList.stream().distinct().collect(Collectors.toList());
+    LinkedHashSet<FireStation> hashSet = new LinkedHashSet<>(fireStationList);
+    List<FireStation> listWithoutDuplicates = new ArrayList<>(hashSet);
 
-    return fireStationListNoDuplicates;
+    return listWithoutDuplicates;
   }
 
   private List<MedicalRecord> readListMedicalRecordFromJsonObject(JSONObject jsonObject) {
@@ -122,13 +117,10 @@ public class JsonReaderRepository {
         logger.error("Error while parsing input json file - medicalRecords : " + exception.getMessage());
       }
     }
-    ;
-    List<MedicalRecord> medicalRecordListNoDuplicates = medicalRecordList.stream().distinct()
-        .collect(Collectors.toList());
+    LinkedHashSet<MedicalRecord> hashSet = new LinkedHashSet<>(medicalRecordList);
+    List<MedicalRecord> listWithoutDuplicates = new ArrayList<>(hashSet);
 
-    return medicalRecordListNoDuplicates;
-
-
+    return listWithoutDuplicates;
   }
 
 }
