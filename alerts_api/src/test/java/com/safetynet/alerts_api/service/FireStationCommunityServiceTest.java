@@ -114,7 +114,7 @@ public class FireStationCommunityServiceTest {
 
     // THEN
     FireStationCommunity fireStationCommunity2 = fireStationCommunityService
-        .getPersonNumberInfoListFromStationNumber(1);
+        .getFireStationCommunityFromStationNumber(1);
     assertThat(fireStationCommunity2).isEqualTo(fireStationCommunity);
   }
 
@@ -125,7 +125,7 @@ public class FireStationCommunityServiceTest {
   @Test
   public void testGetPersonNumberInfoListFromStationNumberIfStationNumberIsNull() {
     FireStationCommunity fireStationCommunity = fireStationCommunityService
-        .getPersonNumberInfoListFromStationNumber(null);
+        .getFireStationCommunityFromStationNumber(null);
     assertThat(fireStationCommunity).isEqualTo(null);
   }
 

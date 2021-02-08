@@ -3,6 +3,7 @@ package com.safetynet.alerts_api.service.home;
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.repository.PersonRepository;
 import com.safetynet.alerts_api.service.personInfo.PersonInfoService;
+import java.time.LocalDate;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +35,7 @@ public class HomeServiceImpl implements HomeService {
     try {
       // we retrieve the list of persons corresponding to the address
       filteredPersonList = personRepository.findDistinctByAddress(address);
-      personInfoService.setAgeAndMedicationsAndAllergiesFromPersonList(filteredPersonList);
+      personInfoService.setAgeAndMedicationsAndAllergiesFromPersonList(filteredPersonList, LocalDate.now());
     } catch (Exception exception) {
       logger.error("Error when we try to get PersonList By address :"
           + exception.getMessage());

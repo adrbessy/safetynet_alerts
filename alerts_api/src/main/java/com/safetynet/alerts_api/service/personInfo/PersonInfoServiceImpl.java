@@ -71,7 +71,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
     try {
       // we retrieve the list of persons corresponding to the address
       filteredPersonList = personRepository.findByFirstNameAndLastNameAllIgnoreCase(firstName, lastName);
-      setAgeAndMedicationsAndAllergiesFromPersonList(filteredPersonList);
+      setAgeAndMedicationsAndAllergiesFromPersonList(filteredPersonList, LocalDate.now());
     } catch (Exception exception) {
       logger.error("Error when we try to get PersonList By FirstName And LastName :" + exception.getMessage());
     }
@@ -93,7 +93,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
     try {
       // we retrieve the list of persons corresponding to the address
       filteredPersonList = personRepository.findByLastNameAllIgnoreCase(lastName);
-      setAgeAndMedicationsAndAllergiesFromPersonList(filteredPersonList);
+      setAgeAndMedicationsAndAllergiesFromPersonList(filteredPersonList, LocalDate.now());
     } catch (Exception exception) {
       logger.error("Error when we try to get PersonList By LastName :" + exception.getMessage());
     }
@@ -107,7 +107,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
    * @param personList The given person list
    */
   @Override
-  public void setAgeAndMedicationsAndAllergiesFromPersonList(List<Person> personList) {
+  public void setAgeAndMedicationsAndAllergiesFromPersonList(List<Person> personList, LocalDate aDate) {
     logger
         .debug("in the method setAgeAndMedicationsAndAllergiesFromPersonList in the class PersonInfoServiceImpl");
     try {

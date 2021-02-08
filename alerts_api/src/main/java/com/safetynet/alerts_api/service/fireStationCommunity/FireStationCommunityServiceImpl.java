@@ -46,7 +46,7 @@ public class FireStationCommunityServiceImpl implements FireStationCommunityServ
    *         number of children and the number of adults
    */
   @Override
-  public FireStationCommunity getPersonNumberInfoListFromStationNumber(Integer stationNumber) {
+  public FireStationCommunity getFireStationCommunityFromStationNumber(Integer stationNumber) {
     logger.debug("in the method getPersonNumberInfoListFromStationNumber in the class FireStationCommunityServiceImpl");
     FireStationCommunity fireStationCommunity = null;
     if (stationNumber != null) {

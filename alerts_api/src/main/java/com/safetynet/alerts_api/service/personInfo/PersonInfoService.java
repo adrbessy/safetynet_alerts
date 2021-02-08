@@ -2,6 +2,7 @@ package com.safetynet.alerts_api.service.personInfo;
 
 import com.safetynet.alerts_api.model.Person;
 import com.safetynet.alerts_api.model.PersonInfoDTO;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface PersonInfoService {
@@ -40,6 +41,6 @@ public interface PersonInfoService {
    * 
    * @param personList The given person list
    */
-  public void setAgeAndMedicationsAndAllergiesFromPersonList(List<Person> personList);
+  public void setAgeAndMedicationsAndAllergiesFromPersonList(List<Person> personList, LocalDate aDate);
 
 }

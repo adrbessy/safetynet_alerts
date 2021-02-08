@@ -14,6 +14,7 @@ import com.safetynet.alerts_api.service.fire.FireService;
 import com.safetynet.alerts_api.service.fireStation.FireStationServiceImpl;
 import com.safetynet.alerts_api.service.map.MapService;
 import com.safetynet.alerts_api.service.personInfo.PersonInfoServiceImpl;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -74,7 +75,7 @@ public class FireServiceTest {
 
     when(personRepositoryMock.findDistinctByAddress(address)).thenReturn(
         personList);
-    doNothing().when(personInfoService).setAgeAndMedicationsAndAllergiesFromPersonList(personList);
+    doNothing().when(personInfoService).setAgeAndMedicationsAndAllergiesFromPersonList(personList, LocalDate.now());
     when(firestationServiceMock.getStationNumberListFromFireStationList(
         filteredFireStationList)).thenReturn(fireStationNumberList);
     when(mapServiceMock.convertToFireDTOList(personList))

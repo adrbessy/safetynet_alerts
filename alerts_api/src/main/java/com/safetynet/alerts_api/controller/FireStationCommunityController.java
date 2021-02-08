@@ -51,7 +51,7 @@ public class FireStationCommunityController {
       existingFireStationNumber = fireStationService.fireStationNumberExist(stationNumber);
       if (existingFireStationNumber) {
         fireStationCommunity = fireStationCommunityService
-            .getPersonNumberInfoListFromStationNumber(stationNumber);
+            .getFireStationCommunityFromStationNumber(stationNumber);
         logger.info(
             "response following the Get on the endpoint 'firestation' with the given stationNumber : {"
                 + stationNumber.toString() + "}");

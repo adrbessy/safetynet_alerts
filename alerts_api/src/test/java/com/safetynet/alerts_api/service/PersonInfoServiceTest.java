@@ -70,7 +70,6 @@ public class PersonInfoServiceTest {
     personList.add(person);
   }
 
-
   /**
    * test to set age, medications and allergies from a person list.
    * 
@@ -84,11 +83,8 @@ public class PersonInfoServiceTest {
         .thenReturn(medicalRecordList);
     when(medicalRecordMock.getBirthdate())
         .thenReturn("16/06/2019");
-    doNothing().when(personMock).setAge(medicalRecord1,
-        LocalDate.of(2021, 1, 11));
-    doNothing().when(personMock).setMedicationsAndAllergies(medicalRecord1);
 
-    personInfoService.setAgeAndMedicationsAndAllergiesFromPersonList(personList);
+    personInfoService.setAgeAndMedicationsAndAllergiesFromPersonList(personList, LocalDate.of(2021, 2, 8));
     assertThat(person.getAge()).isEqualTo(1);
   }
 
@@ -114,8 +110,7 @@ public class PersonInfoServiceTest {
 
 
   /**
-   * test to get a person list from the first name and the last name, then only
-   * from the last name.
+   * test to get a person list from the last name.
    * 
    */
   @Test

@@ -12,6 +12,7 @@ import com.safetynet.alerts_api.service.address.AddressServiceImpl;
 import com.safetynet.alerts_api.service.flood.FloodService;
 import com.safetynet.alerts_api.service.map.MapService;
 import com.safetynet.alerts_api.service.personInfo.PersonInfoServiceImpl;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -70,7 +71,7 @@ public class FloodServiceTest {
 
     when(addressServiceMock.getAddressListFromStationNumberList(stationNumberList)).thenReturn(addressList);
     when(personRepositoryMock.findDistinctByAddress(address)).thenReturn(personList);
-    doNothing().when(personInfoServiceMock).setAgeAndMedicationsAndAllergiesFromPersonList(personList);
+    doNothing().when(personInfoServiceMock).setAgeAndMedicationsAndAllergiesFromPersonList(personList, LocalDate.now());
     when(mapServiceMock.convertToFireDTOList(personList))
         .thenReturn(fireDTOList);
 

@@ -14,7 +14,7 @@ public interface FireStationCommunityService {
    * @return A FireStationCommunity object including a list of persons and the
    *         number of children and the number of adults
    */
-  public FireStationCommunity getPersonNumberInfoListFromStationNumber(Integer stationNumber);
+  public FireStationCommunity getFireStationCommunityFromStationNumber(Integer stationNumber);
 
 
   /**
