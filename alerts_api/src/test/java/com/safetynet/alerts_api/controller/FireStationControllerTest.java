@@ -54,11 +54,13 @@ public class FireStationControllerTest {
   @Test
   public void testUpdateFireStation() throws Exception {
     String address = "12 rue des ecoles";
+    Integer station = 1;
 
-    when(fireStationService.fireStationAddressExist(address)).thenReturn(true);
-    when(fireStationService.getFireStation(address)).thenReturn(fireStation);
+    when(fireStationService.fireStationAddressAndStationNumberExist(address, station)).thenReturn(true);
+    when(fireStationService.getFireStation(address, station)).thenReturn(fireStation);
 
-    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put("/firestation/" + address)
+    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
+        .put("/firestation?address=" + address + "&station=" + station.toString())
         .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
         .content(new ObjectMapper().writeValueAsString(fireStation));
     this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
@@ -68,11 +70,13 @@ public class FireStationControllerTest {
   @Test
   public void testUpdateFireStationIfAddressDoesntExist() throws Exception {
     String address = "12 rue des ecoles";
+    Integer station = 1;
 
-    when(fireStationService.fireStationAddressExist(address)).thenReturn(false);
-    when(fireStationService.getFireStation(address)).thenReturn(null);
+    when(fireStationService.fireStationAddressAndStationNumberExist(address, station)).thenReturn(false);
+    when(fireStationService.getFireStation(address, station)).thenReturn(null);
 
-    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put("/firestation/" + address)
+    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
+        .put("/firestation?address=" + address + "&station=" + station.toString())
         .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
         .content(new ObjectMapper().writeValueAsString(fireStation));
     this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isNotFound());
@@ -80,25 +84,28 @@ public class FireStationControllerTest {
 
 
   @Test
-  public void testDeleteFireStationByAddress() throws Exception {
+  public void testDeleteFireStation() throws Exception {
     String address = "1509 Culver St";
+    Integer station = 1;
 
-    when(fireStationService.fireStationAddressExist(address))
+    when(fireStationService.fireStationAddressAndStationNumberExist(address, station))
         .thenReturn(true);
 
-    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.delete("/firestation/" + address)
-        .contentType(MediaType.APPLICATION_JSON);
-    mockMvc.perform(builder).andExpect(status().isOk());
+    mockMvc.perform(MockMvcRequestBuilders.delete("/firestation?address=" + address + "&station=" + station.toString()))
+        .andExpect(status().isOk());
   }
 
   @Test
-  public void testDeleteFireStationByAddressIfAddressDoesntExist() throws Exception {
+  public void testDeleteFireStationIfAddressDoesntExist() throws Exception {
     String address = "1509 Culver S";
-    when(fireStationService.fireStationAddressExist(address))
-        .thenReturn(false);
-    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.delete("/firestation/" + address)
-        .contentType(MediaType.APPLICATION_JSON);
+    Integer station = 1;
 
+    when(fireStationService.fireStationAddressAndStationNumberExist(address, station))
+        .thenReturn(false);
+
+    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
+        .delete("/firestation?address=" + address + "&station=" + station.toString())
+        .contentType(MediaType.APPLICATION_JSON);
     mockMvc.perform(builder).andExpect(status().isNotFound());
   }
 

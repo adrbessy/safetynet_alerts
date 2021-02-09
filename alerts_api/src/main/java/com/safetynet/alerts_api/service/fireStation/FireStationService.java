@@ -84,4 +84,39 @@ public interface FireStationService {
    */
   public boolean fireStationAddressExist(String address);
 
+
+  /**
+   * Check if the given fire station address exists in the database.
+   * 
+   * @param id An id
+   * @return true if it exists, otherwise returns false
+   */
+  public boolean fireStationIdExist(Long id);
+
+  /**
+   * Check if the given firestation number/address link exists in the database.
+   * 
+   * @param address An address
+   * @param station A station number
+   * @return true if it exists, otherwise returns false
+   */
+  public boolean fireStationAddressAndStationNumberExist(String address, Integer station);
+
+  /**
+   * Delete a fireStation corresponding to a given address and station number link
+   * 
+   * @param address An address
+   * @param station An station number
+   */
+  public void deleteFireStation(String address, Integer station);
+
+  /**
+   * Get a link between FireStation number and an address a firestation covers
+   * 
+   * @param address An address a firestation covers
+   * @param station A station number
+   * @return the fireStation if it exists, null if not
+   */
+  public FireStation getFireStation(String address, Integer station);
+
 }

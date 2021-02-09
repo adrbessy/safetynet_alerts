@@ -8,10 +8,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,34 +26,34 @@ public class FireStationController {
   /**
    * Delete a fire station from a given address
    * 
-   * @param address The address of the fire station to delete
+   * @param id The id of the fire station to delete
    */
   @Transactional
-  @DeleteMapping("/firestation/{address}")
-  public void deleteFireStation(@PathVariable("address") final String address) {
+  @DeleteMapping("/firestation")
+  public void deleteFireStation(@RequestParam String address, @RequestParam Integer station) {
     boolean existingFireStation = false;
-    boolean fireStationAddressExist = false;
+    boolean fireStationAddressAndStationExist = false;
     try {
       logger.info(
-          "Delete request of the endpoint 'firestation' with the firestation address : {"
-              + address + "}");
-      fireStationAddressExist = fireStationService.fireStationAddressExist(address);
+          "Delete request of the endpoint 'firestation' with the firestation number : {"
+              + station.toString() + "} and the address : " + address);
+      fireStationAddressAndStationExist = fireStationService.fireStationAddressAndStationNumberExist(address, station);
       if (!existingFireStation) {
-        fireStationService.deleteFireStation(address);
+        fireStationService.deleteFireStation(address, station);
       }
     } catch (Exception exception) {
       logger.error("Error in the FireStationController in the method deleteFireStation :"
           + exception.getMessage());
     }
-    if (!fireStationAddressExist) {
-      logger.error("The firestation with the address " + address +
-          " doesn't exist.");
-      throw new NonexistentException("The firestation with the address " + address +
-          " doesn't exist.");
+    if (!fireStationAddressAndStationExist) {
+      logger.error("The link with the firestation number " + station.toString() +
+          " and the address " + address + " doesn't exist.");
+      throw new NonexistentException("The link with the firestation number " + station.toString() +
+          " and the address " + address + " doesn't exist.");
     }
     logger.info(
-        "response following the Delete on the endpoint 'firestation' with the given address : {"
-            + address + "}");
+        "response following the Delete on the endpoint 'firestation' with the given firestation number : {"
+            + station.toString() + "} and the address " + address);
   }
 
 
@@ -64,36 +64,40 @@ public class FireStationController {
    * @param fireStation The updated fireStation
    * @return The updated firestation object
    */
-  @PutMapping("/firestation/{address}")
-  public FireStation updateFireStation(@PathVariable("address") final String address,
+  @PutMapping("/firestation")
+  public FireStation updateFireStation(@RequestParam String address, @RequestParam Integer station,
       @RequestBody FireStation fireStation) {
     FireStation fireStationToUpdate = null;
-    boolean existingFireStationAddress = false;
+    boolean fireStationAddressAndStationExist = false;
     try {
       logger.info(
-          "Put request of the endpoint 'firestation' with the firestation address : {" + address + "}");
-      existingFireStationAddress = fireStationService.fireStationAddressExist(address);
-      if (existingFireStationAddress) {
-        fireStationToUpdate = fireStationService.getFireStation(address);
+          "Put request of the endpoint 'firestation' with the given address : {" + address
+              + "} and the given firestation number : "
+              + station.toString());
+      fireStationAddressAndStationExist = fireStationService.fireStationAddressAndStationNumberExist(address, station);
+      if (fireStationAddressAndStationExist) {
+        fireStationToUpdate = fireStationService.getFireStation(address, station);
         if (fireStationToUpdate != null) {
-          Integer station = fireStation.getStation();
-          if (station != null) {
-            fireStationToUpdate.setStation(station);
+          Integer newStationNumber = fireStation.getStation();
+          if (newStationNumber != null) {
+            fireStationToUpdate.setStation(newStationNumber);
           }
           fireStationService.saveFireStation(fireStationToUpdate);
           logger.info(
               "response following the Put on the endpoint 'firestation' with the given address : {"
-                  + address + "}");
+                  + address + "} and the given firestation number : " + station.toString());
         }
       }
     } catch (Exception exception) {
       logger.error("Error in the FireStationController in the method updateFireStation :"
           + exception.getMessage());
     }
-    if (!existingFireStationAddress) {
-      logger.error("The station number address" + address + " doesn't exist.");
+    if (!fireStationAddressAndStationExist) {
+      logger.error("The link between the given address {" + address + "} and the given firestation number {"
+          + station.toString() + "} doesn't exist.");
       throw new NonexistentException(
-          "The fire station address " + address + " doesn't exist.");
+          "The link between the given address {" + address + "} and the given firestation number {" + station.toString()
+              + "} doesn't exist.");
     }
     return fireStationToUpdate;
   }

@@ -23,4 +23,10 @@ public interface FireStationRepository extends CrudRepository<FireStation, Long>
 
   boolean existsByAddress(String address);
 
+  boolean existsByAddressAndStationAllIgnoreCase(String address, Integer station);
+
+  void deletePersonByAddressAndStationAllIgnoreCase(String address, Integer station);
+
+  Optional<FireStation> findByAddressAndStation(String address, Integer station);
+
 }

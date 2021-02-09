@@ -20,6 +20,34 @@ public class FireStationServiceImpl implements FireStationService {
 
 
   /**
+   * Check if the given firestation number/address link exists in the database.
+   * 
+   * @param address An address
+   * @param station A station number
+   * @return true if it exists, otherwise returns false
+   */
+  @Override
+  public boolean fireStationAddressAndStationNumberExist(String address, Integer station) {
+    logger.debug("in the method fireStationAddressAndStationNumberExist in the class FireStationServiceImpl");
+    boolean existingFireStationAddressAndStationNumber = fireStationRepository
+        .existsByAddressAndStationAllIgnoreCase(address, station);
+    return existingFireStationAddressAndStationNumber;
+  }
+
+  /**
+   * Check if the given fire station address exists in the database.
+   * 
+   * @param id An id
+   * @return true if it exists, otherwise returns false
+   */
+  @Override
+  public boolean fireStationIdExist(Long id) {
+    logger.debug("in the method fireStationIdExist in the class FireStationServiceImpl");
+    boolean existingFireStationId = fireStationRepository.existsById(id);
+    return existingFireStationId;
+  }
+
+  /**
    * Check if the given fire station address exists in the database.
    * 
    * @param address An address
@@ -83,6 +111,17 @@ public class FireStationServiceImpl implements FireStationService {
    * @param address An address corresponding to the fireStation to delete
    */
   @Override
+  public void deleteFireStation(String address, Integer station) {
+    logger.debug("in the method deleteFireStation in the class FireStationServiceImpl");
+    fireStationRepository.deletePersonByAddressAndStationAllIgnoreCase(address, station);
+  }
+
+  /**
+   * Delete a fireStation corresponding to a given address
+   * 
+   * @param address An address corresponding to the fireStation to delete
+   */
+  @Override
   public void deleteFireStation(String address) {
     logger.debug("in the method deleteFireStation in the class FireStationServiceImpl");
     fireStationRepository.deleteByAddress(address);
@@ -98,6 +137,26 @@ public class FireStationServiceImpl implements FireStationService {
   public FireStation getFireStation(final String address) {
     logger.debug("in the method getFireStation in the class FireStationServiceImpl");
     Optional<FireStation> fireStation = fireStationRepository.findByAddress(address);
+    if (fireStation.isPresent()) {
+      FireStation fireStationToUpdate = fireStation.get();
+      return fireStationToUpdate;
+    } else {
+      return null;
+    }
+  }
+
+
+  /**
+   * Get a link between FireStation number and an address a firestation covers
+   * 
+   * @param address An address a firestation covers
+   * @param station A station number
+   * @return the fireStation if it exists, null if not
+   */
+  @Override
+  public FireStation getFireStation(final String address, Integer station) {
+    logger.debug("in the method getFireStation in the class FireStationServiceImpl");
+    Optional<FireStation> fireStation = fireStationRepository.findByAddressAndStation(address, station);
     if (fireStation.isPresent()) {
       FireStation fireStationToUpdate = fireStation.get();
       return fireStationToUpdate;
