@@ -55,7 +55,7 @@ http://localhost:9002/communityEmail?city=culver
 
 PUT
 
-http://localhost:9002/firestation/1509%20Culver%20St
+http://localhost:9002/firestation?address=1509 Culver St&station=3
 
 http://localhost:9002/medicalRecord/1
 
@@ -78,7 +78,7 @@ http://localhost:9002/person?firstName=Jacob&lastName=Boyd
 
 http://localhost:9002/medicalRecord?firstName=Jacob&lastName=Boyd
 
-http://localhost:9002/firestation/1509%20Culver%20St
+http://localhost:9002/firestation?address=1509 Culver St&station=3
 
 
 ### Testing
