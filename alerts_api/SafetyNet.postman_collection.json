@@ -276,13 +276,13 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:9002/firestation/1509 Culver St",
+			"name": "http://localhost:9002/firestation?address=1509 Culver St&station=3",
 			"request": {
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"address\":\"1 rue antonio vivaldi\",\n    \"station\": 2\n}",
+					"raw": "{\n    \"station\": 2\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -290,15 +290,24 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:9002/firestation/1",
+					"raw": "http://localhost:9002/firestation?address=1509 Culver St&station=3",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "9002",
 					"path": [
-						"firestation",
-						"1"
+						"firestation"
+					],
+					"query": [
+						{
+							"key": "address",
+							"value": "1509 Culver St"
+						},
+						{
+							"key": "station",
+							"value": "3"
+						}
 					]
 				}
 			},
@@ -439,7 +448,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:9002/firestation/1509 Culver St",
+			"name": "http://localhost:9002/firestation?address=1509 Culver St&station=3",
 			"request": {
 				"method": "DELETE",
 				"header": [],
@@ -453,15 +462,24 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:9002/firestation/1509 Culver St",
+					"raw": "http://localhost:9002/firestation?address=1509 Culver St&station=3",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "9002",
 					"path": [
-						"firestation",
-						"1509 Culver St"
+						"firestation"
+					],
+					"query": [
+						{
+							"key": "address",
+							"value": "1509 Culver St"
+						},
+						{
+							"key": "station",
+							"value": "3"
+						}
 					]
 				}
 			},
