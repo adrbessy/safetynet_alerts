@@ -100,7 +100,7 @@ public class PersonInfoServiceTest {
         .thenReturn(medicalRecordList);
     when(medicalRecordMock.getBirthdate())
         .thenReturn("16/06/2019");
-    doNothing().when(personMock).setAge(medicalRecord1,
+    doNothing().when(personMock).setAge("16/06/2019",
         LocalDate.of(2021, 1, 11));
     doNothing().when(personMock).setMedicationsAndAllergies(medicalRecord1);
 
@@ -120,7 +120,7 @@ public class PersonInfoServiceTest {
         .thenReturn(medicalRecordList);
     when(medicalRecordMock.getBirthdate())
         .thenReturn("16/06/2019");
-    doNothing().when(personMock).setAge(medicalRecord1,
+    doNothing().when(personMock).setAge("16/06/2019",
         LocalDate.of(2021, 1, 11));
     doNothing().when(personMock).setMedicationsAndAllergies(medicalRecord1);
 
@@ -147,7 +147,7 @@ public class PersonInfoServiceTest {
         .thenReturn(medicalRecordList);
     when(medicalRecordMock.getBirthdate())
         .thenReturn("16/06/2019");
-    doNothing().when(personMock).setAge(medicalRecord1,
+    doNothing().when(personMock).setAge("16/06/2019",
         LocalDate.of(2021, 1, 11));
     doNothing().when(personMock).setMedicationsAndAllergies(medicalRecord1);
     when(personRepositoryMock.findByLastNameAllIgnoreCase("Bessy")).thenReturn(personList);

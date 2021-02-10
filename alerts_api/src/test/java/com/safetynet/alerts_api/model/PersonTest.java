@@ -92,9 +92,7 @@ class PersonTest {
 
   @Test
   public void testSetAge() throws Exception {
-    MedicalRecord medicalRecord = new MedicalRecord();
-    medicalRecord.setBirthdate("16/06/1988");
-    person.setAge(medicalRecord, LocalDate.of(2021, 1, 11));
+    person.setAge("16/06/1988", LocalDate.of(2021, 1, 11));
     assertThat(person.getAge()).isEqualTo(32);
   }
 

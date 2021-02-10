@@ -53,8 +53,7 @@ public class Person {
   private List<String> allergies;
 
 
-  public void setAge(MedicalRecord medicalRecord, LocalDate currentDate) {
-    String birthdate = medicalRecord.getBirthdate();
+  public void setAge(String birthdate, LocalDate currentDate) {
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     Date d;
     try {

@@ -115,7 +115,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
         medicalRecordRepository.findByFirstNameAndLastNameAllIgnoreCase(
             personIterator.getFirstName(), personIterator.getLastName()).forEach(medicalRecordIterator -> {
               if (medicalRecordIterator.getBirthdate() != null && !medicalRecordIterator.getBirthdate().isEmpty()) {
-                personIterator.setAge(medicalRecordIterator, LocalDate.now());
+                personIterator.setAge(medicalRecordIterator.getBirthdate(), LocalDate.now());
                 personIterator.setMedicationsAndAllergies(medicalRecordIterator);
               }
             });
